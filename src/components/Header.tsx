@@ -1,0 +1,105 @@
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Menu, X, Phone } from "lucide-react";
+import Logo from "./Logo";
+import { Button } from "./ui/button";
+
+const navLinks = [
+  { href: "/", label: "בית" },
+  { href: "/about", label: "אודות" },
+  { href: "/services", label: "שירותים" },
+  { href: "/blog", label: "בלוג" },
+  { href: "/contact", label: "צור קשר" },
+];
+
+const Header = () => {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
+
+  return (
+    <header className="sticky top-0 z-50 bg-card/90 backdrop-blur-md border-b border-border">
+      <nav className="container-custom flex items-center justify-between h-16 md:h-20" aria-label="ניווט ראשי">
+        <Logo />
+
+        {/* Desktop nav */}
+        <ul className="hidden md:flex items-center gap-1">
+          {navLinks.map((link) => (
+            <li key={link.href}>
+              <Link
+                to={link.href}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted hover:text-primary ${
+                  location.pathname === link.href
+                    ? "text-primary bg-muted"
+                    : "text-muted-foreground"
+                }`}
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        <div className="hidden md:flex items-center gap-3">
+          <a href="tel:0527186881">
+            <Button variant="outline" size="sm" className="gap-2">
+              <Phone className="w-4 h-4" />
+              052-718-6881
+            </Button>
+          </a>
+          <a href="https://wa.me/972527186881" target="_blank" rel="noopener noreferrer">
+            <Button size="sm" className="gradient-primary text-primary-foreground border-0">
+              WhatsApp
+            </Button>
+          </a>
+        </div>
+
+        {/* Mobile toggle */}
+        <button
+          className="md:hidden p-2 text-foreground"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label={mobileOpen ? "סגור תפריט" : "פתח תפריט"}
+        >
+          {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+      </nav>
+
+      {/* Mobile menu */}
+      {mobileOpen && (
+        <div className="md:hidden bg-card border-b border-border animate-fade-in">
+          <ul className="container-custom py-4 space-y-1">
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <Link
+                  to={link.href}
+                  onClick={() => setMobileOpen(false)}
+                  className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                    location.pathname === link.href
+                      ? "text-primary bg-muted"
+                      : "text-muted-foreground hover:bg-muted"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+            <li className="pt-3 flex gap-2">
+              <a href="tel:0527186881" className="flex-1">
+                <Button variant="outline" className="w-full gap-2">
+                  <Phone className="w-4 h-4" />
+                  052-718-6881
+                </Button>
+              </a>
+              <a href="https://wa.me/972527186881" target="_blank" rel="noopener noreferrer" className="flex-1">
+                <Button className="w-full gradient-primary text-primary-foreground border-0">
+                  WhatsApp
+                </Button>
+              </a>
+            </li>
+          </ul>
+        </div>
+      )}
+    </header>
+  );
+};
+
+export default Header;
