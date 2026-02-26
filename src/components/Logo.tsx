@@ -1,13 +1,11 @@
-import { Shield } from "lucide-react";
 import { Link } from "react-router-dom";
+import logoImg from "@/assets/logo.png";
 
 const Logo = () => (
-  <Link to="/" className="flex items-center gap-2 group" aria-label="SmartFilter – דף הבית">
-    <div className="relative flex items-center justify-center w-10 h-10 rounded-lg gradient-primary">
-      <Shield className="w-6 h-6 text-primary-foreground" />
-    </div>
+  <Link to="/" className="flex items-center gap-2 group" aria-label="FilterSmart – דף הבית">
+    <img src={logoImg} alt="FilterSmart לוגו" className="w-10 h-10 rounded-lg object-cover" />
     <span className="text-xl font-heading font-bold text-foreground group-hover:text-primary transition-colors">
-      SmartFilter
+      FilterSmart
     </span>
   </Link>
 );

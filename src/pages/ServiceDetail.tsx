@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/SEOHead";
 import { services } from "@/data/services";
 
+const WA_LINK = "https://wa.me/972527186881?text=שלום%20פילטר%20סמארט%2C%20אשמח%20לקבל%20פרטים";
+
 const ServiceDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const service = services.find((s) => s.slug === slug);
@@ -20,7 +22,7 @@ const ServiceDetail = () => {
   return (
     <>
       <SEOHead
-        title={`${service.name} – ${service.price} | SmartFilter אשדוד`}
+        title={`${service.name} – ${service.price} | FilterSmart פילטר סמארט אשדוד`}
         description={service.shortDesc}
         path={`/services/${service.slug}`}
         keywords={service.keywords}
@@ -34,7 +36,12 @@ const ServiceDetail = () => {
           </Link>
 
           <div className="flex items-start justify-between flex-wrap gap-4 mb-6">
-            <h1 className="text-3xl md:text-4xl font-heading font-bold text-foreground">{service.name}</h1>
+            <div className="flex items-center gap-4">
+              {service.logo && (
+                <img src={service.logo} alt={`${service.name} לוגו`} className="w-14 h-14 rounded-xl object-contain bg-muted p-2" />
+              )}
+              <h1 className="text-3xl md:text-4xl font-heading font-bold text-foreground">{service.name}</h1>
+            </div>
             <span className="text-3xl font-bold gradient-text">{service.price}</span>
           </div>
 
@@ -44,8 +51,8 @@ const ServiceDetail = () => {
             <h2 className="text-xl font-heading font-semibold text-card-foreground mb-4">מה כולל השירות</h2>
             <ul className="space-y-3">
               {service.features.map((feature, i) => (
-                <li key={i} className="flex items-center gap-3 text-card-foreground">
-                  <CheckCircle className="w-5 h-5 text-accent shrink-0" />
+                <li key={i} className="flex items-start gap-3 text-card-foreground">
+                  <CheckCircle className="w-5 h-5 text-accent shrink-0 mt-0.5" />
                   <span>{feature}</span>
                 </li>
               ))}
@@ -53,7 +60,7 @@ const ServiceDetail = () => {
           </div>
 
           <div className="flex flex-wrap gap-4">
-            <a href="https://wa.me/972527186881" target="_blank" rel="noopener noreferrer">
+            <a href={WA_LINK} target="_blank" rel="noopener noreferrer">
               <Button size="lg" className="gradient-primary text-primary-foreground border-0">
                 הזמן דרך WhatsApp
               </Button>

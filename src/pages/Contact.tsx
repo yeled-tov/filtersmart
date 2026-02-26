@@ -7,6 +7,8 @@ import SEOHead from "@/components/SEOHead";
 import { z } from "zod";
 import { toast } from "sonner";
 
+const WA_LINK = "https://wa.me/972527186881?text=שלום%20פילטר%20סמארט%2C%20אשמח%20לקבל%20פרטים";
+
 const contactSchema = z.object({
   name: z.string().trim().min(2, "שם חייב להכיל לפחות 2 תווים").max(100),
   phone: z.string().trim().min(9, "מספר טלפון לא תקין").max(15),
@@ -29,9 +31,8 @@ const Contact = () => {
       return;
     }
     setErrors({});
-    // Send via WhatsApp
     const text = encodeURIComponent(`שם: ${form.name}\nטלפון: ${form.phone}\nהודעה: ${form.message}`);
-    window.open(`https://wa.me/972527186881?text=${text}`, "_blank");
+    window.open(`https://wa.me/972527186881?text=${text}`, "_blank", "noopener,noreferrer");
     toast.success("ההודעה נשלחה בהצלחה!");
     setForm({ name: "", phone: "", message: "" });
   };
@@ -39,10 +40,10 @@ const Contact = () => {
   return (
     <>
       <SEOHead
-        title="צור קשר – SmartFilter סינון טלפון אשדוד"
-        description="צרו קשר עם SmartFilter באשדוד לשירותי סינון טלפון מקצועיים. טלפון: 052-718-6881, רחוב חטיבת גבעתי 2."
+        title="צור קשר – FilterSmart פילטר סמארט סינון טלפון אשדוד"
+        description="צרו קשר עם FilterSmart (פילטר סמארט) באשדוד לשירותי סינון טלפון מקצועיים. טלפון: 052-718-6881, רחוב חטיבת גבעתי 2."
         path="/contact"
-        keywords="סינון טלפון אשדוד, SmartFilter"
+        keywords="סינון טלפון אשדוד, פילטר סמארט"
       />
 
       <section className="section-padding bg-background">
@@ -55,7 +56,6 @@ const Contact = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Contact info */}
             <div className="space-y-6">
               <div className="bg-card rounded-xl p-6 card-shadow">
                 <h2 className="text-lg font-heading font-semibold text-card-foreground mb-4">פרטי התקשרות</h2>
@@ -100,7 +100,7 @@ const Contact = () => {
               </div>
 
               <div className="flex gap-3">
-                <a href="https://wa.me/972527186881" target="_blank" rel="noopener noreferrer" className="flex-1">
+                <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="flex-1">
                   <Button className="w-full gradient-primary text-primary-foreground border-0">WhatsApp</Button>
                 </a>
                 <a href="https://bitpay.co.il/app/me/0527186881" target="_blank" rel="noopener noreferrer" className="flex-1">
@@ -109,37 +109,18 @@ const Contact = () => {
               </div>
             </div>
 
-            {/* Form */}
             <form onSubmit={handleSubmit} className="bg-card rounded-xl p-6 card-shadow space-y-4">
               <h2 className="text-lg font-heading font-semibold text-card-foreground mb-2">שלחו לנו הודעה</h2>
               <div>
-                <Input
-                  placeholder="שם מלא"
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className={errors.name ? "border-destructive" : ""}
-                />
+                <Input placeholder="שם מלא" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={errors.name ? "border-destructive" : ""} />
                 {errors.name && <p className="text-destructive text-xs mt-1">{errors.name}</p>}
               </div>
               <div>
-                <Input
-                  placeholder="טלפון"
-                  type="tel"
-                  value={form.phone}
-                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                  className={errors.phone ? "border-destructive" : ""}
-                  dir="ltr"
-                />
+                <Input placeholder="טלפון" type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className={errors.phone ? "border-destructive" : ""} dir="ltr" />
                 {errors.phone && <p className="text-destructive text-xs mt-1">{errors.phone}</p>}
               </div>
               <div>
-                <Textarea
-                  placeholder="הודעה"
-                  rows={5}
-                  value={form.message}
-                  onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  className={errors.message ? "border-destructive" : ""}
-                />
+                <Textarea placeholder="הודעה" rows={5} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className={errors.message ? "border-destructive" : ""} />
                 {errors.message && <p className="text-destructive text-xs mt-1">{errors.message}</p>}
               </div>
               <Button type="submit" className="w-full gradient-primary text-primary-foreground border-0 gap-2">
