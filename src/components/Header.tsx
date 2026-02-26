@@ -4,6 +4,8 @@ import { Menu, X, Phone } from "lucide-react";
 import Logo from "./Logo";
 import { Button } from "./ui/button";
 
+const WA_LINK = "https://wa.me/972527186881?text=שלום%20פילטר%20סמארט%2C%20אשמח%20לקבל%20פרטים";
+
 const navLinks = [
   { href: "/", label: "בית" },
   { href: "/about", label: "אודות" },
@@ -21,16 +23,13 @@ const Header = () => {
       <nav className="container-custom flex items-center justify-between h-16 md:h-20" aria-label="ניווט ראשי">
         <Logo />
 
-        {/* Desktop nav */}
         <ul className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => (
             <li key={link.href}>
               <Link
                 to={link.href}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted hover:text-primary ${
-                  location.pathname === link.href
-                    ? "text-primary bg-muted"
-                    : "text-muted-foreground"
+                  location.pathname === link.href ? "text-primary bg-muted" : "text-muted-foreground"
                 }`}
               >
                 {link.label}
@@ -46,14 +45,13 @@ const Header = () => {
               052-718-6881
             </Button>
           </a>
-          <a href="https://wa.me/972527186881" target="_blank" rel="noopener noreferrer">
+          <a href={WA_LINK} target="_blank" rel="noopener noreferrer">
             <Button size="sm" className="gradient-primary text-primary-foreground border-0">
               WhatsApp
             </Button>
           </a>
         </div>
 
-        {/* Mobile toggle */}
         <button
           className="md:hidden p-2 text-foreground"
           onClick={() => setMobileOpen(!mobileOpen)}
@@ -63,7 +61,6 @@ const Header = () => {
         </button>
       </nav>
 
-      {/* Mobile menu */}
       {mobileOpen && (
         <div className="md:hidden bg-card border-b border-border animate-fade-in">
           <ul className="container-custom py-4 space-y-1">
@@ -73,9 +70,7 @@ const Header = () => {
                   to={link.href}
                   onClick={() => setMobileOpen(false)}
                   className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                    location.pathname === link.href
-                      ? "text-primary bg-muted"
-                      : "text-muted-foreground hover:bg-muted"
+                    location.pathname === link.href ? "text-primary bg-muted" : "text-muted-foreground hover:bg-muted"
                   }`}
                 >
                   {link.label}
@@ -89,7 +84,7 @@ const Header = () => {
                   052-718-6881
                 </Button>
               </a>
-              <a href="https://wa.me/972527186881" target="_blank" rel="noopener noreferrer" className="flex-1">
+              <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="flex-1">
                 <Button className="w-full gradient-primary text-primary-foreground border-0">
                   WhatsApp
                 </Button>
