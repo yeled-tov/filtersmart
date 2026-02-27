@@ -50,7 +50,7 @@ const Index = () => {
                 </Button>
               </Link>
               <a href={WA_LINK} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="outline" className="text-primary-foreground border-primary-foreground/30 hover:bg-primary-foreground/10 text-base px-8">
+                <Button size="lg" className="bg-card text-foreground hover:bg-card/90 text-base px-8 border border-border">
                   דברו איתנו
                 </Button>
               </a>
@@ -178,7 +178,7 @@ const Index = () => {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a href={WA_LINK} target="_blank" rel="noopener noreferrer">
-              <Button size="lg" variant="outline" className="text-primary-foreground border-primary-foreground/30 hover:bg-primary-foreground/10 text-base px-8">
+              <Button size="lg" className="bg-card text-foreground hover:bg-card/90 text-base px-8 border border-border">
                 WhatsApp
               </Button>
             </a>

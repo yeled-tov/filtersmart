@@ -1,27 +1,16 @@
-import { useState } from "react";
-import { Shield, Zap, Coins, CheckCircle, RotateCcw } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Send, Bot, User, RotateCcw } from "lucide-react";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 
+type Step = "welcome" | "q1" | "q2" | "q3" | "result";
 type Answer = "protection" | "speed" | "price";
 
-const questions = [
-  { q: "מה הכי חשוב לכם?", options: [
-    { label: "הגנה מקסימלית", value: "protection" as Answer, icon: Shield },
-    { label: "מהירות הטלפון", value: "speed" as Answer, icon: Zap },
-    { label: "מחיר נוח", value: "price" as Answer, icon: Coins },
-  ]},
-  { q: "האם חשוב לכם שלא ניתן יהיה להסיר את הסינון?", options: [
-    { label: "כן, הכרחי", value: "protection" as Answer, icon: Shield },
-    { label: "רצוי אבל לא קריטי", value: "speed" as Answer, icon: Zap },
-    { label: "לא משנה", value: "price" as Answer, icon: Coins },
-  ]},
-  { q: "מה התקציב שלכם?", options: [
-    { label: "מוכנים להשקיע לטובת הגנה מלאה", value: "protection" as Answer, icon: Shield },
-    { label: "תקציב בינוני", value: "speed" as Answer, icon: Zap },
-    { label: "מחפשים פתרון חסכוני", value: "price" as Answer, icon: Coins },
-  ]},
-];
+interface Message {
+  from: "bot" | "user";
+  text: string;
+  options?: { label: string; value: Answer }[];
+}
 
 const results: Record<string, { name: string; slug: string; desc: string }> = {
   protection: { name: "מערכת הדרן (Hadran)", slug: "hadran", desc: "ההגנה ההרמטית ביותר בשוק – צריבה שלא ניתנת להסרה." },
@@ -29,68 +18,182 @@ const results: Record<string, { name: string; slug: string; desc: string }> = {
   price: { name: "סינון בסיסי", slug: "basic-filtering", desc: "פתרון מהיר ויעיל ב-20₪ בלבד, התקנה תוך 5 דקות." },
 };
 
-const FilterMatcher = () => {
-  const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<Answer[]>([]);
+const botQuestions: Record<string, { text: string; options: { label: string; value: Answer }[] }> = {
+  q1: {
+    text: "מה הכי חשוב לכם בסינון? 🤔",
+    options: [
+      { label: "🛡️ הגנה מקסימלית", value: "protection" },
+      { label: "⚡ מהירות הטלפון", value: "speed" },
+      { label: "💰 מחיר נוח", value: "price" },
+    ],
+  },
+  q2: {
+    text: "האם חשוב לכם שלא ניתן יהיה להסיר את הסינון?",
+    options: [
+      { label: "כן, הכרחי", value: "protection" },
+      { label: "רצוי אבל לא קריטי", value: "speed" },
+      { label: "לא משנה", value: "price" },
+    ],
+  },
+  q3: {
+    text: "מה התקציב שלכם? 💳",
+    options: [
+      { label: "מוכנים להשקיע להגנה מלאה", value: "protection" },
+      { label: "תקציב בינוני", value: "speed" },
+      { label: "מחפשים פתרון חסכוני", value: "price" },
+    ],
+  },
+};
 
-  const handleAnswer = (value: Answer) => {
+const FilterMatcher = () => {
+  const [messages, setMessages] = useState<Message[]>([
+    { from: "bot", text: "שלום! 👋 אני הבוט של FilterSmart. אעזור לכם למצוא את פתרון הסינון המושלם." },
+    { from: "bot", text: botQuestions.q1.text, options: botQuestions.q1.options },
+  ]);
+  const [step, setStep] = useState<Step>("q1");
+  const [answers, setAnswers] = useState<Answer[]>([]);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+  }, [messages]);
+
+  const handleOption = (label: string, value: Answer) => {
     const newAnswers = [...answers, value];
     setAnswers(newAnswers);
-    setStep(step + 1);
+
+    const userMsg: Message = { from: "user", text: label };
+    const nextStep = step === "q1" ? "q2" : step === "q2" ? "q3" : "result";
+
+    if (nextStep === "result") {
+      const counts: Record<string, number> = { protection: 0, speed: 0, price: 0 };
+      newAnswers.forEach((a) => counts[a]++);
+      const winner = Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
+      const result = results[winner];
+
+      setMessages((prev) => [
+        ...prev,
+        userMsg,
+        { from: "bot", text: `מעולה! ✅ בהתבסס על התשובות שלכם, אני ממליץ על:\n\n🏆 **${result.name}**\n${result.desc}` },
+      ]);
+      setStep("result");
+    } else {
+      const q = botQuestions[nextStep];
+      setMessages((prev) => [...prev, userMsg, { from: "bot", text: q.text, options: q.options }]);
+      setStep(nextStep);
+    }
   };
 
-  const getResult = () => {
+  const reset = () => {
+    setMessages([
+      { from: "bot", text: "שלום! 👋 אני הבוט של FilterSmart. אעזור לכם למצוא את פתרון הסינון המושלם." },
+      { from: "bot", text: botQuestions.q1.text, options: botQuestions.q1.options },
+    ]);
+    setStep("q1");
+    setAnswers([]);
+  };
+
+  const getResultSlug = () => {
     const counts: Record<string, number> = { protection: 0, speed: 0, price: 0 };
     answers.forEach((a) => counts[a]++);
     const winner = Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
-    return results[winner];
+    return results[winner].slug;
   };
-
-  const reset = () => { setStep(0); setAnswers([]); };
-
-  const done = step >= questions.length;
-  const result = done ? getResult() : null;
 
   return (
     <section className="section-padding bg-muted/50">
       <div className="container-custom max-w-2xl text-center">
-        <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">🔍 מצאו את הסינון המתאים לכם</h2>
-        <p className="text-muted-foreground text-lg mb-10">ענו על 3 שאלות קצרות ונמליץ על הפתרון המושלם</p>
+        <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">🤖 בוט התאמת סינון</h2>
+        <p className="text-muted-foreground text-lg mb-8">שוחחו עם הבוט שלנו ונמצא לכם את הפתרון המושלם</p>
 
-        {!done ? (
-          <div className="bg-card rounded-xl p-8 card-shadow">
-            <p className="text-sm text-muted-foreground mb-2">שאלה {step + 1} מתוך {questions.length}</p>
-            <h3 className="text-xl font-heading font-semibold text-card-foreground mb-6">{questions[step].q}</h3>
-            <div className="space-y-3">
-              {questions[step].options.map((opt) => (
-                <button
-                  key={opt.value}
-                  onClick={() => handleAnswer(opt.value)}
-                  className="w-full flex items-center gap-3 px-5 py-4 rounded-lg border border-border hover:border-primary hover:bg-primary/5 transition-all text-right"
-                >
-                  <opt.icon className="w-5 h-5 text-primary shrink-0" />
-                  <span className="text-card-foreground font-medium">{opt.label}</span>
-                </button>
-              ))}
+        <div className="bg-card rounded-2xl card-shadow overflow-hidden text-right">
+          {/* Chat header */}
+          <div className="flex items-center justify-between px-5 py-3 border-b border-border bg-primary/5">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                <Bot className="w-4 h-4 text-primary-foreground" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-card-foreground">FilterSmart Bot</p>
+                <p className="text-xs text-muted-foreground">מקוון</p>
+              </div>
             </div>
-          </div>
-        ) : result && (
-          <div className="bg-card rounded-xl p-8 card-shadow animate-fade-in">
-            <CheckCircle className="w-12 h-12 text-secondary mx-auto mb-4" />
-            <h3 className="text-2xl font-heading font-bold text-card-foreground mb-2">אנחנו ממליצים על:</h3>
-            <p className="text-xl font-semibold gradient-text mb-3">{result.name}</p>
-            <p className="text-muted-foreground mb-6">{result.desc}</p>
-            <div className="flex justify-center gap-3">
-              <Link to={`/services/${result.slug}`}>
-                <Button className="gradient-primary text-primary-foreground border-0">לפרטים נוספים</Button>
-              </Link>
-              <Button variant="outline" onClick={reset} className="gap-2">
-                <RotateCcw className="w-4 h-4" />
-                נסו שוב
+            {step === "result" && (
+              <Button variant="ghost" size="sm" onClick={reset} className="gap-1 text-xs">
+                <RotateCcw className="w-3 h-3" />
+                התחל מחדש
               </Button>
+            )}
+          </div>
+
+          {/* Messages */}
+          <div ref={scrollRef} className="p-4 space-y-3 h-80 overflow-y-auto">
+            {messages.map((msg, i) => (
+              <div key={i} className={`flex ${msg.from === "user" ? "justify-start" : "justify-end"}`}>
+                <div className="flex items-end gap-2 max-w-[85%]">
+                  {msg.from === "bot" && (
+                    <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                      <Bot className="w-3 h-3 text-primary" />
+                    </div>
+                  )}
+                  <div>
+                    <div
+                      className={`rounded-2xl px-4 py-2.5 text-sm leading-relaxed whitespace-pre-line ${
+                        msg.from === "user"
+                          ? "bg-primary text-primary-foreground rounded-bl-sm"
+                          : "bg-muted text-card-foreground rounded-br-sm"
+                      }`}
+                    >
+                      {msg.text}
+                    </div>
+                    {/* Options as buttons below bot message */}
+                    {msg.from === "bot" && msg.options && i === messages.length - 1 && step !== "result" && (
+                      <div className="mt-2 space-y-1.5">
+                        {msg.options.map((opt) => (
+                          <button
+                            key={opt.value}
+                            onClick={() => handleOption(opt.label, opt.value)}
+                            className="block w-full text-right px-4 py-2.5 rounded-xl border border-border bg-card hover:border-primary hover:bg-primary/5 transition-all text-sm font-medium text-card-foreground"
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  {msg.from === "user" && (
+                    <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center shrink-0">
+                      <User className="w-3 h-3 text-primary-foreground" />
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+
+            {/* Result action buttons */}
+            {step === "result" && (
+              <div className="flex justify-center gap-3 pt-3">
+                <Link to={`/services/${getResultSlug()}`}>
+                  <Button size="sm" className="gradient-primary text-primary-foreground border-0">לפרטים נוספים</Button>
+                </Link>
+                <Button size="sm" variant="outline" onClick={reset} className="gap-1">
+                  <RotateCcw className="w-3 h-3" />
+                  נסו שוב
+                </Button>
+              </div>
+            )}
+          </div>
+
+          {/* Bottom bar */}
+          <div className="px-4 py-3 border-t border-border bg-muted/30 flex items-center gap-2">
+            <div className="flex-1 bg-card border border-border rounded-full px-4 py-2 text-sm text-muted-foreground">
+              בחרו אפשרות מהרשימה למעלה...
+            </div>
+            <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
+              <Send className="w-4 h-4 text-muted-foreground" />
             </div>
           </div>
-        )}
+        </div>
       </div>
     </section>
   );
