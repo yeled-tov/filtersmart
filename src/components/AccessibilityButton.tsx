@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Eye } from "lucide-react";
+
+const AccessibilityIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+    <circle cx="12" cy="4.5" r="2" />
+    <path d="M12 7.5c-3.5 0-6.5 1-6.5 1L6 10.5s2.5-.7 5-.9v3.4l-3.5 6.5 1.8.9L12 15l2.7 5.4 1.8-.9L13 13V9.6c2.5.2 5 .9 5 .9l.5-2s-3-1-6.5-1z" />
+  </svg>
+);
 
 const AccessibilityButton = () => {
   const [open, setOpen] = useState(false);
@@ -17,7 +23,7 @@ const AccessibilityButton = () => {
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
       {open && (
-        <div className="bg-card border border-border rounded-xl p-4 card-shadow animate-fade-in space-y-3 w-56">
+        <div className="bg-card border border-border rounded-xl p-4 card-shadow animate-fade-in space-y-2 w-52">
           <h3 className="text-sm font-heading font-semibold text-card-foreground">נגישות</h3>
           <button onClick={increaseFontSize} className="w-full text-right text-sm px-3 py-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground">
             הגדל גופן +
@@ -32,10 +38,10 @@ const AccessibilityButton = () => {
       )}
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center justify-center w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg hover:scale-110 transition-transform"
+        className="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground shadow-md hover:scale-105 transition-transform"
         aria-label="תפריט נגישות"
       >
-        <Eye className="w-7 h-7" />
+        <AccessibilityIcon className="w-5 h-5" />
       </button>
     </div>
   );
