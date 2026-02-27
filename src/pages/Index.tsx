@@ -3,6 +3,9 @@ import { Shield, ArrowLeft, Smartphone, Lock, Zap, Cpu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/SEOHead";
 import { services } from "@/data/services";
+import FilterMatcher from "@/components/FilterMatcher";
+import Reviews from "@/components/Reviews";
+import FAQ from "@/components/FAQ";
 import heroBg from "@/assets/hero-bg.jpg";
 
 const WA_LINK = "https://wa.me/972527186881?text=שלום%20פילטר%20סמארט%2C%20אשמח%20לקבל%20פרטים";
@@ -155,6 +158,15 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Filter Matcher Quiz */}
+      <FilterMatcher />
+
+      {/* Reviews */}
+      <Reviews />
+
+      {/* FAQ */}
+      <FAQ />
 
       {/* CTA */}
       <section className="relative overflow-hidden">

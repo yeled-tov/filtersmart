@@ -54,8 +54,16 @@ const Footer = () => (
         </div>
       </div>
 
-      <div className="mt-10 pt-6 border-t border-background/10 text-center text-sm text-background/50">
-        <p>© {new Date().getFullYear()} FilterSmart (פילטר סמארט) – כל הזכויות שמורות</p>
+      <div className="mt-8 pt-6 border-t border-background/10 space-y-4">
+        <p className="text-xs text-background/40 text-center leading-relaxed">
+          הבהרה: השירות הניתן הינו עבור צריבת והתקנת המערכת. לאחר מכן, השירות והתמיכה השוטפת הינם באחריות חברות הסינון בלבד.
+        </p>
+        <div className="flex justify-center gap-4 text-xs text-background/50">
+          <Link to="/privacy" className="hover:text-background transition-colors">מדיניות פרטיות</Link>
+          <span>|</span>
+          <Link to="/refund-policy" className="hover:text-background transition-colors">מדיניות ביטולים והחזרים</Link>
+        </div>
+        <p className="text-center text-sm text-background/50">© {new Date().getFullYear()} FilterSmart (פילטר סמארט) – כל הזכויות שמורות</p>
       </div>
     </div>
   </footer>
