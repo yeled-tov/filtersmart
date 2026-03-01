@@ -19,7 +19,7 @@ const Header = () => {
   const location = useLocation();
 
   return (
-    <header className="sticky top-0 z-50 bg-card/90 backdrop-blur-md border-b border-border">
+    <header className="sticky top-0 z-50 bg-card/70 backdrop-blur-xl border-b border-border/50">
       <nav className="container-custom flex items-center justify-between h-16 md:h-20" aria-label="ניווט ראשי">
         <Logo />
 
@@ -62,7 +62,7 @@ const Header = () => {
       </nav>
 
       {mobileOpen && (
-        <div className="md:hidden bg-card border-b border-border animate-fade-in">
+        <div className="md:hidden bg-card/80 backdrop-blur-xl border-b border-border/50 animate-fade-in">
           <ul className="container-custom py-4 space-y-1">
             {navLinks.map((link) => (
               <li key={link.href}>

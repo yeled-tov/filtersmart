@@ -23,7 +23,7 @@ const AccessibilityButton = () => {
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
       {open && (
-        <div className="bg-card border border-border rounded-xl p-4 card-shadow animate-fade-in space-y-2 w-52">
+        <div className="bg-card/80 backdrop-blur-xl border border-border/50 rounded-xl p-4 card-shadow animate-fade-in space-y-2 w-52">
           <h3 className="text-sm font-heading font-semibold text-card-foreground">נגישות</h3>
           <button onClick={increaseFontSize} className="w-full text-right text-sm px-3 py-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground">
             הגדל גופן +
