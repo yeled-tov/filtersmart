@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import { Shield, ArrowLeft, Smartphone, Lock, Zap, Cpu } from "lucide-react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/SEOHead";
 import { services } from "@/data/services";
-import FilterMatcher from "@/components/FilterMatcher";
+import TrustBadges from "@/components/TrustBadges";
 import Reviews from "@/components/Reviews";
 import FAQ from "@/components/FAQ";
+import AnimatedSection from "@/components/AnimatedSection";
 import heroBg from "@/assets/hero-bg.jpg";
 
 const WA_LINK = "https://wa.me/972527186881?text=שלום%20פילטר%20סמארט%2C%20אשמח%20לקבל%20פרטים";
@@ -26,11 +28,16 @@ const Index = () => {
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroBg} alt="" className="w-full h-full object-cover" aria-hidden="true" />
+          <img src={heroBg} alt="" className="w-full h-full object-cover" loading="eager" aria-hidden="true" />
           <div className="absolute inset-0 bg-foreground/70" />
         </div>
         <div className="relative container-custom py-20 md:py-32 lg:py-40">
-          <div className="max-w-2xl">
+          <motion.div
+            className="max-w-2xl"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+          >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 text-primary-foreground text-sm font-medium mb-6 backdrop-blur-sm border border-primary-foreground/20">
               <Shield className="w-4 h-4" />
               משווק מורשה – הדרן, עסקן, כושר פליי
@@ -44,123 +51,133 @@ const Index = () => {
             </p>
             <div className="flex flex-wrap gap-4">
               <Link to="/services">
-                <Button size="lg" className="gradient-primary text-primary-foreground border-0 text-base px-8">
+                <Button size="lg" className="gradient-primary text-primary-foreground border-0 text-base px-8 hover:scale-105 transition-transform">
                   לשירותים שלנו
                   <ArrowLeft className="w-5 h-5 mr-2" />
                 </Button>
               </Link>
               <a href={WA_LINK} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="bg-card text-foreground hover:bg-card/90 text-base px-8 border border-border">
+                <Button size="lg" variant="outline" className="bg-card/90 text-foreground hover:bg-card text-base px-8 border-border backdrop-blur-sm hover:scale-105 transition-transform">
                   דברו איתנו
                 </Button>
               </a>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
+
+      {/* Trust Badges */}
+      <TrustBadges />
 
       {/* Features */}
       <section className="section-padding bg-background">
         <div className="container-custom">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">למה FilterSmart?</h2>
-            <p className="text-muted-foreground text-lg">פילטר סמארט – המומחים לסינון טלפונים והגנה דיגיטלית באשדוד</p>
-          </div>
+          <AnimatedSection>
+            <div className="text-center max-w-2xl mx-auto mb-12">
+              <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">למה FilterSmart?</h2>
+              <p className="text-muted-foreground text-lg">פילטר סמארט – המומחים לסינון טלפונים והגנה דיגיטלית באשדוד</p>
+            </div>
+          </AnimatedSection>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { icon: Shield, title: "הגנה מקצועית", desc: "פתרונות סינון ברמה הגבוהה ביותר עם שכבות הגנה מרובות" },
               { icon: Smartphone, title: "תמיכה בכל המכשירים", desc: "אייפון, אנדרואיד ומכשירי שיאומי Qin – פתרון לכל סוגי המכשירים" },
               { icon: Zap, title: "שירות מהיר", desc: "התקנה מקצועית ומהירה, ללא איפוס המכשיר בשירותים הבסיסיים" },
             ].map((feature, i) => (
-              <div key={i} className="bg-card rounded-xl p-8 card-shadow hover:card-shadow-hover transition-shadow group">
-                <div className="w-12 h-12 rounded-lg gradient-primary flex items-center justify-center mb-5">
-                  <feature.icon className="w-6 h-6 text-primary-foreground" />
+              <AnimatedSection key={i} delay={i * 0.1}>
+                <div className="bg-card rounded-xl p-8 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group">
+                  <div className="w-12 h-12 rounded-lg gradient-primary flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+                    <feature.icon className="w-6 h-6 text-primary-foreground" />
+                  </div>
+                  <h3 className="text-lg font-heading font-semibold text-card-foreground mb-2">{feature.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{feature.desc}</p>
                 </div>
-                <h3 className="text-lg font-heading font-semibold text-card-foreground mb-2">{feature.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{feature.desc}</p>
-              </div>
+              </AnimatedSection>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Filtering Services Category */}
+      {/* Filtering Services */}
       <section className="section-padding bg-muted/50">
         <div className="container-custom">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">
-              <Lock className="w-4 h-4" />
-              סינון טלפונים והגנה
+          <AnimatedSection>
+            <div className="text-center max-w-2xl mx-auto mb-12">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">
+                <Lock className="w-4 h-4" />
+                סינון טלפונים והגנה
+              </div>
+              <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">שירותי סינון והגנה דיגיטלית</h2>
+              <p className="text-muted-foreground text-lg">פתרונות סינון מקצועיים לאייפון ואנדרואיד – מסינון בסיסי ועד הגנה הרמטית</p>
             </div>
-            <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">שירותי סינון והגנה דיגיטלית</h2>
-            <p className="text-muted-foreground text-lg">פתרונות סינון מקצועיים לאייפון ואנדרואיד – מסינון בסיסי ועד הגנה הרמטית</p>
-          </div>
+          </AnimatedSection>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteringServices.map((service) => (
-              <Link
-                key={service.slug}
-                to={`/services/${service.slug}`}
-                className="bg-card rounded-xl p-6 card-shadow hover:card-shadow-hover transition-all hover:-translate-y-1 group"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    {service.logo && (
-                      <img src={service.logo} alt={`${service.name} לוגו`} className="w-10 h-10 rounded-lg object-contain bg-muted p-1" />
-                    )}
+            {filteringServices.map((service, i) => (
+              <AnimatedSection key={service.slug} delay={i * 0.1}>
+                <Link
+                  to={`/services/${service.slug}`}
+                  className="block bg-card rounded-xl p-6 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group"
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      {service.logo && (
+                        <img src={service.logo} alt={`${service.name} לוגו`} className="w-10 h-10 rounded-lg object-contain bg-muted p-1" loading="lazy" />
+                      )}
+                      <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">
+                        {service.name}
+                      </h3>
+                    </div>
+                    <span className="text-lg font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
+                  </div>
+                  <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{service.shortDesc}</p>
+                  <div className="flex items-center text-primary text-sm font-medium">
+                    <span>פרטים נוספים</span>
+                    <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
+                  </div>
+                </Link>
+              </AnimatedSection>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Flashing Services */}
+      <section className="section-padding bg-background">
+        <div className="container-custom">
+          <AnimatedSection>
+            <div className="text-center max-w-2xl mx-auto mb-12">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 text-secondary text-sm font-semibold mb-4">
+                <Cpu className="w-4 h-4" />
+                צריבת גרסאות ומערכות
+              </div>
+              <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">צריבת גרסאות למכשירי שיאומי Qin</h2>
+              <p className="text-muted-foreground text-lg">צריבת גרסה כשרה ומותאמת למכשירי Qin F21 Pro ו-Qin F25</p>
+            </div>
+          </AnimatedSection>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            {flashingServices.map((service, i) => (
+              <AnimatedSection key={service.slug} delay={i * 0.1}>
+                <Link
+                  to={`/services/${service.slug}`}
+                  className="block bg-card rounded-xl p-6 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group"
+                >
+                  <div className="flex items-start justify-between mb-4">
                     <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">
                       {service.name}
                     </h3>
+                    <span className="text-lg font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
                   </div>
-                  <span className="text-lg font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
-                </div>
-                <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{service.shortDesc}</p>
-                <div className="flex items-center text-primary text-sm font-medium">
-                  <span>פרטים נוספים</span>
-                  <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
-                </div>
-              </Link>
+                  <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{service.shortDesc}</p>
+                  <div className="flex items-center text-primary text-sm font-medium">
+                    <span>פרטים נוספים</span>
+                    <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
+                  </div>
+                </Link>
+              </AnimatedSection>
             ))}
           </div>
         </div>
       </section>
-
-      {/* Flashing Services Category */}
-      <section className="section-padding bg-background">
-        <div className="container-custom">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 text-secondary text-sm font-semibold mb-4">
-              <Cpu className="w-4 h-4" />
-              צריבת גרסאות ומערכות
-            </div>
-            <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">צריבת גרסאות למכשירי שיאומי Qin</h2>
-            <p className="text-muted-foreground text-lg">צריבת גרסה כשרה ומותאמת למכשירי Qin F21 Pro ו-Qin F25</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-            {flashingServices.map((service) => (
-              <Link
-                key={service.slug}
-                to={`/services/${service.slug}`}
-                className="bg-card rounded-xl p-6 card-shadow hover:card-shadow-hover transition-all hover:-translate-y-1 group"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">
-                    {service.name}
-                  </h3>
-                  <span className="text-lg font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
-                </div>
-                <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{service.shortDesc}</p>
-                <div className="flex items-center text-primary text-sm font-medium">
-                  <span>פרטים נוספים</span>
-                  <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Filter Matcher Quiz */}
-      <FilterMatcher />
 
       {/* Reviews */}
       <Reviews />
@@ -172,22 +189,24 @@ const Index = () => {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 gradient-primary" />
         <div className="relative container-custom py-16 md:py-24 text-center">
-          <h2 className="text-2xl md:text-4xl font-heading font-bold text-primary-foreground mb-4">מוכנים להגן על הטלפון שלכם?</h2>
-          <p className="text-primary-foreground/80 text-lg mb-8 max-w-xl mx-auto">
-            צרו קשר עוד היום ונתאים לכם את פתרון הסינון המושלם
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <a href={WA_LINK} target="_blank" rel="noopener noreferrer">
-              <Button size="lg" className="bg-card text-foreground hover:bg-card/90 text-base px-8 border border-border">
-                WhatsApp
-              </Button>
-            </a>
-            <a href="https://bitpay.co.il/app/me/0527186881" target="_blank" rel="noopener noreferrer">
-              <Button size="lg" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 text-base px-8">
-                שלם ב-BIT
-              </Button>
-            </a>
-          </div>
+          <AnimatedSection>
+            <h2 className="text-2xl md:text-4xl font-heading font-bold text-primary-foreground mb-4">מוכנים להגן על הטלפון שלכם?</h2>
+            <p className="text-primary-foreground/80 text-lg mb-8 max-w-xl mx-auto">
+              צרו קשר עוד היום ונתאים לכם את פתרון הסינון המושלם
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <a href={WA_LINK} target="_blank" rel="noopener noreferrer">
+                <Button size="lg" variant="outline" className="bg-card/90 text-foreground hover:bg-card text-base px-8 border-border hover:scale-105 transition-transform">
+                  WhatsApp
+                </Button>
+              </a>
+              <a href="https://bitpay.co.il/app/me/0527186881" target="_blank" rel="noopener noreferrer">
+                <Button size="lg" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 text-base px-8 hover:scale-105 transition-transform">
+                  שלם ב-BIT
+                </Button>
+              </a>
+            </div>
+          </AnimatedSection>
         </div>
       </section>
 
@@ -203,7 +222,7 @@ const Index = () => {
               המומחיות שלנו כוללת סינון לאייפון ואנדרואיד, התקנת מערכות הגנה מתקדמות, וצריבת גרסאות כשרות למכשירי <strong className="text-foreground">שיאומי Qin F21 Pro</strong> ו-<strong className="text-foreground">Qin F25</strong>. כל עבודה מתבצעת באופן מקצועי עם תמיכה טכנית מלאה.
             </p>
             <p>
-              אנו ממוקמים ברחוב חטיבת גבעתי 2, כניסה ו׳, אשדוד – ומספקים שירות אמין, מהיר ובמחירים הוגנים. בין אם אתם מחפשים סינון בסיסי ב-20₪ או פתרון הרמטי כמו הדרן, אנחנו כאן בשבילכם.
+              אנו ממוקמים ברחוב חטיבת גבעתי 2, רובע ג׳, אשדוד – ומספקים שירות אמין, מהיר ובמחירים הוגנים. בין אם אתם מחפשים סינון בסיסי ב-20₪ או פתרון הרמטי כמו הדרן, אנחנו כאן בשבילכם.
             </p>
           </div>
         </div>
