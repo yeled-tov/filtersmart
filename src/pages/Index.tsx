@@ -20,7 +20,7 @@ const Index = () => {
     <>
       <SEOHead
         title="FilterSmart – פילטר סמארט: סינון טלפונים וצריבת גרסאות באשדוד"
-        description="המומחים לסינון טלפונים וצריבת גרסאות באשדוד. משווק מורשה הדרן, עסקן וכושר פליי. צריבת גרסה לשיאומי Qin F21/F22, סינון אייפון ואנדרואיד."
+        description="המעבדה המובילה באשדוד לסינון מכשירים, התקנת הדרן, עסקן וכושר פליי. שירות מקצועי ומהיר לציבור החרדי והדתי"
         path="/"
         keywords="סינון טלפון אשדוד, הדרן אשדוד, עסקן אשדוד, כושר פליי אשדוד, צריבת גרסה לשיאומי קין, חסימת אינטרנט באשדוד, פילטר סמארט"
       />
@@ -43,25 +43,12 @@ const Index = () => {
               משווק מורשה – הדרן, עסקן, כושר פליי
             </div>
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-primary-foreground leading-tight mb-6">
-              סינון טלפונים וצריבת
-              <span className="block mt-2" style={{ color: "hsl(155, 55%, 55%)" }}>גרסאות באשדוד</span>
+              פילטר סמארט - סינון טלפונים
+              <span className="block mt-2" style={{ color: "hsl(155, 55%, 55%)" }}>וצריבת גרסאות באשדוד</span>
             </h1>
             <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 leading-relaxed">
               FilterSmart (פילטר סמארט) – פתרונות סינון לאייפון ואנדרואיד, התקנת הדרן, עסקן, כושר פליי וצריבת גרסה למכשירי שיאומי Qin. שירות מקצועי ואמין באשדוד.
             </p>
-            <div className="flex flex-wrap gap-4">
-              <Link to="/services">
-                <Button size="lg" className="gradient-primary text-primary-foreground border-0 text-base px-8 hover:scale-105 transition-transform">
-                  לשירותים שלנו
-                  <ArrowLeft className="w-5 h-5 mr-2" />
-                </Button>
-              </Link>
-              <a href={WA_LINK} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="outline" className="bg-card/90 text-foreground hover:bg-card text-base px-8 border-border backdrop-blur-sm hover:scale-105 transition-transform">
-                  דברו איתנו
-                </Button>
-              </a>
-            </div>
           </motion.div>
         </div>
       </section>
