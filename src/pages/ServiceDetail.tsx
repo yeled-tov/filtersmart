@@ -27,6 +27,27 @@ const ServiceDetail = () => {
         path={`/services/${service.slug}`}
         keywords={service.keywords}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "name": service.name,
+            "description": service.shortDesc,
+            "provider": {
+              "@type": "LocalBusiness",
+              "name": "FilterSmart – פילטר סמארט",
+              "url": "https://smartfilter.co.il"
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": service.price.replace("₪", ""),
+              "priceCurrency": "ILS"
+            }
+          })
+        }}
+      />
 
       <section className="section-padding bg-background">
         <div className="container-custom max-w-3xl">

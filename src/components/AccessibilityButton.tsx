@@ -21,9 +21,9 @@ const AccessibilityButton = () => {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
+    <div className="fixed bottom-4 left-4 z-50 flex flex-col items-start gap-1.5">
       {open && (
-        <div className="bg-card/80 backdrop-blur-xl border border-border/50 rounded-xl p-4 card-shadow animate-fade-in space-y-2 w-52">
+        <div className="bg-card/80 backdrop-blur-xl border border-border/50 rounded-lg p-3 card-shadow animate-fade-in space-y-1.5 w-44">
           <h3 className="text-sm font-heading font-semibold text-card-foreground">נגישות</h3>
           <button onClick={increaseFontSize} className="w-full text-right text-sm px-3 py-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground">
             הגדל גופן +
@@ -38,10 +38,10 @@ const AccessibilityButton = () => {
       )}
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground shadow-md hover:scale-105 transition-transform"
+        className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/80 text-primary-foreground shadow-sm hover:scale-105 transition-transform"
         aria-label="תפריט נגישות"
       >
-        <AccessibilityIcon className="w-5 h-5" />
+        <AccessibilityIcon className="w-4 h-4" />
       </button>
     </div>
   );
