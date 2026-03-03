@@ -21,7 +21,7 @@ const AccessibilityButton = () => {
   };
 
   return (
-    <div className="fixed bottom-20 left-1 z-50 flex flex-col items-start gap-1.5">
+    <div className="fixed top-1/2 -translate-y-1/2 left-1 z-50 flex flex-col items-start gap-1.5">
       {open && (
         <div className="bg-card/80 backdrop-blur-xl border border-border/50 rounded-lg p-3 card-shadow animate-fade-in space-y-1.5 w-44">
           <h3 className="text-sm font-heading font-semibold text-card-foreground">נגישות</h3>
