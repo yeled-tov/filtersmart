@@ -3,19 +3,27 @@ import { Shield, ArrowLeft, Smartphone, Lock, Zap, Cpu } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/SEOHead";
-import { services } from "@/data/services";
+import { useServices } from "@/hooks/useServices";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 import TrustBadges from "@/components/TrustBadges";
 import Reviews from "@/components/Reviews";
 import FAQ from "@/components/FAQ";
 import AnimatedSection from "@/components/AnimatedSection";
 import heroBg from "@/assets/hero-bg.jpg";
 
-const WA_LINK = "https://wa.me/972527186881?text=שלום%20פילטר%20סמארט%2C%20אשמח%20לקבל%20פרטים";
-
-const filteringServices = services.filter((s) => s.category === "filtering");
-const flashingServices = services.filter((s) => s.category === "flashing");
-
 const Index = () => {
+  const { data: services } = useServices();
+  const { data: settings } = useSiteSettings();
+
+  const waLink = settings?.whatsapp_link || "https://wa.me/972527186881";
+  const bitLink = settings?.bit_link || "https://bitpay.co.il/app/me/0527186881";
+  const heroTitle = settings?.hero_title || "פילטר סמארט - סינון טלפונים";
+  const heroSubtitle = settings?.hero_subtitle || "וצריבת גרסאות באשדוד";
+  const heroDesc = settings?.hero_description || "FilterSmart (פילטר סמארט) – פתרונות סינון לאייפון ואנדרואיד, התקנת הדרן, עסקן, כושר פליי וצריבת גרסה למכשירי שיאומי Qin. שירות מקצועי ואמין באשדוד.";
+
+  const filteringServices = services?.filter((s) => s.category === "filtering") || [];
+  const flashingServices = services?.filter((s) => s.category === "flashing") || [];
+
   return (
     <>
       <SEOHead
@@ -43,17 +51,14 @@ const Index = () => {
               משווק מורשה – הדרן, עסקן, כושר פליי
             </div>
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-primary-foreground leading-tight mb-6">
-              פילטר סמארט - סינון טלפונים
-              <span className="block mt-2" style={{ color: "hsl(155, 55%, 55%)" }}>וצריבת גרסאות באשדוד</span>
+              {heroTitle}
+              <span className="block mt-2" style={{ color: "hsl(155, 55%, 55%)" }}>{heroSubtitle}</span>
             </h1>
-            <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 leading-relaxed">
-              FilterSmart (פילטר סמארט) – פתרונות סינון לאייפון ואנדרואיד, התקנת הדרן, עסקן, כושר פליי וצריבת גרסה למכשירי שיאומי Qin. שירות מקצועי ואמין באשדוד.
-            </p>
+            <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 leading-relaxed">{heroDesc}</p>
           </motion.div>
         </div>
       </section>
 
-      {/* Trust Badges */}
       <TrustBadges />
 
       {/* Features */}
@@ -95,7 +100,7 @@ const Index = () => {
                 סינון טלפונים והגנה
               </div>
               <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">שירותי סינון והגנה דיגיטלית</h2>
-              <p className="text-muted-foreground text-lg">פתרונות סינון מקצועיים לאייפון ואנדרואיד – מסינון בסיסי ועד הגנה הרמטית</p>
+              <p className="text-muted-foreground text-lg">פתרונות סינון מקצועיים לאייפון ואנדרואיד</p>
             </div>
           </AnimatedSection>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -107,8 +112,8 @@ const Index = () => {
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      {service.logo && (
-                        <img src={service.logo} alt={`${service.name} לוגו`} className="w-10 h-10 rounded-lg object-contain bg-muted p-1" loading="lazy" />
+                      {service.logo_url && (
+                        <img src={service.logo_url} alt={`${service.name} לוגו`} className="w-10 h-10 rounded-lg object-contain bg-muted p-1" loading="lazy" />
                       )}
                       <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">
                         {service.name}
@@ -116,7 +121,7 @@ const Index = () => {
                     </div>
                     <span className="text-lg font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
                   </div>
-                  <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{service.shortDesc}</p>
+                  <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{service.short_desc}</p>
                   <div className="flex items-center text-primary text-sm font-medium">
                     <span>פרטים נוספים</span>
                     <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
@@ -154,7 +159,7 @@ const Index = () => {
                     </h3>
                     <span className="text-lg font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
                   </div>
-                  <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{service.shortDesc}</p>
+                  <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{service.short_desc}</p>
                   <div className="flex items-center text-primary text-sm font-medium">
                     <span>פרטים נוספים</span>
                     <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
@@ -166,10 +171,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Reviews */}
       <Reviews />
-
-      {/* FAQ */}
       <FAQ />
 
       {/* CTA */}
@@ -178,16 +180,14 @@ const Index = () => {
         <div className="relative container-custom py-16 md:py-24 text-center">
           <AnimatedSection>
             <h2 className="text-2xl md:text-4xl font-heading font-bold text-primary-foreground mb-4">מוכנים להגן על הטלפון שלכם?</h2>
-            <p className="text-primary-foreground/80 text-lg mb-8 max-w-xl mx-auto">
-              צרו קשר עוד היום ונתאים לכם את פתרון הסינון המושלם
-            </p>
+            <p className="text-primary-foreground/80 text-lg mb-8 max-w-xl mx-auto">צרו קשר עוד היום ונתאים לכם את פתרון הסינון המושלם</p>
             <div className="flex flex-wrap justify-center gap-4">
-              <a href={WA_LINK} target="_blank" rel="noopener noreferrer">
+              <a href={waLink} target="_blank" rel="noopener noreferrer">
                 <Button size="lg" variant="outline" className="bg-card/90 text-foreground hover:bg-card text-base px-8 border-border hover:scale-105 transition-transform">
                   WhatsApp
                 </Button>
               </a>
-              <a href="https://bitpay.co.il/app/me/0527186881" target="_blank" rel="noopener noreferrer">
+              <a href={bitLink} target="_blank" rel="noopener noreferrer">
                 <Button size="lg" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 text-base px-8 hover:scale-105 transition-transform">
                   שלם ב-BIT
                 </Button>

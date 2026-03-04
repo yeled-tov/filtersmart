@@ -6,20 +6,26 @@ import { Textarea } from "@/components/ui/textarea";
 import SEOHead from "@/components/SEOHead";
 import { z } from "zod";
 import { toast } from "sonner";
-
-const WA_LINK = "https://wa.me/972527186881?text=שלום%20פילטר%20סמארט%2C%20אשמח%20לקבל%20פרטים";
+import { supabase } from "@/integrations/supabase/client";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 const contactSchema = z.object({
   name: z.string().trim().min(2, "שם חייב להכיל לפחות 2 תווים").max(100),
   phone: z.string().trim().min(9, "מספר טלפון לא תקין").max(15),
+  email: z.string().trim().email("כתובת מייל לא תקינה").optional().or(z.literal("")),
   message: z.string().trim().min(5, "הודעה חייבת להכיל לפחות 5 תווים").max(1000),
 });
 
 const Contact = () => {
-  const [form, setForm] = useState({ name: "", phone: "", message: "" });
+  const [form, setForm] = useState({ name: "", phone: "", email: "", message: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [sending, setSending] = useState(false);
+  const { data: settings } = useSiteSettings();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const waLink = settings?.whatsapp_link || "https://wa.me/972527186881";
+  const bitLink = settings?.bit_link || "https://bitpay.co.il/app/me/0527186881";
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const result = contactSchema.safeParse(form);
     if (!result.success) {
@@ -31,10 +37,23 @@ const Contact = () => {
       return;
     }
     setErrors({});
-    const text = encodeURIComponent(`שם: ${form.name}\nטלפון: ${form.phone}\nהודעה: ${form.message}`);
-    window.open(`https://wa.me/972527186881?text=${text}`, "_blank", "noopener,noreferrer");
-    toast.success("ההודעה נשלחה בהצלחה!");
-    setForm({ name: "", phone: "", message: "" });
+    setSending(true);
+
+    const { error } = await supabase.from("contact_submissions").insert({
+      name: form.name,
+      phone: form.phone,
+      email: form.email || null,
+      message: form.message,
+    });
+
+    setSending(false);
+    if (error) {
+      toast.error("שגיאה בשליחה, נסו שוב");
+      return;
+    }
+
+    toast.success("ההודעה נשלחה בהצלחה! ניצור איתכם קשר בהקדם.");
+    setForm({ name: "", phone: "", email: "", message: "" });
   };
 
   return (
@@ -66,7 +85,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <p className="font-medium text-card-foreground text-sm">כתובת</p>
-                      <p className="text-muted-foreground text-sm">רחוב חטיבת גבעתי 2, כניסה ו׳, אשדוד</p>
+                      <p className="text-muted-foreground text-sm">{settings?.address || "רחוב חטיבת גבעתי 2, כניסה ו׳, אשדוד"}</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
@@ -75,7 +94,9 @@ const Contact = () => {
                     </div>
                     <div>
                       <p className="font-medium text-card-foreground text-sm">טלפון</p>
-                      <a href="tel:0527186881" className="text-muted-foreground text-sm hover:text-primary transition-colors" dir="ltr">052-718-6881</a>
+                      <a href={`tel:${settings?.phone_raw || "0527186881"}`} className="text-muted-foreground text-sm hover:text-primary transition-colors" dir="ltr">
+                        {settings?.phone || "052-718-6881"}
+                      </a>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
@@ -84,7 +105,9 @@ const Contact = () => {
                     </div>
                     <div>
                       <p className="font-medium text-card-foreground text-sm">מייל</p>
-                      <a href="mailto:ywldyld@gmail.com" className="text-muted-foreground text-sm hover:text-primary transition-colors">ywldyld@gmail.com</a>
+                      <a href={`mailto:${settings?.email || "ywldyld@gmail.com"}`} className="text-muted-foreground text-sm hover:text-primary transition-colors">
+                        {settings?.email || "ywldyld@gmail.com"}
+                      </a>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
@@ -93,17 +116,17 @@ const Contact = () => {
                     </div>
                     <div>
                       <p className="font-medium text-card-foreground text-sm">שעות פעילות</p>
-                      <p className="text-muted-foreground text-sm">ראשון–חמישי: 09:00–19:00</p>
+                      <p className="text-muted-foreground text-sm">{settings?.opening_hours || "ראשון–חמישי: 09:00–19:00"}</p>
                     </div>
                   </li>
                 </ul>
               </div>
 
               <div className="flex gap-3">
-                <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="flex-1">
+                <a href={waLink} target="_blank" rel="noopener noreferrer" className="flex-1">
                   <Button className="w-full gradient-primary text-primary-foreground border-0">WhatsApp</Button>
                 </a>
-                <a href="https://bitpay.co.il/app/me/0527186881" target="_blank" rel="noopener noreferrer" className="flex-1">
+                <a href={bitLink} target="_blank" rel="noopener noreferrer" className="flex-1">
                   <Button variant="outline" className="w-full">שלם ב-BIT</Button>
                 </a>
               </div>
@@ -120,12 +143,16 @@ const Contact = () => {
                 {errors.phone && <p className="text-destructive text-xs mt-1">{errors.phone}</p>}
               </div>
               <div>
+                <Input placeholder="מייל (אופציונלי)" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className={errors.email ? "border-destructive" : ""} dir="ltr" />
+                {errors.email && <p className="text-destructive text-xs mt-1">{errors.email}</p>}
+              </div>
+              <div>
                 <Textarea placeholder="הודעה" rows={5} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className={errors.message ? "border-destructive" : ""} />
                 {errors.message && <p className="text-destructive text-xs mt-1">{errors.message}</p>}
               </div>
-              <Button type="submit" className="w-full gradient-primary text-primary-foreground border-0 gap-2">
+              <Button type="submit" disabled={sending} className="w-full gradient-primary text-primary-foreground border-0 gap-2">
                 <Send className="w-4 h-4" />
-                שלח הודעה
+                {sending ? "שולח..." : "שלח הודעה"}
               </Button>
             </form>
           </div>
