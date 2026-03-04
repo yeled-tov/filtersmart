@@ -1,14 +1,16 @@
 import { Link } from "react-router-dom";
 import { Calendar, ArrowLeft } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
-import { blogPosts } from "@/data/blog";
+import { useBlogPosts } from "@/hooks/useBlogPosts";
 
 const Blog = () => {
+  const { data: posts, isLoading } = useBlogPosts();
+
   return (
     <>
       <SEOHead
         title="בלוג SmartFilter – מדריכים וטיפים לסינון טלפון"
-        description="מאמרים ומדריכים בנושא סינון טלפון, הגנה דיגיטלית, מכשירי Qin ועוד. כל מה שצריך לדעת על סינון לאייפון ואנדרואיד."
+        description="מאמרים ומדריכים בנושא סינון טלפון, הגנה דיגיטלית, מכשירי Qin ועוד."
         path="/blog"
         keywords="סינון טלפון, חסימת אינטרנט, סינון אנדרואיד, סינון אייפון"
       />
@@ -22,30 +24,36 @@ const Blog = () => {
             <p className="text-lg text-muted-foreground">מאמרים, מדריכים וטיפים בנושא סינון והגנה דיגיטלית</p>
           </div>
 
-          <div className="space-y-6">
-            {blogPosts.map((post) => (
-              <Link
-                key={post.slug}
-                to={`/blog/${post.slug}`}
-                className="block bg-card rounded-xl p-6 md:p-8 card-shadow hover:card-shadow-hover transition-all group"
-              >
-                <div className="flex items-center gap-2 text-muted-foreground text-sm mb-3">
-                  <Calendar className="w-4 h-4" />
-                  <time dateTime={post.date}>
-                    {new Date(post.date).toLocaleDateString("he-IL", { year: "numeric", month: "long", day: "numeric" })}
-                  </time>
-                </div>
-                <h2 className="text-xl md:text-2xl font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors mb-3">
-                  {post.title}
-                </h2>
-                <p className="text-muted-foreground leading-relaxed mb-4">{post.excerpt}</p>
-                <div className="flex items-center text-primary text-sm font-medium">
-                  <span>קרא עוד</span>
-                  <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
-                </div>
-              </Link>
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="flex justify-center py-12">
+              <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {posts?.map((post) => (
+                <Link
+                  key={post.slug}
+                  to={`/blog/${post.slug}`}
+                  className="block bg-card rounded-xl p-6 md:p-8 card-shadow hover:card-shadow-hover transition-all group"
+                >
+                  <div className="flex items-center gap-2 text-muted-foreground text-sm mb-3">
+                    <Calendar className="w-4 h-4" />
+                    <time dateTime={post.created_at}>
+                      {new Date(post.created_at).toLocaleDateString("he-IL", { year: "numeric", month: "long", day: "numeric" })}
+                    </time>
+                  </div>
+                  <h2 className="text-xl md:text-2xl font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors mb-3">
+                    {post.title}
+                  </h2>
+                  <p className="text-muted-foreground leading-relaxed mb-4">{post.excerpt}</p>
+                  <div className="flex items-center text-primary text-sm font-medium">
+                    <span>קרא עוד</span>
+                    <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>
