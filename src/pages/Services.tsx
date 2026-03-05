@@ -1,7 +1,23 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, Lock, Cpu } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import SEOHead from "@/components/SEOHead";
 import { useServices } from "@/hooks/useServices";
+
+const ServiceCardSkeleton = () => (
+  <div className="bg-card rounded-xl p-6 card-shadow">
+    <div className="flex items-start justify-between mb-3">
+      <div className="flex items-center gap-3">
+        <Skeleton className="w-10 h-10 rounded-lg" />
+        <Skeleton className="h-5 w-32" />
+      </div>
+      <Skeleton className="h-6 w-16" />
+    </div>
+    <Skeleton className="h-4 w-full mb-2" />
+    <Skeleton className="h-4 w-2/3 mb-4" />
+    <Skeleton className="h-4 w-20" />
+  </div>
+);
 
 const Services = () => {
   const { data: services, isLoading } = useServices();
@@ -30,8 +46,13 @@ const Services = () => {
           </div>
 
           {isLoading ? (
-            <div className="flex justify-center py-12">
-              <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin" />
+            <div className="space-y-12">
+              <div>
+                <Skeleton className="h-6 w-48 mb-6" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {Array.from({ length: 4 }).map((_, i) => <ServiceCardSkeleton key={i} />)}
+                </div>
+              </div>
             </div>
           ) : (
             <>
@@ -46,8 +67,13 @@ const Services = () => {
                     <Link
                       key={service.slug}
                       to={`/services/${service.slug}`}
-                      className="bg-card rounded-xl p-6 card-shadow hover:card-shadow-hover transition-all hover:-translate-y-1 group flex flex-col"
+                      className="bg-card rounded-xl p-6 card-shadow hover:card-shadow-hover transition-all hover:-translate-y-1 duration-300 group flex flex-col relative overflow-hidden"
                     >
+                      {service.slug === "hadran" && (
+                        <div className="absolute top-3 left-3 bg-secondary text-secondary-foreground text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                          ⭐ הכי פופולרי
+                        </div>
+                      )}
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
                           {service.logo_url && (
@@ -80,7 +106,7 @@ const Services = () => {
                     <Link
                       key={service.slug}
                       to={`/services/${service.slug}`}
-                      className="bg-card rounded-xl p-6 card-shadow hover:card-shadow-hover transition-all hover:-translate-y-1 group flex flex-col"
+                      className="bg-card rounded-xl p-6 card-shadow hover:card-shadow-hover transition-all hover:-translate-y-1 duration-300 group flex flex-col"
                     >
                       <div className="flex items-start justify-between mb-3">
                         <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Phone } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import Logo from "./Logo";
 import { Button } from "./ui/button";
 
@@ -61,38 +62,51 @@ const Header = () => {
         </button>
       </nav>
 
-      {mobileOpen && (
-        <div className="md:hidden bg-card/80 backdrop-blur-xl border-b border-border/50 animate-fade-in">
-          <ul className="container-custom py-4 space-y-1">
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <Link
-                  to={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                    location.pathname === link.href ? "text-primary bg-muted" : "text-muted-foreground hover:bg-muted"
-                  }`}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="md:hidden bg-card/95 backdrop-blur-xl border-b border-border/50 overflow-hidden"
+          >
+            <ul className="container-custom py-4 space-y-1">
+              {navLinks.map((link, i) => (
+                <motion.li
+                  key={link.href}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05 }}
                 >
-                  {link.label}
-                </Link>
+                  <Link
+                    to={link.href}
+                    onClick={() => setMobileOpen(false)}
+                    className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                      location.pathname === link.href ? "text-primary bg-muted" : "text-muted-foreground hover:bg-muted"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                </motion.li>
+              ))}
+              <li className="pt-3 flex gap-2">
+                <a href="tel:0527186881" className="flex-1">
+                  <Button variant="outline" className="w-full gap-2">
+                    <Phone className="w-4 h-4" />
+                    052-718-6881
+                  </Button>
+                </a>
+                <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="flex-1">
+                  <Button className="w-full gradient-primary text-primary-foreground border-0">
+                    WhatsApp
+                  </Button>
+                </a>
               </li>
-            ))}
-            <li className="pt-3 flex gap-2">
-              <a href="tel:0527186881" className="flex-1">
-                <Button variant="outline" className="w-full gap-2">
-                  <Phone className="w-4 h-4" />
-                  052-718-6881
-                </Button>
-              </a>
-              <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="flex-1">
-                <Button className="w-full gradient-primary text-primary-foreground border-0">
-                  WhatsApp
-                </Button>
-              </a>
-            </li>
-          </ul>
-        </div>
-      )}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

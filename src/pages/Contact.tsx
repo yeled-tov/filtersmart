@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { MapPin, Phone, Mail, Send, Clock } from "lucide-react";
+import { MapPin, Phone, Mail, Send, Clock, CheckCircle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,6 +21,7 @@ const Contact = () => {
   const [form, setForm] = useState({ name: "", phone: "", email: "", message: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sending, setSending] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const { data: settings } = useSiteSettings();
 
   const waLink = settings?.whatsapp_link || "https://wa.me/972527186881";
@@ -52,8 +54,10 @@ const Contact = () => {
       return;
     }
 
+    setSubmitted(true);
     toast.success("ההודעה נשלחה בהצלחה! ניצור איתכם קשר בהקדם.");
     setForm({ name: "", phone: "", email: "", message: "" });
+    setTimeout(() => setSubmitted(false), 4000);
   };
 
   return (
@@ -79,46 +83,28 @@ const Contact = () => {
               <div className="bg-card rounded-xl p-6 card-shadow">
                 <h2 className="text-lg font-heading font-semibold text-card-foreground mb-4">פרטי התקשרות</h2>
                 <ul className="space-y-4">
-                  <li className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-lg gradient-primary flex items-center justify-center shrink-0">
-                      <MapPin className="w-4 h-4 text-primary-foreground" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-card-foreground text-sm">כתובת</p>
-                      <p className="text-muted-foreground text-sm">{settings?.address || "רחוב חטיבת גבעתי 2, כניסה ו׳, אשדוד"}</p>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-lg gradient-primary flex items-center justify-center shrink-0">
-                      <Phone className="w-4 h-4 text-primary-foreground" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-card-foreground text-sm">טלפון</p>
-                      <a href={`tel:${settings?.phone_raw || "0527186881"}`} className="text-muted-foreground text-sm hover:text-primary transition-colors" dir="ltr">
-                        {settings?.phone || "052-718-6881"}
-                      </a>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-lg gradient-primary flex items-center justify-center shrink-0">
-                      <Mail className="w-4 h-4 text-primary-foreground" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-card-foreground text-sm">מייל</p>
-                      <a href={`mailto:${settings?.email || "ywldyld@gmail.com"}`} className="text-muted-foreground text-sm hover:text-primary transition-colors">
-                        {settings?.email || "ywldyld@gmail.com"}
-                      </a>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-lg gradient-primary flex items-center justify-center shrink-0">
-                      <Clock className="w-4 h-4 text-primary-foreground" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-card-foreground text-sm">שעות פעילות</p>
-                      <p className="text-muted-foreground text-sm">{settings?.opening_hours || "ראשון–חמישי: 09:00–19:00"}</p>
-                    </div>
-                  </li>
+                  {[
+                    { icon: MapPin, label: "כתובת", value: settings?.address || "רחוב חטיבת גבעתי 2, כניסה ו׳, אשדוד" },
+                    { icon: Phone, label: "טלפון", value: settings?.phone || "052-718-6881", href: `tel:${settings?.phone_raw || "0527186881"}`, dir: "ltr" as const },
+                    { icon: Mail, label: "מייל", value: settings?.email || "ywldyld@gmail.com", href: `mailto:${settings?.email || "ywldyld@gmail.com"}` },
+                    { icon: Clock, label: "שעות פעילות", value: settings?.opening_hours || "ראשון–חמישי: 09:00–19:00" },
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <div className="w-9 h-9 rounded-lg gradient-primary flex items-center justify-center shrink-0">
+                        <item.icon className="w-4 h-4 text-primary-foreground" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-card-foreground text-sm">{item.label}</p>
+                        {item.href ? (
+                          <a href={item.href} className="text-muted-foreground text-sm hover:text-primary transition-colors" dir={item.dir}>
+                            {item.value}
+                          </a>
+                        ) : (
+                          <p className="text-muted-foreground text-sm">{item.value}</p>
+                        )}
+                      </div>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
@@ -132,29 +118,60 @@ const Contact = () => {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="bg-card rounded-xl p-6 card-shadow space-y-4">
-              <h2 className="text-lg font-heading font-semibold text-card-foreground mb-2">שלחו לנו הודעה</h2>
-              <div>
-                <Input placeholder="שם מלא" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={errors.name ? "border-destructive" : ""} />
-                {errors.name && <p className="text-destructive text-xs mt-1">{errors.name}</p>}
-              </div>
-              <div>
-                <Input placeholder="טלפון" type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className={errors.phone ? "border-destructive" : ""} dir="ltr" />
-                {errors.phone && <p className="text-destructive text-xs mt-1">{errors.phone}</p>}
-              </div>
-              <div>
-                <Input placeholder="מייל (אופציונלי)" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className={errors.email ? "border-destructive" : ""} dir="ltr" />
-                {errors.email && <p className="text-destructive text-xs mt-1">{errors.email}</p>}
-              </div>
-              <div>
-                <Textarea placeholder="הודעה" rows={5} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className={errors.message ? "border-destructive" : ""} />
-                {errors.message && <p className="text-destructive text-xs mt-1">{errors.message}</p>}
-              </div>
-              <Button type="submit" disabled={sending} className="w-full gradient-primary text-primary-foreground border-0 gap-2">
-                <Send className="w-4 h-4" />
-                {sending ? "שולח..." : "שלח הודעה"}
-              </Button>
-            </form>
+            <div className="bg-card rounded-xl p-6 card-shadow relative overflow-hidden">
+              <AnimatePresence mode="wait">
+                {submitted ? (
+                  <motion.div
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    className="flex flex-col items-center justify-center py-16 text-center"
+                  >
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 200, delay: 0.1 }}
+                    >
+                      <CheckCircle className="w-16 h-16 text-secondary mb-4" />
+                    </motion.div>
+                    <h3 className="text-xl font-heading font-bold text-card-foreground mb-2">ההודעה נשלחה!</h3>
+                    <p className="text-muted-foreground">ניצור איתכם קשר בהקדם האפשרי</p>
+                  </motion.div>
+                ) : (
+                  <motion.form
+                    key="form"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onSubmit={handleSubmit}
+                    className="space-y-4"
+                  >
+                    <h2 className="text-lg font-heading font-semibold text-card-foreground mb-2">שלחו לנו הודעה</h2>
+                    <div>
+                      <Input placeholder="שם מלא" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={errors.name ? "border-destructive" : ""} />
+                      {errors.name && <p className="text-destructive text-xs mt-1">{errors.name}</p>}
+                    </div>
+                    <div>
+                      <Input placeholder="טלפון" type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className={errors.phone ? "border-destructive" : ""} dir="ltr" />
+                      {errors.phone && <p className="text-destructive text-xs mt-1">{errors.phone}</p>}
+                    </div>
+                    <div>
+                      <Input placeholder="מייל (אופציונלי)" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className={errors.email ? "border-destructive" : ""} dir="ltr" />
+                      {errors.email && <p className="text-destructive text-xs mt-1">{errors.email}</p>}
+                    </div>
+                    <div>
+                      <Textarea placeholder="הודעה" rows={5} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className={errors.message ? "border-destructive" : ""} />
+                      {errors.message && <p className="text-destructive text-xs mt-1">{errors.message}</p>}
+                    </div>
+                    <Button type="submit" disabled={sending} className="w-full gradient-primary text-primary-foreground border-0 gap-2">
+                      <Send className="w-4 h-4" />
+                      {sending ? "שולח..." : "שלח הודעה"}
+                    </Button>
+                  </motion.form>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </section>
