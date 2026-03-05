@@ -25,7 +25,7 @@ const Admin = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-background">
         <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -36,23 +36,25 @@ const Admin = () => {
   return (
     <div className="min-h-screen bg-background" dir="rtl">
       {/* Top bar */}
-      <header className="bg-card border-b border-border px-4 py-3 flex items-center justify-between">
-        <h1 className="text-lg font-heading font-bold text-foreground">ניהול FilterSmart</h1>
-        <Button variant="ghost" size="sm" onClick={signOut} className="gap-2 text-muted-foreground">
+      <header className="bg-foreground text-background px-4 py-3 flex items-center justify-between shadow-md">
+        <h1 className="text-lg font-heading font-bold">ניהול FilterSmart</h1>
+        <Button variant="ghost" size="sm" onClick={signOut} className="gap-2 text-background/70 hover:text-background hover:bg-background/10">
           <LogOut className="w-4 h-4" />
           יציאה
         </Button>
       </header>
 
       <div className="flex">
-        {/* Sidebar */}
-        <aside className="w-52 bg-card border-l border-border min-h-[calc(100vh-57px)] p-3 space-y-1 hidden md:block">
+        {/* Sidebar - dark */}
+        <aside className="w-56 bg-foreground text-background min-h-[calc(100vh-52px)] p-3 space-y-1 hidden md:block border-l border-background/10">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                activeTab === tab.id ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted"
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
+                activeTab === tab.id
+                  ? "bg-primary text-primary-foreground shadow-md"
+                  : "text-background/60 hover:bg-background/10 hover:text-background"
               }`}
             >
               <tab.icon className="w-4 h-4" />
@@ -81,7 +83,7 @@ const Admin = () => {
       </div>
 
       {/* Content */}
-      <main className="flex-1 p-4 md:p-6 md:mr-52">
+      <main className="flex-1 p-4 md:p-6 md:mr-56">
         {activeTab === "dashboard" && <AdminDashboard />}
         {activeTab === "services" && <AdminServices />}
         {activeTab === "blog" && <AdminBlog />}

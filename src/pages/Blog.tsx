@@ -1,7 +1,27 @@
 import { Link } from "react-router-dom";
-import { Calendar, ArrowLeft } from "lucide-react";
+import { Calendar, ArrowLeft, Clock } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import SEOHead from "@/components/SEOHead";
 import { useBlogPosts } from "@/hooks/useBlogPosts";
+
+const estimateReadTime = (content: string) => {
+  const words = content.trim().split(/\s+/).length;
+  const minutes = Math.max(1, Math.ceil(words / 200));
+  return `${minutes} דק׳ קריאה`;
+};
+
+const BlogSkeleton = () => (
+  <div className="bg-card rounded-xl p-6 md:p-8 card-shadow">
+    <div className="flex items-center gap-2 mb-3">
+      <Skeleton className="w-4 h-4 rounded" />
+      <Skeleton className="h-4 w-32" />
+    </div>
+    <Skeleton className="h-7 w-3/4 mb-3" />
+    <Skeleton className="h-4 w-full mb-2" />
+    <Skeleton className="h-4 w-2/3 mb-4" />
+    <Skeleton className="h-4 w-20" />
+  </div>
+);
 
 const Blog = () => {
   const { data: posts, isLoading } = useBlogPosts();
@@ -25,8 +45,10 @@ const Blog = () => {
           </div>
 
           {isLoading ? (
-            <div className="flex justify-center py-12">
-              <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin" />
+            <div className="space-y-6">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <BlogSkeleton key={i} />
+              ))}
             </div>
           ) : (
             <div className="space-y-6">
@@ -34,13 +56,19 @@ const Blog = () => {
                 <Link
                   key={post.slug}
                   to={`/blog/${post.slug}`}
-                  className="block bg-card rounded-xl p-6 md:p-8 card-shadow hover:card-shadow-hover transition-all group"
+                  className="block bg-card rounded-xl p-6 md:p-8 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group"
                 >
-                  <div className="flex items-center gap-2 text-muted-foreground text-sm mb-3">
-                    <Calendar className="w-4 h-4" />
-                    <time dateTime={post.created_at}>
-                      {new Date(post.created_at).toLocaleDateString("he-IL", { year: "numeric", month: "long", day: "numeric" })}
-                    </time>
+                  <div className="flex items-center gap-4 text-muted-foreground text-sm mb-3">
+                    <span className="flex items-center gap-1">
+                      <Calendar className="w-4 h-4" />
+                      <time dateTime={post.created_at}>
+                        {new Date(post.created_at).toLocaleDateString("he-IL", { year: "numeric", month: "long", day: "numeric" })}
+                      </time>
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-4 h-4" />
+                      {estimateReadTime(post.content)}
+                    </span>
                   </div>
                   <h2 className="text-xl md:text-2xl font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors mb-3">
                     {post.title}
