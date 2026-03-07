@@ -53,7 +53,7 @@ const Index = () => {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
           <img src={heroBg} alt="" className="w-full h-full object-cover" loading="eager" aria-hidden="true" />
-          <div className="absolute inset-0 bg-foreground/70" />
+          <div className="absolute inset-0 bg-foreground/45" />
         </div>
         <div className="relative container-custom py-20 md:py-32 lg:py-40">
           <motion.div

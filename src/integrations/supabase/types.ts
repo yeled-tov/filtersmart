@@ -16,30 +16,42 @@ export type Database = {
     Tables: {
       blog_posts: {
         Row: {
+          category: string | null
           content: string
           created_at: string
           excerpt: string | null
+          featured_image: string | null
           id: string
+          meta_description: string | null
+          meta_title: string | null
           published: boolean
           slug: string
           title: string
           updated_at: string
         }
         Insert: {
+          category?: string | null
           content: string
           created_at?: string
           excerpt?: string | null
+          featured_image?: string | null
           id?: string
+          meta_description?: string | null
+          meta_title?: string | null
           published?: boolean
           slug: string
           title: string
           updated_at?: string
         }
         Update: {
+          category?: string | null
           content?: string
           created_at?: string
           excerpt?: string | null
+          featured_image?: string | null
           id?: string
+          meta_description?: string | null
+          meta_title?: string | null
           published?: boolean
           slug?: string
           title?: string
@@ -82,8 +94,10 @@ export type Database = {
           category: string
           created_at: string
           description: string | null
+          emoji_icon: string | null
           features: Json | null
           id: string
+          is_popular: boolean | null
           logo_url: string | null
           name: string
           price: string
@@ -97,8 +111,10 @@ export type Database = {
           category?: string
           created_at?: string
           description?: string | null
+          emoji_icon?: string | null
           features?: Json | null
           id?: string
+          is_popular?: boolean | null
           logo_url?: string | null
           name: string
           price: string
@@ -112,8 +128,10 @@ export type Database = {
           category?: string
           created_at?: string
           description?: string | null
+          emoji_icon?: string | null
           features?: Json | null
           id?: string
+          is_popular?: boolean | null
           logo_url?: string | null
           name?: string
           price?: string
