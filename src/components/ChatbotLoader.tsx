@@ -34,11 +34,10 @@ const ChatbotLoader = () => {
   if (isLoaded) return null;
 
   return (
-    <div className="fixed bottom-5 left-5 z-40">
+    <div className="fixed bottom-3 left-3 z-40">
       <button
         className="w-14 h-14 rounded-full bg-primary shadow-lg flex items-center justify-center hover:scale-105 transition-transform relative"
         style={{
-          boxShadow: `0 0 0 0 hsl(var(--primary) / 0.4), 0 0 0 12px hsl(var(--primary) / 0.15)`,
           animation: 'glow-pulse 2s ease-in-out infinite'
         }}
         onClick={() => {
@@ -48,8 +47,8 @@ const ChatbotLoader = () => {
         }}
       >
         <MessageCircle className="w-6 h-6 text-primary-foreground" />
+        <span className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-background" />
       </button>
-      <span className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-background" />
       <style>{`
         @keyframes glow-pulse {
           0%, 100% {
