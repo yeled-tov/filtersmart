@@ -34,9 +34,12 @@ const ChatbotLoader = () => {
   if (isLoaded) return null;
 
   return (
-    <div className="fixed bottom-5 left-5 z-40">
+    <div className="fixed bottom-5 left-5 z-40 w-14 h-14 flex items-center justify-center">
+      {/* Sonar pulse rings */}
+      <span className="absolute inset-0 rounded-full border-[3px] border-primary animate-[chatbot-sonar_2s_ease-out_infinite] pointer-events-none" />
+      <span className="absolute inset-0 rounded-full border-[3px] border-primary animate-[chatbot-sonar_2s_ease-out_0.8s_infinite] pointer-events-none" />
       <button
-        className="w-14 h-14 rounded-full bg-primary shadow-lg flex items-center justify-center hover:scale-105 transition-transform relative"
+        className="w-14 h-14 rounded-full bg-primary shadow-lg flex items-center justify-center hover:scale-105 transition-transform relative z-10"
         onClick={() => {
           if (window.chatbase) {
             window.chatbase("open");
@@ -46,6 +49,12 @@ const ChatbotLoader = () => {
         <MessageCircle className="w-6 h-6 text-primary-foreground" />
         <span className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-background" />
       </button>
+      <style>{`
+        @keyframes chatbot-sonar {
+          0% { transform: scale(1); opacity: 0.5; }
+          100% { transform: scale(1.8); opacity: 0; }
+        }
+      `}</style>
     </div>
   );
 };

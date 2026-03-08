@@ -1,4 +1,4 @@
-import { Phone, MessageCircle, CreditCard } from "lucide-react";
+import { Phone, MessageCircle } from "lucide-react";
 
 const MobileStickyBar = () => (
   <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden flex border-t border-border bg-card/95 backdrop-blur-md">
@@ -19,16 +19,6 @@ const MobileStickyBar = () => (
     >
       <MessageCircle className="w-4 h-4" />
       💬 ווצאפ
-    </a>
-    <a
-      href="https://bitpay.co.il/app/me/0527186881"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="flex-1 flex items-center justify-center gap-2 py-3 text-sm font-semibold text-white"
-      style={{ backgroundColor: "hsl(0, 72%, 50%)" }}
-    >
-      <CreditCard className="w-4 h-4" />
-      💳 Bit
     </a>
   </div>
 );
