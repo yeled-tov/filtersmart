@@ -27,44 +27,65 @@ const Index = () => {
   const filteringServices = allServices.filter((s) => s.category === "filtering");
   const flashingServices = allServices.filter((s) => s.category === "flashing");
 
-  const localBusinessJsonLd = {
+  // BreadcrumbList for homepage
+  const breadcrumbJsonLd = {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    name: "FilterSmart",
-    telephone: "052-718-6881",
-    email: "ywldyld@gmail.com",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "חטיבת גבעתי 2 כניסה ו׳",
-      addressLocality: "אשדוד",
-      addressCountry: "IL",
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: 31.8028,
-      longitude: 34.6552,
-    },
-    openingHours: ["Su-Th 09:00-18:00", "Fr 09:00-13:00"],
-    priceRange: "₪₪",
-    url: "https://smartfilter.co.il",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "בית", "item": "https://smartfilter.co.il/" }
+    ]
+  };
+
+  // FAQ structured data
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "כמה עולה סינון טלפון באשדוד?",
+        "acceptedAnswer": { "@type": "Answer", "text": "סינון בסיסי לאייפון ואנדרואיד עולה 20₪ בלבד. מערכת כושר פליי עולה 70₪. מערכות הדרן ועסקן עולות 300₪." }
+      },
+      {
+        "@type": "Question",
+        "name": "האם הצריבה פוגעת בטלפון?",
+        "acceptedAnswer": { "@type": "Answer", "text": "לא. מדובר בשכבת תוכנה מקצועית שמותקנת על המכשיר. הצריבה לא פוגעת בחומרה ולא משפיעה לרעה על ביצועי הטלפון." }
+      },
+      {
+        "@type": "Question",
+        "name": "כמה זמן לוקחת התקנת הדרן?",
+        "acceptedAnswer": { "@type": "Answer", "text": "התקנת הדרן לוקחת כ-45-90 דקות. סינון בסיסי לוקח כ-5 דקות בלבד." }
+      },
+      {
+        "@type": "Question",
+        "name": "איפה נמצא FilterSmart באשדוד?",
+        "acceptedAnswer": { "@type": "Answer", "text": "אנחנו נמצאים ברחוב חטיבת גבעתי 2, כניסה ו׳, רובע ג׳, אשדוד. שירות בתיאום מראש בטלפון 052-718-6881." }
+      },
+      {
+        "@type": "Question",
+        "name": "האם אפשר להסיר את סינון הדרן?",
+        "acceptedAnswer": { "@type": "Answer", "text": "הדרן לא ניתן להסרה – גם איפוס לא מוריד את החסימה. זוהי ההגנה ההרמטית ביותר בשוק." }
+      }
+    ]
   };
 
   return (
     <>
       <SEOHead
-        title="FilterSmart – פילטר סמארט: סינון טלפונים וצריבת גרסאות באשדוד"
-        description="המעבדה המובילה באשדוד לסינון מכשירים, התקנת הדרן, עסקן וכושר פליי. שירות מקצועי ומהיר לציבור החרדי והדתי"
+        title="FilterSmart – פילטר סמארט: סינון טלפונים וצריבת גרסאות באשדוד | מ-20₪"
+        description="המעבדה המובילה באשדוד לסינון מכשירים. התקנת הדרן 300₪, עסקן 300₪, כושר פליי 70₪, סינון בסיסי 20₪. צריבת גרסה לשיאומי Qin 70₪. משווק מורשה ☎ 052-718-6881"
         path="/"
-        keywords="סינון טלפון אשדוד, הדרן אשדוד, עסקן אשדוד, כושר פליי אשדוד, צריבת גרסה לשיאומי קין, חסימת אינטרנט באשדוד, פילטר סמארט"
+        keywords="סינון טלפון אשדוד, הדרן אשדוד, עסקן אשדוד, כושר פליי אשדוד, צריבת גרסה לשיאומי קין, חסימת אינטרנט באשדוד, פילטר סמארט, סינון אייפון, סינון אנדרואיד, התקנת הדרן, מחיר הדרן, סינון טלפון מחיר"
       />
       <Helmet>
-        <script type="application/ld+json">{JSON.stringify(localBusinessJsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
       </Helmet>
 
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroBg} alt="" className="w-full h-full object-cover" loading="eager" aria-hidden="true" />
+          <img src={heroBg} alt="סינון טלפונים מקצועי באשדוד – FilterSmart" className="w-full h-full object-cover" loading="eager" fetchPriority="high" />
           <div className="absolute inset-0 bg-foreground/45" />
         </div>
         <div className="relative container-custom py-20 md:py-32 lg:py-40">
@@ -88,6 +109,18 @@ const Index = () => {
               <span className="block mt-2" style={{ color: "hsl(155, 55%, 55%)" }}>{heroSubtitle}</span>
             </h1>
             <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 leading-relaxed">{heroDesc}</p>
+            <div className="flex flex-wrap gap-4">
+              <a href={waLink} target="_blank" rel="noopener noreferrer">
+                <Button size="lg" className="bg-secondary text-secondary-foreground hover:bg-secondary/90 text-base px-8 hover:scale-105 transition-transform">
+                  📱 WhatsApp – קבל הצעה
+                </Button>
+              </a>
+              <Link to="/services">
+                <Button size="lg" variant="outline" className="bg-card/90 text-foreground hover:bg-card text-base px-8 border-border hover:scale-105 transition-transform">
+                  כל השירותים →
+                </Button>
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>
@@ -96,20 +129,20 @@ const Index = () => {
       <TrustBadges />
 
       {/* Features */}
-      <section className="section-padding bg-background">
+      <section className="section-padding bg-background" aria-label="יתרונות FilterSmart">
         <div className="container-custom">
           <AnimatedSection>
             <div className="text-center max-w-2xl mx-auto mb-12">
-              <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">למה FilterSmart?</h2>
+              <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">למה לבחור ב-FilterSmart באשדוד?</h2>
               <p className="text-muted-foreground text-lg">פילטר סמארט – המומחים לסינון טלפונים והגנה דיגיטלית באשדוד</p>
             </div>
           </AnimatedSection>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { icon: Shield, title: "הגנה מקצועית", desc: "פתרונות סינון ברמה הגבוהה ביותר עם שכבות הגנה מרובות" },
-              { icon: Smartphone, title: "כל המכשירים", desc: "אייפון, אנדרואיד ומכשירי שיאומי Qin – פתרון לכל סוג" },
-              { icon: Zap, title: "שירות מהיר", desc: "התקנה מקצועית ומהירה, ללא איפוס המכשיר בשירותים הבסיסיים" },
-              { icon: HeartHandshake, title: "מחירים הוגנים", desc: "מחירים שקופים והוגנים ללא עלויות נסתרות, עם אחריות מלאה" },
+              { icon: Shield, title: "הגנה מקצועית", desc: "פתרונות סינון ברמה הגבוהה ביותר עם שכבות הגנה מרובות – הדרן, עסקן וכושר פליי" },
+              { icon: Smartphone, title: "כל המכשירים", desc: "אייפון, אנדרואיד ומכשירי שיאומי Qin F21 Pro ו-F25 – פתרון לכל סוג מכשיר" },
+              { icon: Zap, title: "שירות מהיר באשדוד", desc: "התקנה מקצועית ומהירה באשדוד. סינון בסיסי תוך 5 דקות, צריבה תוך 30-60 דקות" },
+              { icon: HeartHandshake, title: "מחירים הוגנים", desc: "סינון בסיסי מ-20₪ בלבד. מחירים שקופים ללא עלויות נסתרות, עם אחריות מלאה" },
             ].map((feature, i) => (
               <AnimatedSection key={i} delay={i * 0.1}>
                 <div className="bg-card rounded-xl p-8 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group h-full">
@@ -126,7 +159,7 @@ const Index = () => {
       </section>
 
       {/* Filtering Services */}
-      <section className="section-padding bg-muted/50">
+      <section className="section-padding bg-muted/50" aria-label="שירותי סינון טלפונים">
         <div className="container-custom">
           <AnimatedSection>
             <div className="text-center max-w-2xl mx-auto mb-12">
@@ -134,8 +167,8 @@ const Index = () => {
                 <Lock className="w-4 h-4" />
                 סינון טלפונים והגנה
               </div>
-              <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">שירותי סינון והגנה דיגיטלית</h2>
-              <p className="text-muted-foreground text-lg">פתרונות סינון מקצועיים לאייפון ואנדרואיד</p>
+              <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">שירותי סינון טלפון והגנה דיגיטלית באשדוד</h2>
+              <p className="text-muted-foreground text-lg">פתרונות סינון מקצועיים לאייפון ואנדרואיד – מ-20₪ בלבד</p>
             </div>
           </AnimatedSection>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -174,7 +207,7 @@ const Index = () => {
       </section>
 
       {/* Flashing Services */}
-      <section className="section-padding bg-background">
+      <section className="section-padding bg-background" aria-label="שירותי צריבת גרסאות">
         <div className="container-custom">
           <AnimatedSection>
             <div className="text-center max-w-2xl mx-auto mb-12">
@@ -182,8 +215,8 @@ const Index = () => {
                 <Cpu className="w-4 h-4" />
                 צריבת גרסאות ומערכות
               </div>
-              <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">צריבת גרסאות למכשירי שיאומי Qin</h2>
-              <p className="text-muted-foreground text-lg">צריבת גרסה כשרה ומותאמת למכשירי Qin F21 Pro ו-Qin F25</p>
+              <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">צריבת גרסאות כשרות למכשירי שיאומי Qin באשדוד</h2>
+              <p className="text-muted-foreground text-lg">צריבת גרסה כשרה ומותאמת למכשירי Qin F21 Pro ו-Qin F25 – 70₪ בלבד</p>
             </div>
           </AnimatedSection>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
@@ -215,16 +248,16 @@ const Index = () => {
       <FAQ />
 
       {/* CTA */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden" aria-label="יצירת קשר">
         <div className="absolute inset-0 gradient-primary" />
         <div className="relative container-custom py-16 md:py-24 text-center">
           <AnimatedSection>
             <h2 className="text-2xl md:text-4xl font-heading font-bold text-primary-foreground mb-4">מוכנים להגן על הטלפון שלכם?</h2>
-            <p className="text-primary-foreground/80 text-lg mb-8 max-w-xl mx-auto">צרו קשר עוד היום ונתאים לכם את פתרון הסינון המושלם</p>
+            <p className="text-primary-foreground/80 text-lg mb-8 max-w-xl mx-auto">צרו קשר עוד היום ונתאים לכם את פתרון הסינון המושלם – שירות מקצועי באשדוד</p>
             <div className="flex flex-wrap justify-center gap-4">
               <a href={waLink} target="_blank" rel="noopener noreferrer">
                 <Button size="lg" variant="outline" className="bg-card/90 text-foreground hover:bg-card text-base px-8 border-border hover:scale-105 transition-transform">
-                  WhatsApp
+                  WhatsApp – 052-718-6881
                 </Button>
               </a>
               <a href={bitLink} target="_blank" rel="noopener noreferrer">
@@ -237,19 +270,22 @@ const Index = () => {
         </div>
       </section>
 
-      {/* SEO Content */}
-      <section className="section-padding bg-muted/30">
+      {/* SEO Content - Rich keyword-laden content block */}
+      <section className="section-padding bg-muted/30" aria-label="מידע על סינון טלפונים באשדוד">
         <div className="container-custom max-w-4xl">
-          <h2 className="text-xl md:text-2xl font-heading font-bold text-foreground mb-6 text-center">סינון טלפונים וצריבת גרסאות באשדוד – FilterSmart</h2>
+          <h2 className="text-xl md:text-2xl font-heading font-bold text-foreground mb-6 text-center">סינון טלפונים וצריבת גרסאות באשדוד – FilterSmart פילטר סמארט</h2>
           <div className="prose prose-lg max-w-none text-muted-foreground leading-relaxed space-y-4">
             <p>
-              <strong className="text-foreground">FilterSmart (פילטר סמארט)</strong> הוא הכתובת המקצועית לסינון טלפונים וצריבת גרסאות באשדוד. אנו משווקים מורשים של מערכות הסינון המובילות בישראל – <strong className="text-foreground">הדרן (Hadran)</strong>, <strong className="text-foreground">עסקן (Askan)</strong> ו<strong className="text-foreground">כושר פליי (Kosher Play)</strong>.
+              <strong className="text-foreground">FilterSmart (פילטר סמארט)</strong> הוא הכתובת המקצועית מספר 1 ל<strong className="text-foreground">סינון טלפונים באשדוד</strong> ו<strong className="text-foreground">צריבת גרסאות</strong>. אנו משווקים מורשים של מערכות הסינון המובילות בישראל – <strong className="text-foreground">הדרן (Hadran)</strong>, <strong className="text-foreground">עסקן (Askan)</strong> ו<strong className="text-foreground">כושר פליי (Kosher Play)</strong>.
             </p>
             <p>
-              המומחיות שלנו כוללת סינון לאייפון ואנדרואיד, התקנת מערכות הגנה מתקדמות, וצריבת גרסאות כשרות למכשירי <strong className="text-foreground">שיאומי Qin F21 Pro</strong> ו-<strong className="text-foreground">Qin F25</strong>. כל עבודה מתבצעת באופן מקצועי עם תמיכה טכנית מלאה.
+              <strong className="text-foreground">התקנת הדרן באשדוד</strong> – ההגנה ההרמטית ביותר בשוק. גרסת מערכת שלמה שלא ניתנת להסרה בשום צורה. מחיר: <strong className="text-foreground">300₪</strong>. <strong className="text-foreground">התקנת עסקן באשדוד</strong> – סינון AI חכם עם צריבה עמוקה. מחיר: <strong className="text-foreground">300₪</strong>. <strong className="text-foreground">כושר פליי התקנה</strong> – חנות אפליקציות כשרה עם MDM. מחיר: <strong className="text-foreground">70₪</strong>. <strong className="text-foreground">סינון בסיסי</strong> מ-<strong className="text-foreground">20₪</strong> בלבד.
             </p>
             <p>
-              אנו ממוקמים ברחוב חטיבת גבעתי 2, רובע ג׳, אשדוד – ומספקים שירות אמין, מהיר ובמחירים הוגנים. בין אם אתם מחפשים סינון בסיסי ב-20₪ או פתרון הרמטי כמו הדרן, אנחנו כאן בשבילכם.
+              המומחיות שלנו כוללת <strong className="text-foreground">סינון לאייפון</strong> ו<strong className="text-foreground">סינון אנדרואיד</strong>, התקנת מערכות הגנה מתקדמות, וצריבת גרסאות כשרות למכשירי <strong className="text-foreground">שיאומי Qin F21 Pro</strong> ו-<strong className="text-foreground">Qin F25</strong> (70₪). כל עבודה מתבצעת באופן מקצועי עם תמיכה טכנית מלאה.
+            </p>
+            <p>
+              אנו ממוקמים ב<strong className="text-foreground">רחוב חטיבת גבעתי 2, רובע ג׳, אשדוד</strong> – ומספקים שירות אמין, מהיר ובמחירים הוגנים. לתיאום: <strong className="text-foreground">052-718-6881</strong>. בין אם אתם מחפשים <strong className="text-foreground">סינון טלפון זול</strong>, <strong className="text-foreground">חסימת אינטרנט באשדוד</strong> או פתרון הרמטי כמו <strong className="text-foreground">הדרן</strong>, אנחנו כאן בשבילכם.
             </p>
           </div>
         </div>
