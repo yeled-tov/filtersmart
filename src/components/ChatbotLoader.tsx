@@ -52,10 +52,10 @@ const ChatbotLoader = () => {
       <style>{`
         @keyframes glow-pulse {
           0%, 100% {
-            box-shadow: 0 0 0 0 hsl(var(--primary) / 0.6), 0 0 0 12px hsl(var(--primary) / 0.1);
+            box-shadow: 0 0 0 0 hsl(var(--primary) / 0.5), 0 0 0 8px hsl(var(--primary) / 0.12);
           }
           50% {
-            box-shadow: 0 0 0 8px hsl(var(--primary) / 0.3), 0 0 0 20px hsl(var(--primary) / 0.05);
+            box-shadow: 0 0 0 5px hsl(var(--primary) / 0.25), 0 0 0 14px hsl(var(--primary) / 0.06);
           }
         }
       `}</style>
