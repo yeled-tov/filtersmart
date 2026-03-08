@@ -34,7 +34,7 @@ const ChatbotLoader = () => {
   if (isLoaded) return null;
 
   return (
-    <div className="fixed bottom-3 left-3 z-40">
+    <div className="fixed bottom-5 left-5 z-40">
       <button
         className="w-14 h-14 rounded-full bg-primary shadow-lg flex items-center justify-center hover:scale-105 transition-transform relative"
         style={{
