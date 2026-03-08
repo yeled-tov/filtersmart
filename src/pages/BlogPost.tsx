@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { ArrowRight, Calendar, Clock } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import SEOHead from "@/components/SEOHead";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import { useBlogPosts } from "@/hooks/useBlogPosts";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 
@@ -60,12 +61,14 @@ const BlogPost = () => {
   return (
     <>
       <SEOHead title={`${post.title} | בלוג SmartFilter`} description={post.excerpt || ""} path={`/blog/${post.slug}`} />
+      <Breadcrumbs
+        items={[
+          { label: "בלוג", path: "/blog" },
+          { label: post.title },
+        ]}
+      />
       <article className="section-padding bg-background">
         <div className="container-custom max-w-3xl">
-          <Link to="/blog" className="inline-flex items-center gap-1 text-muted-foreground hover:text-primary text-sm mb-6 transition-colors">
-            <ArrowRight className="w-4 h-4" />
-            חזרה לבלוג
-          </Link>
           <div className="flex items-center gap-4 text-muted-foreground text-sm mb-4">
             <span className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />

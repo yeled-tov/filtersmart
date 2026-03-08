@@ -1,5 +1,6 @@
 import { Shield, Award, Users, MapPin } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 const About = () => (
   <>
@@ -8,6 +9,7 @@ const About = () => (
       description="FilterSmart (פילטר סמארט) – משווק מורשה של הדרן, עסקן וכושר פליי באשדוד. שירות סינון טלפון מקצועי ואמין."
       path="/about"
     />
+    <Breadcrumbs items={[{ label: "אודות" }]} />
 
     <section className="section-padding bg-background">
       <div className="container-custom">

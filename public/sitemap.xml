@@ -11,4 +11,6 @@
   <url><loc>https://smartfilter.co.il/services/qin-f25</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
   <url><loc>https://smartfilter.co.il/blog</loc><priority>0.7</priority><changefreq>weekly</changefreq></url>
   <url><loc>https://smartfilter.co.il/contact</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://smartfilter.co.il/privacy</loc><priority>0.3</priority><changefreq>yearly</changefreq></url>
+  <url><loc>https://smartfilter.co.il/refund-policy</loc><priority>0.3</priority><changefreq>yearly</changefreq></url>
 </urlset>

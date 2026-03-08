@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Calendar, ArrowLeft, Clock } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import SEOHead from "@/components/SEOHead";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import { useBlogPosts } from "@/hooks/useBlogPosts";
 
 const estimateReadTime = (content: string) => {
@@ -34,6 +35,7 @@ const Blog = () => {
         path="/blog"
         keywords="סינון טלפון, חסימת אינטרנט, סינון אנדרואיד, סינון אייפון"
       />
+      <Breadcrumbs items={[{ label: "בלוג" }]} />
 
       <section className="section-padding bg-background">
         <div className="container-custom max-w-4xl">
@@ -46,9 +48,7 @@ const Blog = () => {
 
           {isLoading ? (
             <div className="space-y-6">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <BlogSkeleton key={i} />
-              ))}
+              {Array.from({ length: 3 }).map((_, i) => <BlogSkeleton key={i} />)}
             </div>
           ) : (
             <div className="space-y-6">

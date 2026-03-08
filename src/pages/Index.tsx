@@ -7,10 +7,12 @@ import SEOHead from "@/components/SEOHead";
 import { useServices } from "@/hooks/useServices";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import TrustBadges from "@/components/TrustBadges";
+import TrustStrip from "@/components/TrustStrip";
 import Reviews from "@/components/Reviews";
 import FAQ from "@/components/FAQ";
 import AnimatedSection from "@/components/AnimatedSection";
 import heroBg from "@/assets/hero-bg.jpg";
+import { Helmet } from "react-helmet-async";
 
 const ServiceCardSkeleton = () => (
   <div className="bg-card rounded-xl p-6 card-shadow">
@@ -40,6 +42,28 @@ const Index = () => {
   const filteringServices = services?.filter((s) => s.category === "filtering") || [];
   const flashingServices = services?.filter((s) => s.category === "flashing") || [];
 
+  const localBusinessJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: "FilterSmart",
+    telephone: "052-718-6881",
+    email: "ywldyld@gmail.com",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "חטיבת גבעתי 2 כניסה ו׳",
+      addressLocality: "אשדוד",
+      addressCountry: "IL",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 31.8028,
+      longitude: 34.6552,
+    },
+    openingHours: ["Su-Th 09:00-18:00", "Fr 09:00-13:00"],
+    priceRange: "₪₪",
+    url: "https://smartfilter.co.il",
+  };
+
   return (
     <>
       <SEOHead
@@ -48,6 +72,9 @@ const Index = () => {
         path="/"
         keywords="סינון טלפון אשדוד, הדרן אשדוד, עסקן אשדוד, כושר פליי אשדוד, צריבת גרסה לשיאומי קין, חסימת אינטרנט באשדוד, פילטר סמארט"
       />
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(localBusinessJsonLd)}</script>
+      </Helmet>
 
       {/* Hero */}
       <section className="relative overflow-hidden">
@@ -80,9 +107,10 @@ const Index = () => {
         </div>
       </section>
 
+      <TrustStrip />
       <TrustBadges />
 
-      {/* Features - Why Choose Us */}
+      {/* Features */}
       <section className="section-padding bg-background">
         <div className="container-custom">
           <AnimatedSection>
@@ -228,7 +256,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* SEO Content Block */}
+      {/* SEO Content */}
       <section className="section-padding bg-muted/30">
         <div className="container-custom max-w-4xl">
           <h2 className="text-xl md:text-2xl font-heading font-bold text-foreground mb-6 text-center">סינון טלפונים וצריבת גרסאות באשדוד – FilterSmart</h2>

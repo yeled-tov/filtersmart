@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import SEOHead from "@/components/SEOHead";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import { z } from "zod";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -68,6 +69,7 @@ const Contact = () => {
         path="/contact"
         keywords="סינון טלפון אשדוד, פילטר סמארט"
       />
+      <Breadcrumbs items={[{ label: "צור קשר" }]} />
 
       <section className="section-padding bg-background">
         <div className="container-custom max-w-5xl">
