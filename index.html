@@ -50,13 +50,19 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
-      // Ultra-fast deferred chatbot loading
-      function loadChatbase() {
-        if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}
-        const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="agIIVpS1lqAxtCew_XXcJ";script.domain="www.chatbase.co";script.async=true;script.defer=true;document.body.appendChild(script);
-      }
-      // Load after page is fully interactive (1 second delay for faster perceived load)
-      if(document.readyState==='complete'){setTimeout(loadChatbase,1000)}else{window.addEventListener('load',function(){setTimeout(loadChatbase,1000)},{once:true})}
+      // Fast chatbot loading - prioritize user interaction
+      (function(){
+        if(!window.chatbase||window.chatbase("getState")!=="initialized"){
+          window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};
+          window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}});
+        }
+        const script=document.createElement("script");
+        script.src="https://www.chatbase.co/embed.min.js";
+        script.id="agIIVpS1lqAxtCew_XXcJ";
+        script.domain="www.chatbase.co";
+        script.async=true;
+        document.body.appendChild(script);
+      })();
     </script>
   </body>
 </html>
