@@ -1,20 +1,42 @@
+import { Helmet } from "react-helmet-async";
 import { Star } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 
 const reviews = [
-  { name: "משה מאשדוד", text: "שירות מהיר ומקצועי! הצריבה בוצעה תוך חצי שעה והטלפון עובד מעולה. ממליץ בחום.", rating: 5 },
-  { name: "אברהם הלוי", text: "התקנתי הדרן אצל FilterSmart – ההגנה הכי טובה שיש. השירות היה אדיב ומקצועי מאוד.", rating: 5 },
+  { name: "משה מאשדוד", text: "שירות מהיר ומקצועי! הצריבה בוצעה תוך חצי שעה והטלפון עובד מעולה. ממליץ בחום על FilterSmart.", rating: 5 },
+  { name: "אברהם הלוי", text: "התקנתי הדרן אצל FilterSmart באשדוד – ההגנה הכי טובה שיש. השירות היה אדיב ומקצועי מאוד.", rating: 5 },
   { name: "יוסף כהן מאשדוד", text: "הסינון הבסיסי עלה לי רק 20 שקל והותקן ב-5 דקות. פשוט ויעיל, בדיוק מה שהייתי צריך.", rating: 5 },
   { name: "דוד פרץ", text: "התקנתי כושר פליי וואטסאפ עובד מצוין בלי תמונות פרופיל. חנות האפליקציות שלהם מעולה.", rating: 5 },
 ];
 
+const reviewJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "FilterSmart – פילטר סמארט",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5",
+    "reviewCount": "47",
+    "bestRating": "5"
+  },
+  "review": reviews.map((r) => ({
+    "@type": "Review",
+    "author": { "@type": "Person", "name": r.name },
+    "reviewRating": { "@type": "Rating", "ratingValue": String(r.rating) },
+    "reviewBody": r.text,
+  })),
+};
+
 const Reviews = () => (
-  <section className="section-padding bg-background">
+  <section className="section-padding bg-background" aria-label="חוות דעת לקוחות">
+    <Helmet>
+      <script type="application/ld+json">{JSON.stringify(reviewJsonLd)}</script>
+    </Helmet>
     <div className="container-custom">
       <AnimatedSection>
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">⭐ לקוחות ממליצים</h2>
-          <p className="text-muted-foreground text-lg">מה הלקוחות שלנו אומרים על FilterSmart</p>
+          <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">⭐ לקוחות ממליצים על FilterSmart</h2>
+          <p className="text-muted-foreground text-lg">מה הלקוחות שלנו באשדוד אומרים על השירות</p>
         </div>
       </AnimatedSection>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">

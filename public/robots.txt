@@ -1,4 +1,13 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /admin/login
+Disallow: /reset-password
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
 
 Sitemap: https://smartfilter.co.il/sitemap.xml
+
+# Host
+Host: https://smartfilter.co.il
