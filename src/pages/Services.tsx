@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Lock, Cpu } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import SEOHead from "@/components/SEOHead";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import { useServices } from "@/hooks/useServices";
 
 const ServiceCardSkeleton = () => (
@@ -33,6 +34,7 @@ const Services = () => {
         path="/services"
         keywords="סינון טלפון אשדוד, התקנת הדרן אשדוד, כושר פליי התקנה, עסקן התקנה, צריבת גרסה לשיאומי קין"
       />
+      <Breadcrumbs items={[{ label: "שירותים" }]} />
 
       <section className="section-padding bg-background">
         <div className="container-custom">
@@ -56,7 +58,6 @@ const Services = () => {
             </div>
           ) : (
             <>
-              {/* Filtering */}
               <div className="mb-16">
                 <div className="flex items-center gap-2 mb-6">
                   <Lock className="w-5 h-5 text-primary" />
@@ -95,7 +96,6 @@ const Services = () => {
                 </div>
               </div>
 
-              {/* Flashing */}
               <div>
                 <div className="flex items-center gap-2 mb-6">
                   <Cpu className="w-5 h-5 text-secondary" />

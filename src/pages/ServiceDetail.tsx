@@ -2,8 +2,19 @@ import { useParams, Link } from "react-router-dom";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/SEOHead";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import ServiceFAQ from "@/components/ServiceFAQ";
 import { useServices } from "@/hooks/useServices";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+
+const seoH1Map: Record<string, string> = {
+  hadran: "התקנת הדרן באשדוד",
+  askan: "עסקן התקנה באשדוד",
+  "kosher-play": "כושר פליי התקנה באשדוד",
+  "basic-filtering": "סינון בסיסי לאייפון ואנדרואיד באשדוד",
+  "qin-f21-pro": "צריבת גרסה Qin F21 Pro באשדוד",
+  "qin-f25": "צריבת גרסה Qin F25 באשדוד",
+};
 
 const ServiceDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -33,10 +44,12 @@ const ServiceDetail = () => {
     );
   }
 
+  const h1Text = seoH1Map[service.slug] || service.name;
+
   return (
     <>
       <SEOHead
-        title={`${service.name} – ${service.price} | FilterSmart פילטר סמארט אשדוד`}
+        title={`${h1Text} – ${service.price} | FilterSmart פילטר סמארט`}
         description={service.short_desc || ""}
         path={`/services/${service.slug}`}
       />
@@ -46,7 +59,7 @@ const ServiceDetail = () => {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Service",
-            name: service.name,
+            name: h1Text,
             description: service.short_desc,
             provider: {
               "@type": "LocalBusiness",
@@ -62,19 +75,21 @@ const ServiceDetail = () => {
         }}
       />
 
+      <Breadcrumbs
+        items={[
+          { label: "שירותים", path: "/services" },
+          { label: h1Text },
+        ]}
+      />
+
       <section className="section-padding bg-background">
         <div className="container-custom max-w-3xl">
-          <Link to="/services" className="inline-flex items-center gap-1 text-muted-foreground hover:text-primary text-sm mb-6 transition-colors">
-            <ArrowRight className="w-4 h-4" />
-            חזרה לכל השירותים
-          </Link>
-
           <div className="flex items-start justify-between flex-wrap gap-4 mb-6">
             <div className="flex items-center gap-4">
               {service.logo_url && (
-                <img src={service.logo_url} alt={`${service.name} לוגו`} className="w-14 h-14 rounded-xl object-contain bg-muted p-2" />
+                <img src={service.logo_url} alt={`${service.name} לוגו`} className="w-14 h-14 rounded-xl object-contain bg-muted p-2" loading="lazy" />
               )}
-              <h1 className="text-3xl md:text-4xl font-heading font-bold text-foreground">{service.name}</h1>
+              <h1 className="text-3xl md:text-4xl font-heading font-bold text-foreground">{h1Text}</h1>
             </div>
             <span className="text-3xl font-bold gradient-text">{service.price}</span>
           </div>
@@ -106,6 +121,8 @@ const ServiceDetail = () => {
               <Button size="lg" variant="outline">{phone}</Button>
             </a>
           </div>
+
+          <ServiceFAQ slug={service.slug} />
         </div>
       </section>
     </>
