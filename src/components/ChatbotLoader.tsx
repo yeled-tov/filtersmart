@@ -44,8 +44,8 @@ const ChatbotLoader = () => {
         }}
       >
         {/* Sonar pulse rings - positioned relative to the button */}
-        <span className="absolute -inset-[2px] top-[2px] left-[2px] rounded-full border-[3px] border-primary animate-[chatbot-sonar_2s_ease-out_infinite] pointer-events-none" />
-        <span className="absolute -inset-[2px] top-[2px] left-[2px] rounded-full border-[3px] border-primary animate-[chatbot-sonar_2s_ease-out_0.8s_infinite] pointer-events-none" />
+        <span className="absolute inset-0 rounded-full border-[3px] border-primary animate-[chatbot-sonar_2s_ease-out_infinite] pointer-events-none" />
+        <span className="absolute inset-0 rounded-full border-[3px] border-primary animate-[chatbot-sonar_2s_ease-out_0.8s_infinite] pointer-events-none" />
         <MessageCircle className="w-6 h-6 text-primary-foreground relative z-10" />
         <span className="absolute top-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2 border-background z-20" />
       </button>
