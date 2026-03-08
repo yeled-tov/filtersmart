@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { lovable } from "@/integrations/lovable/index";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Shield, Mail, Lock, ArrowRight } from "lucide-react";
+import { Shield, Mail } from "lucide-react";
 import { toast } from "sonner";
 
 const AdminLogin = () => {
@@ -16,8 +16,15 @@ const AdminLogin = () => {
   const [showForgot, setShowForgot] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotLoading, setForgotLoading] = useState(false);
-  const { signIn } = useAuth();
+  const { signIn, isAdmin, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+
+  // Redirect if already admin
+  useEffect(() => {
+    if (!authLoading && isAdmin) {
+      navigate("/admin", { replace: true });
+    }
+  }, [isAdmin, authLoading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,9 +33,8 @@ const AdminLogin = () => {
     setLoading(false);
     if (error) {
       toast.error("שגיאה בהתחברות: " + error.message);
-    } else {
-      navigate("/admin");
     }
+    // Navigation will happen automatically via useEffect when isAdmin becomes true
   };
 
   const handleGoogleSignIn = async () => {
