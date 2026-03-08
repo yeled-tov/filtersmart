@@ -92,4 +92,5 @@ export const useServices = () =>
     queryFn: fetchServices,
     staleTime: 60_000,
     retry: 1,
+    placeholderData: fallbackServices,
   });
