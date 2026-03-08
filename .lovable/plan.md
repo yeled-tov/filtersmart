@@ -1,12 +1,25 @@
 
 
-## Plan: Remove chatbot button, keep only the sonar halo
+## Plan: Technical Updates for FilterSmart
 
-The user wants to remove the visible button (the blue circle with the MessageCircle icon and green dot), keeping only the sonar pulse animation rings. The rings will still be clickable to open the chatbot.
+### 1. Remove Built-in Chatbot
+- Delete `src/components/SmartChatbot.tsx`
+- Remove `SmartChatbot` import and usage from `src/components/Layout.tsx`
 
-### Changes to `src/components/ChatbotLoader.tsx`:
-1. Remove the `bg-primary shadow-lg` styling from the button (make it transparent/invisible)
-2. Remove the `<MessageCircle>` icon
-3. Remove the green status dot (`<span>` with `bg-emerald-500`)
-4. Keep the button element for click functionality but make it invisible — only the sonar pulse rings remain visible
+### 2. Embed Chatbase Chatbot
+- The Chatbase script is already present in `index.html` (confirmed from the provided file). No changes needed here.
+
+### 3. Remove Hero Buttons ("דברו איתנו" and "לשירותים שלנו")
+- In `src/pages/Index.tsx`, remove lines 52-64 (the `div` containing both buttons in the Hero section).
+
+### 4. SEO Updates
+- **H1**: The current H1 in `Index.tsx` (lines 45-48) splits across two elements. Will consolidate to: `פילטר סמארט - סינון טלפונים וצריבת גרסאות באשדוד`
+- **Meta Description**: Update `SEOHead` call (line 23) and `index.html` meta tags to: `המעבדה המובילה באשדוד לסינון מכשירים, התקנת הדרן, עסקן וכושר פליי. שירות מקצועי ומהיר לציבור החרדי והדתי`
+- **Favicon**: Already set as `/favicon.png` in `index.html`. No change needed.
+
+### Files to modify:
+- `src/components/Layout.tsx` — remove SmartChatbot
+- `src/pages/Index.tsx` — remove hero buttons, update H1 and meta description
+- `index.html` — update meta description
+- Delete `src/components/SmartChatbot.tsx`
 
