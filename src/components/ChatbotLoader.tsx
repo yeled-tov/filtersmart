@@ -34,20 +34,20 @@ const ChatbotLoader = () => {
   if (isLoaded) return null;
 
   return (
-    <div className="fixed bottom-5 left-5 z-40 w-14 h-14 flex items-center justify-center">
-      {/* Sonar pulse rings */}
-      <span className="absolute inset-0 rounded-full border-[3px] border-primary animate-[chatbot-sonar_2s_ease-out_infinite] pointer-events-none" />
-      <span className="absolute inset-0 rounded-full border-[3px] border-primary animate-[chatbot-sonar_2s_ease-out_0.8s_infinite] pointer-events-none" />
+    <div className="fixed bottom-5 left-5 z-40">
       <button
-        className="w-14 h-14 rounded-full bg-primary shadow-lg flex items-center justify-center hover:scale-105 transition-transform relative z-10"
+        className="relative w-14 h-14 rounded-full bg-primary shadow-lg flex items-center justify-center hover:scale-105 transition-transform z-10"
         onClick={() => {
           if (window.chatbase) {
             window.chatbase("open");
           }
         }}
       >
-        <MessageCircle className="w-6 h-6 text-primary-foreground" />
-        <span className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-background" />
+        {/* Sonar pulse rings - positioned relative to the button */}
+        <span className="absolute inset-0 rounded-full border-[3px] border-primary animate-[chatbot-sonar_2s_ease-out_infinite] pointer-events-none" />
+        <span className="absolute inset-0 rounded-full border-[3px] border-primary animate-[chatbot-sonar_2s_ease-out_0.8s_infinite] pointer-events-none" />
+        <MessageCircle className="w-6 h-6 text-primary-foreground relative z-10" />
+        <span className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-background z-20" />
       </button>
       <style>{`
         @keyframes chatbot-sonar {
