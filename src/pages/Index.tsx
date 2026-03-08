@@ -2,9 +2,8 @@ import { Link } from "react-router-dom";
 import { Shield, ArrowLeft, Smartphone, Lock, Zap, Cpu, HeartHandshake } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import SEOHead from "@/components/SEOHead";
-import { useServices } from "@/hooks/useServices";
+import { useServices, fallbackServices } from "@/hooks/useServices";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import TrustBadges from "@/components/TrustBadges";
 import TrustStrip from "@/components/TrustStrip";
@@ -14,23 +13,8 @@ import AnimatedSection from "@/components/AnimatedSection";
 import heroBg from "@/assets/hero-bg.jpg";
 import { Helmet } from "react-helmet-async";
 
-const ServiceCardSkeleton = () => (
-  <div className="bg-card rounded-xl p-6 card-shadow">
-    <div className="flex items-start justify-between mb-4">
-      <div className="flex items-center gap-3">
-        <Skeleton className="w-10 h-10 rounded-lg" />
-        <Skeleton className="h-5 w-32" />
-      </div>
-      <Skeleton className="h-5 w-16" />
-    </div>
-    <Skeleton className="h-4 w-full mb-2" />
-    <Skeleton className="h-4 w-3/4 mb-4" />
-    <Skeleton className="h-4 w-20" />
-  </div>
-);
-
 const Index = () => {
-  const { data: services, isLoading } = useServices();
+  const { data: services } = useServices();
   const { data: settings } = useSiteSettings();
 
   const waLink = settings?.whatsapp_link || "https://wa.me/972527186881";
@@ -39,8 +23,9 @@ const Index = () => {
   const heroSubtitle = settings?.hero_subtitle || "וצריבת גרסאות באשדוד";
   const heroDesc = settings?.hero_description || "FilterSmart (פילטר סמארט) – פתרונות סינון לאייפון ואנדרואיד, התקנת הדרן, עסקן, כושר פליי וצריבת גרסה למכשירי שיאומי Qin. שירות מקצועי ואמין באשדוד.";
 
-  const filteringServices = services?.filter((s) => s.category === "filtering") || [];
-  const flashingServices = services?.filter((s) => s.category === "flashing") || [];
+  const allServices = services && services.length > 0 ? services : fallbackServices;
+  const filteringServices = allServices.filter((s) => s.category === "filtering");
+  const flashingServices = allServices.filter((s) => s.category === "flashing");
 
   const localBusinessJsonLd = {
     "@context": "https://schema.org",
@@ -154,38 +139,36 @@ const Index = () => {
             </div>
           </AnimatedSection>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {isLoading
-              ? Array.from({ length: 4 }).map((_, i) => <ServiceCardSkeleton key={i} />)
-              : filteringServices.map((service, i) => (
-                  <AnimatedSection key={service.slug} delay={i * 0.1}>
-                    <Link
-                      to={`/services/${service.slug}`}
-                      className="block bg-card rounded-xl p-6 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden"
-                    >
-                      {service.slug === "hadran" && (
-                        <div className="absolute top-3 left-3 bg-secondary text-secondary-foreground text-xs font-bold px-3 py-1 rounded-full shadow-md">
-                          ⭐ הכי פופולרי
-                        </div>
+            {filteringServices.map((service, i) => (
+              <AnimatedSection key={service.slug} delay={i * 0.1}>
+                <Link
+                  to={`/services/${service.slug}`}
+                  className="block bg-card rounded-xl p-6 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden"
+                >
+                  {service.slug === "hadran" && (
+                    <div className="absolute top-3 left-3 bg-secondary text-secondary-foreground text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                      ⭐ הכי פופולרי
+                    </div>
+                  )}
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      {service.logo_url && (
+                        <img src={service.logo_url} alt={`${service.name} לוגו`} className="w-10 h-10 rounded-lg object-contain bg-muted p-1" loading="lazy" />
                       )}
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                          {service.logo_url && (
-                            <img src={service.logo_url} alt={`${service.name} לוגו`} className="w-10 h-10 rounded-lg object-contain bg-muted p-1" loading="lazy" />
-                          )}
-                          <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">
-                            {service.name}
-                          </h3>
-                        </div>
-                        <span className="text-lg font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
-                      </div>
-                      <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{service.short_desc}</p>
-                      <div className="flex items-center text-primary text-sm font-medium">
-                        <span>פרטים נוספים</span>
-                        <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
-                      </div>
-                    </Link>
-                  </AnimatedSection>
-                ))}
+                      <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">
+                        {service.name}
+                      </h3>
+                    </div>
+                    <span className="text-lg font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
+                  </div>
+                  <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{service.short_desc}</p>
+                  <div className="flex items-center text-primary text-sm font-medium">
+                    <span>פרטים נוספים</span>
+                    <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
+                  </div>
+                </Link>
+              </AnimatedSection>
+            ))}
           </div>
         </div>
       </section>
@@ -204,28 +187,26 @@ const Index = () => {
             </div>
           </AnimatedSection>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-            {isLoading
-              ? Array.from({ length: 2 }).map((_, i) => <ServiceCardSkeleton key={i} />)
-              : flashingServices.map((service, i) => (
-                  <AnimatedSection key={service.slug} delay={i * 0.1}>
-                    <Link
-                      to={`/services/${service.slug}`}
-                      className="block bg-card rounded-xl p-6 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group"
-                    >
-                      <div className="flex items-start justify-between mb-4">
-                        <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">
-                          {service.name}
-                        </h3>
-                        <span className="text-lg font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
-                      </div>
-                      <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{service.short_desc}</p>
-                      <div className="flex items-center text-primary text-sm font-medium">
-                        <span>פרטים נוספים</span>
-                        <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
-                      </div>
-                    </Link>
-                  </AnimatedSection>
-                ))}
+            {flashingServices.map((service, i) => (
+              <AnimatedSection key={service.slug} delay={i * 0.1}>
+                <Link
+                  to={`/services/${service.slug}`}
+                  className="block bg-card rounded-xl p-6 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group"
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">
+                      {service.name}
+                    </h3>
+                    <span className="text-lg font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
+                  </div>
+                  <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{service.short_desc}</p>
+                  <div className="flex items-center text-primary text-sm font-medium">
+                    <span>פרטים נוספים</span>
+                    <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
+                  </div>
+                </Link>
+              </AnimatedSection>
+            ))}
           </div>
         </div>
       </section>
