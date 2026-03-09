@@ -109,18 +109,6 @@ const Index = () => {
               <span className="block mt-2" style={{ color: "hsl(155, 55%, 55%)" }}>{heroSubtitle}</span>
             </h1>
             <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 leading-relaxed">{heroDesc}</p>
-            <div className="flex flex-wrap gap-4">
-              <a href={waLink} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="bg-secondary text-secondary-foreground hover:bg-secondary/90 text-base px-8 hover:scale-105 transition-transform">
-                  📱 WhatsApp – קבל הצעה
-                </Button>
-              </a>
-              <Link to="/services">
-                <Button size="lg" variant="outline" className="bg-card/90 text-foreground hover:bg-card text-base px-8 border-border hover:scale-105 transition-transform">
-                  כל השירותים →
-                </Button>
-              </Link>
-            </div>
           </motion.div>
         </div>
       </section>
