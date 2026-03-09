@@ -1,6 +1,6 @@
 {
-  "name": "FilterSmart",
-  "short_name": "FilterSmart",
+  "name": "FilterPhone",
+  "short_name": "FilterPhone",
   "description": "סינון טלפונים וצריבת גרסאות באשדוד",
   "start_url": "/",
   "display": "standalone",

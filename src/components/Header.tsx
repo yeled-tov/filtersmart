@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Logo from "./Logo";
 import { Button } from "./ui/button";
 
-const WA_LINK = "https://wa.me/972527186881?text=שלום%20פילטר%20סמארט%2C%20אשמח%20לקבל%20פרטים";
+const WA_LINK = "https://wa.me/972527186881?text=שלום%20פילטר%20פון%2C%20אשמח%20לקבל%20פרטים";
 
 const navLinks = [
   { href: "/", label: "בית" },

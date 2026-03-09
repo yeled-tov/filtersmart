@@ -8,11 +8,11 @@ const Footer = () => (
       <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
         <div>
           <div className="flex items-center gap-2 mb-4">
-            <img src={logoImg} alt="FilterSmart לוגו – סינון טלפונים באשדוד" className="w-9 h-9 rounded-lg object-cover" width={36} height={36} />
-            <span className="text-lg font-heading font-bold">FilterSmart</span>
+            <img src={logoImg} alt="FilterPhone לוגו – סינון טלפונים באשדוד" className="w-9 h-9 rounded-lg object-cover" width={36} height={36} />
+            <span className="text-lg font-heading font-bold">FilterPhone</span>
           </div>
           <p className="text-background/70 text-sm leading-relaxed">
-            פילטר סמארט – המעבדה המובילה באשדוד לסינון טלפונים, התקנת הדרן, עסקן וכושר פליי וצריבת גרסאות לשיאומי Qin.
+            פילטר פון – המעבדה המובילה באשדוד לסינון טלפונים, התקנת הדרן, עסקן וכושר פליי וצריבת גרסאות לשיאומי Qin.
           </p>
         </div>
 
@@ -89,7 +89,7 @@ const Footer = () => (
           <span>|</span>
           <Link to="/refund-policy" className="hover:text-background transition-colors">מדיניות ביטולים והחזרים</Link>
         </div>
-        <p className="text-center text-sm text-background/50">© {new Date().getFullYear()} FilterSmart (פילטר סמארט) – סינון טלפונים באשדוד – כל הזכויות שמורות</p>
+        <p className="text-center text-sm text-background/50">© {new Date().getFullYear()} FilterPhone (פילטר פון) – סינון טלפונים באשדוד – כל הזכויות שמורות</p>
       </div>
     </div>
   </footer>

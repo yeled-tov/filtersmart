@@ -7,7 +7,7 @@ Disallow: /reset-password
 # Crawl-delay for polite crawling
 Crawl-delay: 1
 
-Sitemap: https://smartfilter.co.il/sitemap.xml
+Sitemap: https://filterphone.com/sitemap.xml
 
 # Host
-Host: https://smartfilter.co.il
+Host: https://filterphone.com

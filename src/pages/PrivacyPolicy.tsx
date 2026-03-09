@@ -3,13 +3,13 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 
 const PrivacyPolicy = () => (
   <>
-    <SEOHead title="מדיניות פרטיות – FilterSmart" description="מדיניות הפרטיות של FilterSmart פילטר סמארט" path="/privacy" />
+    <SEOHead title="מדיניות פרטיות – FilterPhone" description="מדיניות הפרטיות של FilterPhone פילטר פון" path="/privacy" />
     <Breadcrumbs items={[{ label: "מדיניות פרטיות" }]} />
     <section className="section-padding bg-background">
       <div className="container-custom max-w-3xl">
         <h1 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-8">מדיניות פרטיות</h1>
         <div className="prose prose-lg max-w-none text-muted-foreground space-y-6 leading-relaxed">
-          <p><strong className="text-foreground">FilterSmart (פילטר סמארט)</strong> מחויבת להגן על פרטיות המשתמשים באתר שלנו.</p>
+          <p><strong className="text-foreground">FilterPhone (פילטר פון)</strong> מחויבת להגן על פרטיות המשתמשים באתר שלנו.</p>
           <h2 className="text-xl font-heading font-semibold text-foreground">איסוף מידע</h2>
           <p>אנו אוספים מידע שאתם מספקים לנו באופן ישיר בעת יצירת קשר, כגון שם, מספר טלפון וכתובת דוא"ל. אנו לא אוספים מידע אישי ללא הסכמתכם.</p>
           <h2 className="text-xl font-heading font-semibold text-foreground">שימוש במידע</h2>

@@ -19,24 +19,22 @@ const Index = () => {
 
   const waLink = settings?.whatsapp_link || "https://wa.me/972527186881";
   const bitLink = settings?.bit_link || "https://bitpay.co.il/app/me/0527186881";
-  const heroTitle = settings?.hero_title || "פילטר סמארט - סינון טלפונים";
+  const heroTitle = settings?.hero_title || "פילטר פון - סינון טלפונים";
   const heroSubtitle = settings?.hero_subtitle || "וצריבת גרסאות באשדוד";
-  const heroDesc = settings?.hero_description || "FilterSmart (פילטר סמארט) – פתרונות סינון לאייפון ואנדרואיד, התקנת הדרן, עסקן, כושר פליי וצריבת גרסה למכשירי שיאומי Qin. שירות מקצועי ואמין באשדוד.";
+  const heroDesc = settings?.hero_description || "FilterPhone (פילטר פון) – פתרונות סינון לאייפון ואנדרואיד, התקנת הדרן, עסקן, כושר פליי וצריבת גרסה למכשירי שיאומי Qin. שירות מקצועי ואמין באשדוד.";
 
   const allServices = services && services.length > 0 ? services : fallbackServices;
   const filteringServices = allServices.filter((s) => s.category === "filtering");
   const flashingServices = allServices.filter((s) => s.category === "flashing");
 
-  // BreadcrumbList for homepage
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "בית", "item": "https://smartfilter.co.il/" }
+      { "@type": "ListItem", "position": 1, "name": "בית", "item": "https://filterphone.com/" }
     ]
   };
 
-  // FAQ structured data
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -58,7 +56,7 @@ const Index = () => {
       },
       {
         "@type": "Question",
-        "name": "איפה נמצא FilterSmart באשדוד?",
+        "name": "איפה נמצא FilterPhone באשדוד?",
         "acceptedAnswer": { "@type": "Answer", "text": "אנחנו נמצאים ברחוב חטיבת גבעתי 2, כניסה ו׳, רובע ג׳, אשדוד. שירות בתיאום מראש בטלפון 052-718-6881." }
       },
       {
@@ -72,10 +70,10 @@ const Index = () => {
   return (
     <>
       <SEOHead
-        title="FilterSmart – פילטר סמארט: סינון טלפונים וצריבת גרסאות באשדוד | מ-20₪"
+        title="FilterPhone – פילטר פון: סינון טלפונים וצריבת גרסאות באשדוד | מ-20₪"
         description="המעבדה המובילה באשדוד לסינון מכשירים. התקנת הדרן 300₪, עסקן 300₪, כושר פליי 70₪, סינון בסיסי 20₪. צריבת גרסה לשיאומי Qin 70₪. משווק מורשה ☎ 052-718-6881"
         path="/"
-        keywords="סינון טלפון אשדוד, הדרן אשדוד, עסקן אשדוד, כושר פליי אשדוד, צריבת גרסה לשיאומי קין, חסימת אינטרנט באשדוד, פילטר סמארט, סינון אייפון, סינון אנדרואיד, התקנת הדרן, מחיר הדרן, סינון טלפון מחיר"
+        keywords="סינון טלפון אשדוד, הדרן אשדוד, עסקן אשדוד, כושר פליי אשדוד, צריבת גרסה לשיאומי קין, חסימת אינטרנט באשדוד, פילטר פון, סינון אייפון, סינון אנדרואיד, התקנת הדרן, מחיר הדרן, סינון טלפון מחיר"
       />
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
@@ -85,7 +83,7 @@ const Index = () => {
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroBg} alt="סינון טלפונים מקצועי באשדוד – FilterSmart" className="w-full h-full object-cover" loading="eager" fetchPriority="high" />
+          <img src={heroBg} alt="סינון טלפונים מקצועי באשדוד – FilterPhone" className="w-full h-full object-cover" loading="eager" fetchPriority="high" />
           <div className="absolute inset-0 bg-foreground/45" />
         </div>
         <div className="relative container-custom py-20 md:py-32 lg:py-40">
@@ -117,12 +115,12 @@ const Index = () => {
       <TrustBadges />
 
       {/* Features */}
-      <section className="section-padding bg-background" aria-label="יתרונות FilterSmart">
+      <section className="section-padding bg-background" aria-label="יתרונות FilterPhone">
         <div className="container-custom">
           <AnimatedSection>
             <div className="text-center max-w-2xl mx-auto mb-12">
-              <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">למה לבחור ב-FilterSmart באשדוד?</h2>
-              <p className="text-muted-foreground text-lg">פילטר סמארט – המומחים לסינון טלפונים והגנה דיגיטלית באשדוד</p>
+              <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">למה לבחור ב-FilterPhone באשדוד?</h2>
+              <p className="text-muted-foreground text-lg">פילטר פון – המומחים לסינון טלפונים והגנה דיגיטלית באשדוד</p>
             </div>
           </AnimatedSection>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
@@ -258,13 +256,13 @@ const Index = () => {
         </div>
       </section>
 
-      {/* SEO Content - Rich keyword-laden content block */}
+      {/* SEO Content */}
       <section className="section-padding bg-muted/30" aria-label="מידע על סינון טלפונים באשדוד">
         <div className="container-custom max-w-4xl">
-          <h2 className="text-xl md:text-2xl font-heading font-bold text-foreground mb-6 text-center">סינון טלפונים וצריבת גרסאות באשדוד – FilterSmart פילטר סמארט</h2>
+          <h2 className="text-xl md:text-2xl font-heading font-bold text-foreground mb-6 text-center">סינון טלפונים וצריבת גרסאות באשדוד – FilterPhone פילטר פון</h2>
           <div className="prose prose-lg max-w-none text-muted-foreground leading-relaxed space-y-4">
             <p>
-              <strong className="text-foreground">FilterSmart (פילטר סמארט)</strong> הוא הכתובת המקצועית מספר 1 ל<strong className="text-foreground">סינון טלפונים באשדוד</strong> ו<strong className="text-foreground">צריבת גרסאות</strong>. אנו משווקים מורשים של מערכות הסינון המובילות בישראל – <strong className="text-foreground">הדרן (Hadran)</strong>, <strong className="text-foreground">עסקן (Askan)</strong> ו<strong className="text-foreground">כושר פליי (Kosher Play)</strong>.
+              <strong className="text-foreground">FilterPhone (פילטר פון)</strong> הוא הכתובת המקצועית מספר 1 ל<strong className="text-foreground">סינון טלפונים באשדוד</strong> ו<strong className="text-foreground">צריבת גרסאות</strong>. אנו משווקים מורשים של מערכות הסינון המובילות בישראל – <strong className="text-foreground">הדרן (Hadran)</strong>, <strong className="text-foreground">עסקן (Askan)</strong> ו<strong className="text-foreground">כושר פליי (Kosher Play)</strong>.
             </p>
             <p>
               <strong className="text-foreground">התקנת הדרן באשדוד</strong> – ההגנה ההרמטית ביותר בשוק. גרסת מערכת שלמה שלא ניתנת להסרה בשום צורה. מחיר: <strong className="text-foreground">300₪</strong>. <strong className="text-foreground">התקנת עסקן באשדוד</strong> – סינון AI חכם עם צריבה עמוקה. מחיר: <strong className="text-foreground">300₪</strong>. <strong className="text-foreground">כושר פליי התקנה</strong> – חנות אפליקציות כשרה עם MDM. מחיר: <strong className="text-foreground">70₪</strong>. <strong className="text-foreground">סינון בסיסי</strong> מ-<strong className="text-foreground">20₪</strong> בלבד.

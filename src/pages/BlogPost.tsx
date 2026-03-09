@@ -60,7 +60,7 @@ const BlogPost = () => {
 
   return (
     <>
-      <SEOHead title={`${post.title} | בלוג SmartFilter`} description={post.excerpt || ""} path={`/blog/${post.slug}`} />
+      <SEOHead title={`${post.title} | בלוג FilterPhone`} description={post.excerpt || ""} path={`/blog/${post.slug}`} />
       <Breadcrumbs
         items={[
           { label: "בלוג", path: "/blog" },
@@ -85,7 +85,7 @@ const BlogPost = () => {
           <div className="prose-custom">{renderContent(post.content)}</div>
           <div className="mt-12 bg-card rounded-xl p-6 md:p-8 card-shadow text-center">
             <h2 className="text-xl font-heading font-semibold text-card-foreground mb-3">צריכים עזרה עם סינון?</h2>
-            <p className="text-muted-foreground mb-4">צרו קשר עם SmartFilter ונתאים לכם את הפתרון המושלם</p>
+            <p className="text-muted-foreground mb-4">צרו קשר עם FilterPhone ונתאים לכם את הפתרון המושלם</p>
             <a href={waLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 rounded-lg gradient-primary text-primary-foreground font-medium">
               דברו איתנו ב-WhatsApp
             </a>

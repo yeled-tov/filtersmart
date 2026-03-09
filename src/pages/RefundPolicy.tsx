@@ -3,13 +3,13 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 
 const RefundPolicy = () => (
   <>
-    <SEOHead title="מדיניות ביטולים והחזרים – FilterSmart" description="מדיניות ביטולים והחזרים של FilterSmart פילטר סמארט" path="/refund-policy" />
+    <SEOHead title="מדיניות ביטולים והחזרים – FilterPhone" description="מדיניות ביטולים והחזרים של FilterPhone פילטר פון" path="/refund-policy" />
     <Breadcrumbs items={[{ label: "מדיניות החזרים" }]} />
     <section className="section-padding bg-background">
       <div className="container-custom max-w-3xl">
         <h1 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-8">מדיניות ביטולים והחזרים</h1>
         <div className="prose prose-lg max-w-none text-muted-foreground space-y-6 leading-relaxed">
-          <p><strong className="text-foreground">FilterSmart (פילטר סמארט)</strong> מספקת שירותי צריבה והתקנה מקצועיים. להלן מדיניות הביטולים וההחזרים שלנו:</p>
+          <p><strong className="text-foreground">FilterPhone (פילטר פון)</strong> מספקת שירותי צריבה והתקנה מקצועיים. להלן מדיניות הביטולים וההחזרים שלנו:</p>
           <h2 className="text-xl font-heading font-semibold text-foreground">ביטול לפני ביצוע השירות</h2>
           <p>ניתן לבטל הזמנה ולקבל החזר מלא כל עוד השירות טרם בוצע. יש ליצור קשר איתנו בהקדם האפשרי.</p>
           <h2 className="text-xl font-heading font-semibold text-foreground">לאחר ביצוע השירות</h2>

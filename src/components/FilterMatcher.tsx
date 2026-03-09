@@ -47,7 +47,7 @@ const botQuestions: Record<string, { text: string; options: { label: string; val
 
 const FilterMatcher = () => {
   const [messages, setMessages] = useState<Message[]>([
-    { from: "bot", text: "שלום! 👋 אני הבוט של FilterSmart. אעזור לכם למצוא את פתרון הסינון המושלם." },
+    { from: "bot", text: "שלום! 👋 אני הבוט של FilterPhone. אעזור לכם למצוא את פתרון הסינון המושלם." },
     { from: "bot", text: botQuestions.q1.text, options: botQuestions.q1.options },
   ]);
   const [step, setStep] = useState<Step>("q1");
@@ -86,7 +86,7 @@ const FilterMatcher = () => {
 
   const reset = () => {
     setMessages([
-      { from: "bot", text: "שלום! 👋 אני הבוט של FilterSmart. אעזור לכם למצוא את פתרון הסינון המושלם." },
+      { from: "bot", text: "שלום! 👋 אני הבוט של FilterPhone. אעזור לכם למצוא את פתרון הסינון המושלם." },
       { from: "bot", text: botQuestions.q1.text, options: botQuestions.q1.options },
     ]);
     setStep("q1");
@@ -107,14 +107,13 @@ const FilterMatcher = () => {
         <p className="text-muted-foreground text-lg mb-8">שוחחו עם הבוט שלנו ונמצא לכם את הפתרון המושלם</p>
 
         <div className="bg-card rounded-2xl card-shadow overflow-hidden text-right">
-          {/* Chat header */}
           <div className="flex items-center justify-between px-5 py-3 border-b border-border bg-primary/5">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
                 <Bot className="w-4 h-4 text-primary-foreground" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-card-foreground">FilterSmart Bot</p>
+                <p className="text-sm font-semibold text-card-foreground">FilterPhone Bot</p>
                 <p className="text-xs text-muted-foreground">מקוון</p>
               </div>
             </div>
@@ -126,7 +125,6 @@ const FilterMatcher = () => {
             )}
           </div>
 
-          {/* Messages */}
           <div ref={scrollRef} className="p-4 space-y-3 h-80 overflow-y-auto">
             {messages.map((msg, i) => (
               <div key={i} className={`flex ${msg.from === "user" ? "justify-start" : "justify-end"}`}>
@@ -146,7 +144,6 @@ const FilterMatcher = () => {
                     >
                       {msg.text}
                     </div>
-                    {/* Options as buttons below bot message */}
                     {msg.from === "bot" && msg.options && i === messages.length - 1 && step !== "result" && (
                       <div className="mt-2 space-y-1.5">
                         {msg.options.map((opt) => (
@@ -170,7 +167,6 @@ const FilterMatcher = () => {
               </div>
             ))}
 
-            {/* Result action buttons */}
             {step === "result" && (
               <div className="flex justify-center gap-3 pt-3">
                 <Link to={`/services/${getResultSlug()}`}>
@@ -184,7 +180,6 @@ const FilterMatcher = () => {
             )}
           </div>
 
-          {/* Bottom bar */}
           <div className="px-4 py-3 border-t border-border bg-muted/30 flex items-center gap-2">
             <div className="flex-1 bg-card border border-border rounded-full px-4 py-2 text-sm text-muted-foreground">
               בחרו אפשרות מהרשימה למעלה...

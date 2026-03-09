@@ -5,8 +5,8 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 const About = () => (
   <>
     <SEOHead
-      title="אודות FilterSmart – פילטר סמארט: סינון טלפונים מקצועי באשדוד"
-      description="FilterSmart (פילטר סמארט) – משווק מורשה של הדרן, עסקן וכושר פליי באשדוד. שירות סינון טלפון מקצועי ואמין."
+      title="אודות FilterPhone – פילטר פון: סינון טלפונים מקצועי באשדוד"
+      description="FilterPhone (פילטר פון) – משווק מורשה של הדרן, עסקן וכושר פליי באשדוד. שירות סינון טלפון מקצועי ואמין."
       path="/about"
     />
     <Breadcrumbs items={[{ label: "אודות" }]} />
@@ -15,10 +15,10 @@ const About = () => (
       <div className="container-custom">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-3xl md:text-5xl font-heading font-bold text-foreground mb-6">
-            אודות <span className="gradient-text">FilterSmart</span>
+            אודות <span className="gradient-text">FilterPhone</span>
           </h1>
           <p className="text-lg text-muted-foreground mb-10 leading-relaxed">
-            FilterSmart (פילטר סמארט) הוקמה מתוך תשוקה להגנה דיגיטלית ומחויבות לשירות מקצועי. אנו משווק מורשה של המותגים המובילים בתחום הסינון – הדרן, עסקן וכושר פליי – ופועלים מאשדוד לשרת לקוחות מכל הארץ.
+            FilterPhone (פילטר פון) הוקמה מתוך תשוקה להגנה דיגיטלית ומחויבות לשירות מקצועי. אנו משווק מורשה של המותגים המובילים בתחום הסינון – הדרן, עסקן וכושר פליי – ופועלים מאשדוד לשרת לקוחות מכל הארץ.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
