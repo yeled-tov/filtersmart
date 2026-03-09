@@ -10,7 +10,7 @@ interface SEOHeadProps {
 }
 
 const SEOHead = ({ title, description, path = "", keywords, type = "website", image }: SEOHeadProps) => {
-  const baseUrl = "https://smartfilter.co.il";
+  const baseUrl = "https://filterphone.com";
   const fullUrl = `${baseUrl}${path}`;
   const ogImage = image || "https://storage.googleapis.com/gpt-engineer-file-uploads/zQzpmcciMefmd1jcMZlCnfScdqW2/social-images/social-1772354974246-Gemini_Generated_Image_8ki41m8ki41m8ki4.webp";
 
@@ -28,7 +28,7 @@ const SEOHead = ({ title, description, path = "", keywords, type = "website", im
       <meta property="og:url" content={fullUrl} />
       <meta property="og:type" content={type} />
       <meta property="og:locale" content="he_IL" />
-      <meta property="og:site_name" content="FilterSmart – פילטר סמארט" />
+      <meta property="og:site_name" content="FilterPhone – פילטר פון" />
       <meta property="og:image" content={ogImage} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />

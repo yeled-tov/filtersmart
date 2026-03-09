@@ -3,8 +3,8 @@ import { Star } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 
 const reviews = [
-  { name: "משה מאשדוד", text: "שירות מהיר ומקצועי! הצריבה בוצעה תוך חצי שעה והטלפון עובד מעולה. ממליץ בחום על FilterSmart.", rating: 5 },
-  { name: "אברהם הלוי", text: "התקנתי הדרן אצל FilterSmart באשדוד – ההגנה הכי טובה שיש. השירות היה אדיב ומקצועי מאוד.", rating: 5 },
+  { name: "משה מאשדוד", text: "שירות מהיר ומקצועי! הצריבה בוצעה תוך חצי שעה והטלפון עובד מעולה. ממליץ בחום על FilterPhone.", rating: 5 },
+  { name: "אברהם הלוי", text: "התקנתי הדרן אצל FilterPhone באשדוד – ההגנה הכי טובה שיש. השירות היה אדיב ומקצועי מאוד.", rating: 5 },
   { name: "יוסף כהן מאשדוד", text: "הסינון הבסיסי עלה לי רק 20 שקל והותקן ב-5 דקות. פשוט ויעיל, בדיוק מה שהייתי צריך.", rating: 5 },
   { name: "דוד פרץ", text: "התקנתי כושר פליי וואטסאפ עובד מצוין בלי תמונות פרופיל. חנות האפליקציות שלהם מעולה.", rating: 5 },
 ];
@@ -12,7 +12,7 @@ const reviews = [
 const reviewJsonLd = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
-  "name": "FilterSmart – פילטר סמארט",
+  "name": "FilterPhone – פילטר פון",
   "aggregateRating": {
     "@type": "AggregateRating",
     "ratingValue": "5",
@@ -35,7 +35,7 @@ const Reviews = () => (
     <div className="container-custom">
       <AnimatedSection>
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">⭐ לקוחות ממליצים על FilterSmart</h2>
+          <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">⭐ לקוחות ממליצים על FilterPhone</h2>
           <p className="text-muted-foreground text-lg">מה הלקוחות שלנו באשדוד אומרים על השירות</p>
         </div>
       </AnimatedSection>
