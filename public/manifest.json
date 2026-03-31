@@ -1,13 +1,14 @@
 {
-  "name": "FilterPhone",
+  "name": "FilterPhone – סינון טלפונים מקצועי",
   "short_name": "FilterPhone",
-  "description": "סינון טלפונים וצריבת גרסאות באשדוד",
+  "description": "FilterPhone – המעבדה המובילה באשדוד לסינון טלפונים והגנה דיגיטלית. הדרן, עסקן, כושר פליי – מ-20₪",
   "start_url": "/",
   "display": "standalone",
-  "theme_color": "#1e40af",
-  "background_color": "#ffffff",
+  "theme_color": "#2563c4",
+  "background_color": "#f8f9fb",
   "lang": "he",
   "dir": "rtl",
+  "categories": ["business", "utilities"],
   "icons": [
     {
       "src": "/favicon.png",

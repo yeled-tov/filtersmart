@@ -1,15 +1,15 @@
 import { Link } from "react-router-dom";
-import { Shield, ArrowLeft, Smartphone, Lock, Zap, Cpu, HeartHandshake } from "lucide-react";
+import { Shield, ArrowLeft, Smartphone, Lock, Zap, Cpu, HeartHandshake, Star, CheckCircle, Phone } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/SEOHead";
 import { useServices, fallbackServices } from "@/hooks/useServices";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
-import TrustBadges from "@/components/TrustBadges";
 import TrustStrip from "@/components/TrustStrip";
 import Reviews from "@/components/Reviews";
 import FAQ from "@/components/FAQ";
 import AnimatedSection from "@/components/AnimatedSection";
+import FilterMatcher from "@/components/FilterMatcher";
 import heroBg from "@/assets/hero-bg.jpg";
 import { Helmet } from "react-helmet-async";
 
@@ -19,9 +19,9 @@ const Index = () => {
 
   const waLink = settings?.whatsapp_link || "https://wa.me/972527186881";
   const bitLink = settings?.bit_link || "https://bitpay.co.il/app/me/0527186881";
-  const heroTitle = settings?.hero_title || "פילטר פון - סינון טלפונים";
+  const heroTitle = settings?.hero_title || "סינון טלפונים מקצועי";
   const heroSubtitle = settings?.hero_subtitle || "וצריבת גרסאות באשדוד";
-  const heroDesc = settings?.hero_description || "FilterPhone (פילטר פון) – פתרונות סינון לאייפון ואנדרואיד, התקנת הדרן, עסקן, כושר פליי וצריבת גרסה למכשירי שיאומי Qin. שירות מקצועי ואמין באשדוד.";
+  const heroDesc = settings?.hero_description || "FilterPhone – פתרונות סינון לאייפון ואנדרואיד, התקנת הדרן, עסקן, כושר פליי וצריבת גרסה למכשירי שיאומי Qin. שירות מקצועי ואמין באשדוד.";
 
   const allServices = services && services.length > 0 ? services : fallbackServices;
   const filteringServices = allServices.filter((s) => s.category === "filtering");
@@ -70,8 +70,8 @@ const Index = () => {
   return (
     <>
       <SEOHead
-        title="FilterPhone – פילטר פון: סינון טלפונים וצריבת גרסאות באשדוד | מ-20₪"
-        description="המעבדה המובילה באשדוד לסינון מכשירים. התקנת הדרן 300₪, עסקן 300₪, כושר פליי 70₪, סינון בסיסי 20₪. צריבת גרסה לשיאומי Qin 70₪. משווק מורשה ☎ 052-718-6881"
+        title="FilterPhone – פילטר פון | סינון טלפונים מקצועי באשדוד מ-20₪"
+        description="FilterPhone – המעבדה המובילה באשדוד לסינון טלפונים. התקנת הדרן 300₪, עסקן 300₪, כושר פליי 70₪, סינון בסיסי 20₪. משווק מורשה. צריבת גרסה Qin 70₪ ☎ 052-718-6881"
         path="/"
         keywords="סינון טלפון אשדוד, הדרן אשדוד, עסקן אשדוד, כושר פליי אשדוד, צריבת גרסה לשיאומי קין, חסימת אינטרנט באשדוד, פילטר פון, סינון אייפון, סינון אנדרואיד, התקנת הדרן, מחיר הדרן, סינון טלפון מחיר"
       />
@@ -81,61 +81,92 @@ const Index = () => {
       </Helmet>
 
       {/* Hero */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden min-h-[520px] md:min-h-[600px] flex items-center">
         <div className="absolute inset-0">
           <img src={heroBg} alt="סינון טלפונים מקצועי באשדוד – FilterPhone" className="w-full h-full object-cover" loading="eager" fetchPriority="high" />
-          <div className="absolute inset-0 bg-foreground/45" />
+          <div className="absolute inset-0 bg-gradient-to-l from-foreground/70 via-foreground/55 to-foreground/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-foreground/30 to-transparent" />
         </div>
-        <div className="relative container-custom py-20 md:py-32 lg:py-40">
+        <div className="relative container-custom py-20 md:py-28 lg:py-36">
           <motion.div
             className="max-w-2xl"
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 text-primary-foreground text-sm font-medium mb-6 backdrop-blur-sm border border-primary-foreground/20">
-              <motion.div
-                animate={{ rotate: [0, -10, 10, -10, 0], scale: [1, 1.1, 1] }}
-                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-              >
-                <Shield className="w-4 h-4" />
-              </motion.div>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white text-sm font-medium mb-6 backdrop-blur-md border border-white/15">
+              <Shield className="w-4 h-4 text-green-300" />
               משווק מורשה – הדרן, עסקן, כושר פליי
             </div>
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-primary-foreground leading-tight mb-6">
+            <h1 className="text-3xl md:text-5xl lg:text-[3.5rem] font-heading font-bold text-white leading-[1.15] mb-6 text-balance">
               {heroTitle}
-              <span className="block mt-2" style={{ color: "hsl(155, 55%, 55%)" }}>{heroSubtitle}</span>
+              <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-l from-green-300 to-emerald-200">{heroSubtitle}</span>
             </h1>
-            <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 leading-relaxed">{heroDesc}</p>
+            <p className="text-base md:text-lg text-white/75 mb-8 leading-relaxed max-w-xl">{heroDesc}</p>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <a href={waLink} target="_blank" rel="noopener noreferrer">
+                <Button size="lg" className="gradient-primary text-white border-0 shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-all text-base px-7 h-12">
+                  WhatsApp – הזמן עכשיו
+                </Button>
+              </a>
+              <a href="tel:0527186881">
+                <Button size="lg" variant="outline" className="bg-white/10 text-white border-white/20 hover:bg-white/20 backdrop-blur-sm text-base px-7 h-12 gap-2">
+                  <Phone className="w-4 h-4" />
+                  052-718-6881
+                </Button>
+              </a>
+            </div>
+
+            {/* Quick stats */}
+            <div className="flex items-center gap-6 mt-10 pt-8 border-t border-white/10">
+              {[
+                { value: "500+", label: "לקוחות מרוצים" },
+                { value: "20₪", label: "סינון בסיסי מ-" },
+                { value: "5 דק׳", label: "זמן התקנה" },
+              ].map((stat, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 + i * 0.1 }}
+                  className="text-center"
+                >
+                  <div className="text-xl md:text-2xl font-heading font-bold text-white">{stat.value}</div>
+                  <div className="text-xs text-white/50 mt-0.5">{stat.label}</div>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>
 
       <TrustStrip />
-      <TrustBadges />
 
       {/* Features */}
-      <section className="section-padding bg-background" aria-label="יתרונות FilterPhone">
+      <section className="section-padding bg-background bg-mesh" aria-label="יתרונות FilterPhone">
         <div className="container-custom">
           <AnimatedSection>
-            <div className="text-center max-w-2xl mx-auto mb-12">
-              <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">למה לבחור ב-FilterPhone באשדוד?</h2>
-              <p className="text-muted-foreground text-lg">פילטר פון – המומחים לסינון טלפונים והגנה דיגיטלית באשדוד</p>
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4 text-balance">
+                למה לבחור ב-<span className="gradient-text">FilterPhone</span>?
+              </h2>
+              <p className="text-muted-foreground text-lg">המומחים לסינון טלפונים והגנה דיגיטלית באשדוד</p>
             </div>
           </AnimatedSection>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { icon: Shield, title: "הגנה מקצועית", desc: "פתרונות סינון ברמה הגבוהה ביותר עם שכבות הגנה מרובות – הדרן, עסקן וכושר פליי" },
-              { icon: Smartphone, title: "כל המכשירים", desc: "אייפון, אנדרואיד ומכשירי שיאומי Qin F21 Pro ו-F25 – פתרון לכל סוג מכשיר" },
-              { icon: Zap, title: "שירות מהיר באשדוד", desc: "התקנה מקצועית ומהירה באשדוד. סינון בסיסי תוך 5 דקות, צריבה תוך 30-60 דקות" },
-              { icon: HeartHandshake, title: "מחירים הוגנים", desc: "סינון בסיסי מ-20₪ בלבד. מחירים שקופים ללא עלויות נסתרות, עם אחריות מלאה" },
+              { icon: Shield, title: "הגנה מקצועית", desc: "פתרונות סינון ברמה הגבוהה ביותר עם שכבות הגנה מרובות – הדרן, עסקן וכושר פליי", color: "from-blue-500 to-blue-600" },
+              { icon: Smartphone, title: "כל המכשירים", desc: "אייפון, אנדרואיד ומכשירי שיאומי Qin F21 Pro ו-F25 – פתרון לכל סוג מכשיר", color: "from-violet-500 to-violet-600" },
+              { icon: Zap, title: "שירות מהיר", desc: "התקנה מקצועית ומהירה. סינון בסיסי תוך 5 דקות, צריבה תוך 30-60 דקות", color: "from-amber-500 to-orange-500" },
+              { icon: HeartHandshake, title: "מחירים הוגנים", desc: "סינון בסיסי מ-20₪ בלבד. מחירים שקופים ללא עלויות נסתרות, עם אחריות מלאה", color: "from-emerald-500 to-green-600" },
             ].map((feature, i) => (
-              <AnimatedSection key={i} delay={i * 0.1}>
-                <div className="bg-card rounded-xl p-8 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group h-full">
-                  <div className="w-12 h-12 rounded-lg gradient-primary flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-                    <feature.icon className="w-6 h-6 text-primary-foreground" />
+              <AnimatedSection key={i} delay={i * 0.08}>
+                <div className="bg-card rounded-2xl p-7 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group h-full border border-border/50 card-shine">
+                  <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-5 group-hover:scale-105 transition-transform shadow-sm`}>
+                    <feature.icon className="w-5 h-5 text-white" />
                   </div>
-                  <h3 className="text-lg font-heading font-semibold text-card-foreground mb-2">{feature.title}</h3>
+                  <h3 className="text-base font-heading font-semibold text-card-foreground mb-2">{feature.title}</h3>
                   <p className="text-muted-foreground leading-relaxed text-sm">{feature.desc}</p>
                 </div>
               </AnimatedSection>
@@ -145,45 +176,55 @@ const Index = () => {
       </section>
 
       {/* Filtering Services */}
-      <section className="section-padding bg-muted/50" aria-label="שירותי סינון טלפונים">
+      <section className="section-padding bg-muted/40" aria-label="שירותי סינון טלפונים">
         <div className="container-custom">
           <AnimatedSection>
-            <div className="text-center max-w-2xl mx-auto mb-12">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/8 text-primary text-sm font-semibold mb-4">
                 <Lock className="w-4 h-4" />
                 סינון טלפונים והגנה
               </div>
-              <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">שירותי סינון טלפון והגנה דיגיטלית באשדוד</h2>
+              <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4 text-balance">שירותי סינון טלפון והגנה דיגיטלית</h2>
               <p className="text-muted-foreground text-lg">פתרונות סינון מקצועיים לאייפון ואנדרואיד – מ-20₪ בלבד</p>
             </div>
           </AnimatedSection>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {filteringServices.map((service, i) => (
-              <AnimatedSection key={service.slug} delay={i * 0.1}>
+              <AnimatedSection key={service.slug} delay={i * 0.08}>
                 <Link
                   to={`/services/${service.slug}`}
-                  className="block bg-card rounded-xl p-6 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden"
+                  className="block bg-card rounded-2xl p-6 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden border border-border/50"
                 >
                   {service.slug === "hadran" && (
-                    <div className="absolute top-3 left-3 bg-secondary text-secondary-foreground text-xs font-bold px-3 py-1 rounded-full shadow-md">
-                      ⭐ הכי פופולרי
+                    <div className="absolute top-4 left-4 flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                      <Star className="w-3 h-3 fill-current" />
+                      הכי פופולרי
                     </div>
                   )}
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
                       {service.logo_url && (
-                        <img src={service.logo_url} alt={`${service.name} לוגו`} className="w-10 h-10 rounded-lg object-contain bg-muted p-1" loading="lazy" />
+                        <img src={service.logo_url} alt={`${service.name} לוגו`} className="w-11 h-11 rounded-xl object-contain bg-muted p-1.5" loading="lazy" />
                       )}
-                      <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">
-                        {service.name}
-                      </h3>
+                      <div>
+                        <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">
+                          {service.name}
+                        </h3>
+                      </div>
                     </div>
-                    <span className="text-lg font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
+                    <span className="text-xl font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
                   </div>
-                  <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{service.short_desc}</p>
-                  <div className="flex items-center text-primary text-sm font-medium">
-                    <span>פרטים נוספים</span>
-                    <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
+                  <p className="text-muted-foreground text-sm mb-5 leading-relaxed">{service.short_desc}</p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center text-primary text-sm font-medium group-hover:gap-2 transition-all">
+                      <span>פרטים נוספים</span>
+                      <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
+                    </div>
+                    <div className="flex items-center gap-0.5">
+                      {[1,2,3,4,5].map(n => (
+                        <Star key={n} className="w-3 h-3 fill-amber-400 text-amber-400" />
+                      ))}
+                    </div>
                   </div>
                 </Link>
               </AnimatedSection>
@@ -193,32 +234,32 @@ const Index = () => {
       </section>
 
       {/* Flashing Services */}
-      <section className="section-padding bg-background" aria-label="שירותי צריבת גרסאות">
+      <section className="section-padding bg-background bg-mesh" aria-label="שירותי צריבת גרסאות">
         <div className="container-custom">
           <AnimatedSection>
-            <div className="text-center max-w-2xl mx-auto mb-12">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 text-secondary text-sm font-semibold mb-4">
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary/8 text-secondary text-sm font-semibold mb-4">
                 <Cpu className="w-4 h-4" />
-                צריבת גרסאות ומערכות
+                צריבת גרסאות
               </div>
-              <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">צריבת גרסאות כשרות למכשירי שיאומי Qin באשדוד</h2>
-              <p className="text-muted-foreground text-lg">צריבת גרסה כשרה ומותאמת למכשירי Qin F21 Pro ו-Qin F25 – 70₪ בלבד</p>
+              <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4 text-balance">צריבת גרסאות כשרות למכשירי שיאומי Qin</h2>
+              <p className="text-muted-foreground text-lg">גרסה כשרה ומותאמת למכשירי Qin F21 Pro ו-Qin F25 – 70₪ בלבד</p>
             </div>
           </AnimatedSection>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl mx-auto">
             {flashingServices.map((service, i) => (
-              <AnimatedSection key={service.slug} delay={i * 0.1}>
+              <AnimatedSection key={service.slug} delay={i * 0.08}>
                 <Link
                   to={`/services/${service.slug}`}
-                  className="block bg-card rounded-xl p-6 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group"
+                  className="block bg-card rounded-2xl p-6 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group border border-border/50"
                 >
                   <div className="flex items-start justify-between mb-4">
                     <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">
                       {service.name}
                     </h3>
-                    <span className="text-lg font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
+                    <span className="text-xl font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
                   </div>
-                  <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{service.short_desc}</p>
+                  <p className="text-muted-foreground text-sm mb-5 leading-relaxed">{service.short_desc}</p>
                   <div className="flex items-center text-primary text-sm font-medium">
                     <span>פרטים נוספים</span>
                     <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
@@ -230,34 +271,43 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Filter Matcher Bot */}
+      <FilterMatcher />
+
       <Reviews />
       <FAQ />
 
       {/* CTA */}
       <section className="relative overflow-hidden" aria-label="יצירת קשר">
         <div className="absolute inset-0 gradient-primary" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,_rgba(255,255,255,0.08)_0%,_transparent_60%)]" />
         <div className="relative container-custom py-16 md:py-24 text-center">
           <AnimatedSection>
-            <h2 className="text-2xl md:text-4xl font-heading font-bold text-primary-foreground mb-4">מוכנים להגן על הטלפון שלכם?</h2>
-            <p className="text-primary-foreground/80 text-lg mb-8 max-w-xl mx-auto">צרו קשר עוד היום ונתאים לכם את פתרון הסינון המושלם – שירות מקצועי באשדוד</p>
+            <h2 className="text-2xl md:text-4xl font-heading font-bold text-white mb-4 text-balance">מוכנים להגן על הטלפון שלכם?</h2>
+            <p className="text-white/70 text-lg mb-10 max-w-xl mx-auto">צרו קשר עוד היום ונתאים לכם את פתרון הסינון המושלם – שירות מקצועי באשדוד</p>
             <div className="flex flex-wrap justify-center gap-4">
               <a href={waLink} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="outline" className="bg-card/90 text-foreground hover:bg-card text-base px-8 border-border hover:scale-105 transition-transform">
+                <Button size="lg" className="bg-white text-primary hover:bg-white/95 text-base px-8 h-12 shadow-lg hover:shadow-xl transition-all font-semibold">
                   WhatsApp – 052-718-6881
                 </Button>
               </a>
               <a href={bitLink} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 text-base px-8 hover:scale-105 transition-transform">
+                <Button size="lg" variant="outline" className="bg-transparent text-white border-white/25 hover:bg-white/10 text-base px-8 h-12 backdrop-blur-sm">
                   שלם ב-BIT
                 </Button>
               </a>
+            </div>
+            <div className="flex items-center justify-center gap-6 mt-8 text-white/50 text-sm">
+              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-green-300" /> אחריות מלאה</span>
+              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-green-300" /> שירות מהיר</span>
+              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-green-300" /> מחירים הוגנים</span>
             </div>
           </AnimatedSection>
         </div>
       </section>
 
       {/* SEO Content */}
-      <section className="section-padding bg-muted/30" aria-label="מידע על סינון טלפונים באשדוד">
+      <section className="section-padding bg-muted/20" aria-label="מידע על סינון טלפונים באשדוד">
         <div className="container-custom max-w-4xl">
           <h2 className="text-xl md:text-2xl font-heading font-bold text-foreground mb-6 text-center">סינון טלפונים וצריבת גרסאות באשדוד – FilterPhone פילטר פון</h2>
           <div className="prose prose-lg max-w-none text-muted-foreground leading-relaxed space-y-4">

@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { HelpCircle } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./ui/accordion";
 import AnimatedSection from "./AnimatedSection";
 
@@ -44,25 +45,33 @@ const faqJsonLd = {
 };
 
 const FAQ = () => (
-  <section className="section-padding bg-muted/30" aria-label="שאלות נפוצות על סינון טלפונים">
+  <section className="section-padding bg-muted/20" aria-label="שאלות נפוצות על סינון טלפונים">
     <Helmet>
       <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
     </Helmet>
     <div className="container-custom max-w-3xl">
       <AnimatedSection>
         <div className="text-center mb-12">
-          <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4">❓ שאלות נפוצות על סינון טלפונים באשדוד</h2>
-          <p className="text-muted-foreground text-lg">תשובות לשאלות שנשאלות הכי הרבה על שירותי הסינון שלנו</p>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/8 text-primary text-sm font-semibold mb-4">
+            <HelpCircle className="w-4 h-4" />
+            שאלות נפוצות
+          </div>
+          <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4 text-balance">שאלות נפוצות על סינון טלפונים</h2>
+          <p className="text-muted-foreground text-lg">תשובות לשאלות הנפוצות ביותר על שירותי הסינון שלנו</p>
         </div>
       </AnimatedSection>
-      <AnimatedSection delay={0.15}>
-        <Accordion type="single" collapsible className="space-y-3">
+      <AnimatedSection delay={0.12}>
+        <Accordion type="single" collapsible className="space-y-2.5">
           {faqs.map((faq, i) => (
-            <AccordionItem key={i} value={`faq-${i}`} className="bg-card rounded-xl card-shadow border-0 px-6 hover:card-shadow-hover transition-shadow">
-              <AccordionTrigger className="text-right font-heading font-semibold text-card-foreground hover:no-underline">
+            <AccordionItem
+              key={i}
+              value={`faq-${i}`}
+              className="bg-card rounded-xl card-shadow border border-border/50 px-6 hover:card-shadow-hover transition-all duration-200 data-[state=open]:border-primary/20"
+            >
+              <AccordionTrigger className="text-right font-heading font-semibold text-card-foreground hover:no-underline text-[15px]">
                 {faq.q}
               </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground leading-relaxed">
+              <AccordionContent className="text-muted-foreground leading-relaxed text-sm">
                 {faq.a}
               </AccordionContent>
             </AccordionItem>
