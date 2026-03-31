@@ -1,34 +1,42 @@
 import { Link } from "react-router-dom";
-import { MapPin, Phone, Mail } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, ArrowLeft } from "lucide-react";
 import logoImg from "@/assets/logo.png";
 
 const Footer = () => (
   <footer className="bg-foreground text-background" role="contentinfo">
-    <div className="container-custom py-12 md:py-16">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-        <div>
-          <div className="flex items-center gap-2 mb-4">
-            <img src={logoImg} alt="FilterPhone לוגו – סינון טלפונים באשדוד" className="w-9 h-9 rounded-lg object-cover" width={36} height={36} />
-            <span className="text-lg font-heading font-bold">FilterPhone</span>
+    <div className="container-custom pt-14 pb-8 md:pt-20 md:pb-10">
+      {/* Main grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
+        {/* Brand */}
+        <div className="lg:col-span-1">
+          <div className="flex items-center gap-2.5 mb-5">
+            <img src={logoImg} alt="FilterPhone לוגו" className="w-10 h-10 rounded-xl object-cover" width={40} height={40} />
+            <span className="text-xl font-heading font-bold">FilterPhone</span>
           </div>
-          <p className="text-background/70 text-sm leading-relaxed">
-            פילטר פון – המעבדה המובילה באשדוד לסינון טלפונים, התקנת הדרן, עסקן וכושר פליי וצריבת גרסאות לשיאומי Qin.
+          <p className="text-background/60 text-sm leading-relaxed mb-5">
+            המעבדה המובילה באשדוד לסינון טלפונים, התקנת הדרן, עסקן וכושר פליי וצריבת גרסאות לשיאומי Qin.
           </p>
+          <div className="flex items-center gap-2 text-sm">
+            <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+            <span className="text-background/50">זמינים לשירותכם</span>
+          </div>
         </div>
 
+        {/* Navigation */}
         <div>
-          <h3 className="text-base font-heading font-semibold mb-4">ניווט מהיר</h3>
+          <h3 className="text-sm font-heading font-semibold mb-5 text-background/90 uppercase tracking-wider">ניווט מהיר</h3>
           <nav aria-label="ניווט תחתון">
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2.5">
               {[
-                { href: "/", label: "בית" },
+                { href: "/", label: "דף הבית" },
                 { href: "/about", label: "אודות" },
-                { href: "/services", label: "שירותים" },
-                { href: "/blog", label: "בלוג" },
+                { href: "/services", label: "כל השירותים" },
+                { href: "/blog", label: "בלוג ומדריכים" },
                 { href: "/contact", label: "צור קשר" },
               ].map((l) => (
                 <li key={l.href}>
-                  <Link to={l.href} className="text-background/70 hover:text-background transition-colors">
+                  <Link to={l.href} className="text-background/55 hover:text-background transition-colors text-sm flex items-center gap-1 group">
+                    <ArrowLeft className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity -mr-4 group-hover:mr-0" />
                     {l.label}
                   </Link>
                 </li>
@@ -37,21 +45,26 @@ const Footer = () => (
           </nav>
         </div>
 
+        {/* Services */}
         <div>
-          <h3 className="text-base font-heading font-semibold mb-4">השירותים שלנו</h3>
+          <h3 className="text-sm font-heading font-semibold mb-5 text-background/90 uppercase tracking-wider">השירותים שלנו</h3>
           <nav aria-label="שירותים">
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2.5">
               {[
-                { href: "/services/basic-filtering", label: "סינון בסיסי – 20₪" },
-                { href: "/services/kosher-play", label: "כושר פליי – 70₪" },
-                { href: "/services/hadran", label: "הדרן – 300₪" },
-                { href: "/services/askan", label: "עסקן – 300₪" },
-                { href: "/services/qin-f21-pro", label: "Qin F21 Pro – 70₪" },
-                { href: "/services/qin-f25", label: "Qin F25 – 70₪" },
+                { href: "/services/basic-filtering", label: "סינון בסיסי", price: "20₪" },
+                { href: "/services/kosher-play", label: "כושר פליי", price: "70₪" },
+                { href: "/services/hadran", label: "הדרן", price: "300₪" },
+                { href: "/services/askan", label: "עסקן", price: "300₪" },
+                { href: "/services/qin-f21-pro", label: "Qin F21 Pro", price: "70₪" },
+                { href: "/services/qin-f25", label: "Qin F25", price: "70₪" },
               ].map((l) => (
                 <li key={l.href}>
-                  <Link to={l.href} className="text-background/70 hover:text-background transition-colors">
-                    {l.label}
+                  <Link to={l.href} className="text-background/55 hover:text-background transition-colors text-sm flex items-center justify-between group">
+                    <span className="flex items-center gap-1">
+                      <ArrowLeft className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity -mr-4 group-hover:mr-0" />
+                      {l.label}
+                    </span>
+                    <span className="text-background/35 text-xs">{l.price}</span>
                   </Link>
                 </li>
               ))}
@@ -59,37 +72,61 @@ const Footer = () => (
           </nav>
         </div>
 
+        {/* Contact */}
         <div>
-          <h3 className="text-base font-heading font-semibold mb-4">יצירת קשר</h3>
+          <h3 className="text-sm font-heading font-semibold mb-5 text-background/90 uppercase tracking-wider">יצירת קשר</h3>
           <address className="not-italic">
-            <ul className="space-y-3 text-sm text-background/70">
-              <li className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 mt-0.5 shrink-0" />
-                <span>רחוב חטיבת גבעתי 2, כניסה ו׳, אשדוד</span>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg bg-background/10 flex items-center justify-center shrink-0 mt-0.5">
+                  <MapPin className="w-4 h-4 text-background/70" />
+                </div>
+                <div>
+                  <span className="text-background/55 text-sm leading-relaxed">חטיבת גבעתי 2, כניסה ו׳</span>
+                  <span className="block text-background/40 text-xs">רובע ג׳, אשדוד</span>
+                </div>
               </li>
-              <li className="flex items-center gap-2">
-                <Phone className="w-4 h-4 shrink-0" />
-                <a href="tel:0527186881" className="hover:text-background transition-colors" dir="ltr">052-718-6881</a>
+              <li className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-background/10 flex items-center justify-center shrink-0">
+                  <Phone className="w-4 h-4 text-background/70" />
+                </div>
+                <a href="tel:0527186881" className="text-background/55 hover:text-background transition-colors text-sm" dir="ltr">052-718-6881</a>
               </li>
-              <li className="flex items-center gap-2">
-                <Mail className="w-4 h-4 shrink-0" />
-                <a href="mailto:ywldyld@gmail.com" className="hover:text-background transition-colors">ywldyld@gmail.com</a>
+              <li className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-background/10 flex items-center justify-center shrink-0">
+                  <Mail className="w-4 h-4 text-background/70" />
+                </div>
+                <a href="mailto:ywldyld@gmail.com" className="text-background/55 hover:text-background transition-colors text-sm">ywldyld@gmail.com</a>
+              </li>
+              <li className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-background/10 flex items-center justify-center shrink-0">
+                  <Clock className="w-4 h-4 text-background/70" />
+                </div>
+                <div className="text-sm">
+                  <span className="text-background/55">א׳-ה׳: 09:00–19:00</span>
+                  <span className="block text-background/40 text-xs">ו׳: 09:00–13:00</span>
+                </div>
               </li>
             </ul>
           </address>
         </div>
       </div>
 
-      <div className="mt-8 pt-6 border-t border-background/10 space-y-4">
-        <p className="text-xs text-background/40 text-center leading-relaxed">
+      {/* Bottom */}
+      <div className="mt-10 pt-6 border-t border-background/8">
+        <p className="text-xs text-background/30 text-center leading-relaxed mb-4">
           הבהרה: השירות הניתן הינו עבור צריבת והתקנת המערכת. לאחר מכן, השירות והתמיכה השוטפת הינם באחריות חברות הסינון בלבד.
         </p>
-        <div className="flex justify-center gap-4 text-xs text-background/50">
-          <Link to="/privacy" className="hover:text-background transition-colors">מדיניות פרטיות</Link>
-          <span>|</span>
-          <Link to="/refund-policy" className="hover:text-background transition-colors">מדיניות ביטולים והחזרים</Link>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex items-center gap-4 text-xs text-background/40">
+            <Link to="/privacy" className="hover:text-background/70 transition-colors">מדיניות פרטיות</Link>
+            <span className="text-background/20">|</span>
+            <Link to="/refund-policy" className="hover:text-background/70 transition-colors">מדיניות ביטולים</Link>
+          </div>
+          <p className="text-xs text-background/30">
+            © {new Date().getFullYear()} FilterPhone (פילטר פון) – כל הזכויות שמורות
+          </p>
         </div>
-        <p className="text-center text-sm text-background/50">© {new Date().getFullYear()} FilterPhone (פילטר פון) – סינון טלפונים באשדוד – כל הזכויות שמורות</p>
       </div>
     </div>
   </footer>

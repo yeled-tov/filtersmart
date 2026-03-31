@@ -1,10 +1,11 @@
 import { useParams, Link } from "react-router-dom";
-import { ArrowRight, CheckCircle } from "lucide-react";
+import { ArrowRight, CheckCircle, Star, MessageCircle } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/SEOHead";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import ServiceFAQ from "@/components/ServiceFAQ";
+import AnimatedSection from "@/components/AnimatedSection";
 import { useServices, fallbackServices } from "@/hooks/useServices";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 
@@ -100,7 +101,7 @@ const ServiceDetail = () => {
   return (
     <>
       <SEOHead
-        title={`${h1Text} – ${service.price} | FilterPhone פילטר פון`}
+        title={`${h1Text} – ${service.price} | FilterPhone פילטר פון אשדוד`}
         description={seoDesc}
         path={`/services/${service.slug}`}
         keywords={seoKeywords}
@@ -117,57 +118,77 @@ const ServiceDetail = () => {
         ]}
       />
 
-      <article className="section-padding bg-background">
+      <article className="section-padding bg-background bg-mesh">
         <div className="container-custom max-w-3xl">
-          <div className="flex items-start justify-between flex-wrap gap-4 mb-6">
-            <div className="flex items-center gap-4">
-              {service.logo_url && (
-                <img src={service.logo_url} alt={`${service.name} לוגו`} className="w-14 h-14 rounded-xl object-contain bg-muted p-2" loading="lazy" />
-              )}
-              <h1 className="text-3xl md:text-4xl font-heading font-bold text-foreground">{h1Text}</h1>
+          <AnimatedSection>
+            <div className="flex items-start justify-between flex-wrap gap-4 mb-8">
+              <div className="flex items-center gap-4">
+                {service.logo_url && (
+                  <img src={service.logo_url} alt={`${service.name} לוגו`} className="w-14 h-14 rounded-2xl object-contain bg-muted p-2 border border-border/50" loading="lazy" />
+                )}
+                <div>
+                  <h1 className="text-2xl md:text-4xl font-heading font-bold text-foreground">{h1Text}</h1>
+                  <div className="flex items-center gap-1 mt-1.5">
+                    {[1,2,3,4,5].map(n => (
+                      <Star key={n} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                    ))}
+                    <span className="text-xs text-muted-foreground mr-1">5.0</span>
+                  </div>
+                </div>
+              </div>
+              <div className="text-left">
+                <span className="text-3xl font-bold gradient-text block">{service.price}</span>
+                <span className="text-xs text-muted-foreground">מחיר כולל התקנה</span>
+              </div>
             </div>
-            <span className="text-3xl font-bold gradient-text">{service.price}</span>
-          </div>
+          </AnimatedSection>
 
-          <p className="text-lg text-muted-foreground leading-relaxed mb-8">{service.description}</p>
+          <AnimatedSection delay={0.1}>
+            <p className="text-lg text-muted-foreground leading-relaxed mb-8">{service.description}</p>
+          </AnimatedSection>
 
-          <div className="bg-card rounded-xl p-6 card-shadow mb-8">
-            <h2 className="text-xl font-heading font-semibold text-card-foreground mb-4">מה כולל השירות</h2>
-            <ul className="space-y-3">
-              {service.features.map((feature, i) => (
-                <li key={i} className="flex items-start gap-3 text-card-foreground">
-                  <CheckCircle className="w-5 h-5 text-accent shrink-0 mt-0.5" />
-                  <span>{feature}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <AnimatedSection delay={0.15}>
+            <div className="bg-card rounded-2xl p-6 md:p-8 card-shadow mb-8 border border-border/50">
+              <h2 className="text-xl font-heading font-semibold text-card-foreground mb-5">מה כולל השירות</h2>
+              <ul className="space-y-3">
+                {service.features.map((feature, i) => (
+                  <li key={i} className="flex items-start gap-3 text-card-foreground">
+                    <CheckCircle className="w-5 h-5 text-secondary shrink-0 mt-0.5" />
+                    <span className="text-[15px]">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </AnimatedSection>
 
-          <div className="flex flex-wrap gap-4">
-            <a href={waLink} target="_blank" rel="noopener noreferrer">
-              <Button size="lg" className="gradient-primary text-primary-foreground border-0">
-                הזמן דרך WhatsApp
-              </Button>
-            </a>
-            <a href={bitLink} target="_blank" rel="noopener noreferrer">
-              <Button size="lg" variant="outline">שלם ב-BIT</Button>
-            </a>
-            <a href={`tel:${phoneRaw}`}>
-              <Button size="lg" variant="outline">{phone}</Button>
-            </a>
-          </div>
+          <AnimatedSection delay={0.2}>
+            <div className="flex flex-wrap gap-3 mb-8">
+              <a href={waLink} target="_blank" rel="noopener noreferrer">
+                <Button size="lg" className="gradient-primary text-white border-0 shadow-md shadow-primary/20 hover:shadow-lg gap-2 h-12">
+                  <MessageCircle className="w-4 h-4" />
+                  הזמן דרך WhatsApp
+                </Button>
+              </a>
+              <a href={bitLink} target="_blank" rel="noopener noreferrer">
+                <Button size="lg" variant="outline" className="h-12">שלם ב-BIT</Button>
+              </a>
+              <a href={`tel:${phoneRaw}`}>
+                <Button size="lg" variant="outline" className="h-12" dir="ltr">{phone}</Button>
+              </a>
+            </div>
+          </AnimatedSection>
 
           <ServiceFAQ slug={service.slug} />
 
           {/* Internal linking for SEO */}
-          <nav className="mt-12 pt-8 border-t border-border" aria-label="שירותים נוספים">
-            <h2 className="text-lg font-heading font-semibold text-foreground mb-4">שירותים נוספים שלנו באשדוד</h2>
-            <div className="flex flex-wrap gap-3">
+          <nav className="mt-12 pt-8 border-t border-border/50" aria-label="שירותים נוספים">
+            <h2 className="text-lg font-heading font-semibold text-foreground mb-5">שירותים נוספים שלנו באשדוד</h2>
+            <div className="flex flex-wrap gap-2.5">
               {allServices.filter((s) => s.slug !== service.slug).map((s) => (
                 <Link
                   key={s.slug}
                   to={`/services/${s.slug}`}
-                  className="text-sm px-4 py-2 rounded-lg bg-muted hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors"
+                  className="text-sm px-4 py-2 rounded-xl bg-card border border-border/50 hover:border-primary/30 text-muted-foreground hover:text-primary transition-all card-shadow"
                 >
                   {s.name} – {s.price}
                 </Link>
