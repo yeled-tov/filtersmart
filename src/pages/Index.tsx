@@ -42,7 +42,12 @@ const Index = () => {
       {
         "@type": "Question",
         "name": "כמה עולה סינון טלפון באשדוד?",
-        "acceptedAnswer": { "@type": "Answer", "text": "סינון בסיסי לאייפון ואנדרואיד עולה 20₪ בלבד. מערכת כושר פליי עולה 70₪. מערכות הדרן ועסקן עולות 300₪." }
+        "acceptedAnswer": { "@type": "Answer", "text": "סינון בסיסי לאייפון, גלקסי ואנדרואיד עולה 20₪ בלבד. מערכת כושר פליי עולה 70₪. מערכות הדרן ועסקן עולות 300₪. צריבת גרסה Qin עולה 70₪." }
+      },
+      {
+        "@type": "Question",
+        "name": "האם אפשר לסנן כל סוג טלפון?",
+        "acceptedAnswer": { "@type": "Answer", "text": "כן! FilterPhone מספקים סינון לכל הפלטפורמות: אייפון (iPhone), סמסונג גלקסי (Galaxy), שיאומי, וואווי, אנדרואיד כללי, מכשירי Qin ואפילו פתרונות סינון למחשבים. אנחנו הכתובת לכל מכשיר." }
       },
       {
         "@type": "Question",
@@ -52,32 +57,63 @@ const Index = () => {
       {
         "@type": "Question",
         "name": "כמה זמן לוקחת התקנת הדרן?",
-        "acceptedAnswer": { "@type": "Answer", "text": "התקנת הדרן לוקחת כ-45-90 דקות. סינון בסיסי לוקח כ-5 דקות בלבד." }
+        "acceptedAnswer": { "@type": "Answer", "text": "התקנת הדרן לוקחת כ-45-90 דקות. סינון בסיסי לוקח כ-5 דקות בלבד. השירות בדרך כלל ניתן ביום הפנייה." }
+      },
+      {
+        "@type": "Question",
+        "name": "מה ההבדל בין הדרן, עסקן וכושר פליי?",
+        "acceptedAnswer": { "@type": "Answer", "text": "הדרן (300₪) – ההגנה ההרמטית ביותר, צריבה שלא ניתנת להסרה. עסקן (300₪) – סינון AI חכם עם צריבה עמוקה, מיועד לאנשי עסקים. כושר פליי (70₪) – חנות אפליקציות כשרה עם MDM ווואטסאפ מסונן. סינון בסיסי (20₪) – פתרון פשוט ומהיר לחסימת אתרים." }
       },
       {
         "@type": "Question",
         "name": "איפה נמצא FilterPhone באשדוד?",
-        "acceptedAnswer": { "@type": "Answer", "text": "אנחנו נמצאים ברחוב חטיבת גבעתי 2, כניסה ו׳, רובע ג׳, אשדוד. שירות בתיאום מראש בטלפון 052-718-6881." }
+        "acceptedAnswer": { "@type": "Answer", "text": "אנחנו נמצאים ברחוב חטיבת גבעתי 2, כניסה ו׳, רובע ג׳, אשדוד. שירות בתיאום מראש בטלפון 052-718-6881 או WhatsApp." }
       },
       {
         "@type": "Question",
         "name": "האם אפשר להסיר את סינון הדרן?",
-        "acceptedAnswer": { "@type": "Answer", "text": "הדרן לא ניתן להסרה – גם איפוס לא מוריד את החסימה. זוהי ההגנה ההרמטית ביותר בשוק." }
+        "acceptedAnswer": { "@type": "Answer", "text": "הדרן לא ניתן להסרה – גם איפוס יצרן לא מוריד את החסימה. זוהי ההגנה ההרמטית ביותר בשוק, מושלמת להורים שרוצים הגנה מוחלטת." }
+      },
+      {
+        "@type": "Question",
+        "name": "איזה חברות סינון אתם עובדים איתן?",
+        "acceptedAnswer": { "@type": "Answer", "text": "אנחנו משווקים מורשים של כל חברות הסינון המובילות בישראל: הדרן (Hadran), עסקן (Askan), כושר פליי (Kosher Play). בנוסף, אנו מספקים סינון בסיסי עצמאי וצריבת גרסאות כשרות למכשירי שיאומי Qin." }
+      },
+      {
+        "@type": "Question",
+        "name": "האם אתם מסננים גם גלקסי וסמסונג?",
+        "acceptedAnswer": { "@type": "Answer", "text": "בהחלט! אנחנו מסננים את כל מכשירי סמסונג גלקסי (Galaxy S, Galaxy A, Galaxy Note) וכל מכשיר אנדרואיד אחר. כולל התקנת הדרן, עסקן, כושר פליי וסינון בסיסי." }
       }
+    ]
+  };
+
+  const howToJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "איך לסנן טלפון באשדוד – FilterPhone",
+    "description": "מדריך קצר להזמנת שירות סינון טלפון אצל FilterPhone באשדוד",
+    "totalTime": "PT1H",
+    "estimatedCost": { "@type": "MonetaryAmount", "currency": "ILS", "value": "20" },
+    "step": [
+      { "@type": "HowToStep", "name": "בחרו סוג סינון", "text": "בחרו את רמת הסינון המתאימה: סינון בסיסי (20₪), כושר פליי (70₪), עסקן (300₪) או הדרן (300₪)." },
+      { "@type": "HowToStep", "name": "צרו קשר", "text": "התקשרו ל-052-718-6881 או שלחו הודעת WhatsApp לתיאום." },
+      { "@type": "HowToStep", "name": "הגיעו אלינו", "text": "הגיעו לרחוב חטיבת גבעתי 2, כניסה ו׳, רובע ג׳, אשדוד." },
+      { "@type": "HowToStep", "name": "התקנה מקצועית", "text": "הצוות המקצועי שלנו יתקין את הסינון תוך 5 דקות עד שעה, תלוי בסוג." }
     ]
   };
 
   return (
     <>
       <SEOHead
-        title="FilterPhone – פילטר פון | סינון טלפונים מקצועי באשדוד מ-20₪"
-        description="FilterPhone – המעבדה המובילה באשדוד לסינון טלפונים. התקנת הדרן 300₪, עסקן 300₪, כושר פליי 70₪, סינון בסיסי 20₪. משווק מורשה. צריבת גרסה Qin 70₪ ☎ 052-718-6881"
+        title="סינון טלפונים באשדוד מ-20₪ ⭐ 5.0 (47 חוות דעת) | FilterPhone פילטר פון"
+        description="✅ הכתובת #1 לסינון טלפונים בישראל! סינון אייפון, גלקסי, אנדרואיד, מחשב – כל מכשיר, כל פלטפורמה. הדרן 300₪ | עסקן 300₪ | כושר פליי 70₪ | סינון בסיסי 20₪. משווק מורשה ✓ 500+ לקוחות מרוצים ☎ 052-718-6881"
         path="/"
-        keywords="סינון טלפון אשדוד, הדרן אשדוד, עסקן אשדוד, כושר פליי אשדוד, צריבת גרסה לשיאומי קין, חסימת אינטרנט באשדוד, פילטר פון, סינון אייפון, סינון אנדרואיד, התקנת הדרן, מחיר הדרן, סינון טלפון מחיר"
+        keywords="סינון טלפון, סינון טלפון אשדוד, סינון אייפון, סינון אנדרואיד, סינון גלקסי, סינון סמסונג, סינון שיאומי, סינון מחשב, חסימת אינטרנט, הדרן, עסקן, כושר פליי, פילטר פון, FilterPhone, התקנת הדרן אשדוד, מחיר הדרן, מחיר סינון טלפון, סינון טלפון זול, סינון טלפון ילדים, סינון תוכן אינטרנט, צריבת גרסה שיאומי, סינון טלפון מחיר, חסימת אתרים בטלפון, סינון אייפון אשדוד, סינון גלקסי אשדוד, סינון טלפון לילדים, סינון נייד, חסימת אינטרנט באשדוד, נטפרי, רימון, סינון תוכן"
       />
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(howToJsonLd)}</script>
       </Helmet>
 
       {/* Hero */}
@@ -157,7 +193,7 @@ const Index = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
               { icon: Shield, title: "הגנה מקצועית", desc: "פתרונות סינון ברמה הגבוהה ביותר עם שכבות הגנה מרובות – הדרן, עסקן וכושר פליי", color: "from-blue-500 to-blue-600" },
-              { icon: Smartphone, title: "כל המכשירים", desc: "אייפון, אנדרואיד ומכשירי שיאומי Qin F21 Pro ו-F25 – פתרון לכל סוג מכשיר", color: "from-violet-500 to-violet-600" },
+              { icon: Smartphone, title: "כל מכשיר, כל פלטפורמה", desc: "אייפון, גלקסי, סמסונג, שיאומי, וואווי, אנדרואיד, טאבלט ומחשב – הכתובת לכל סוג מכשיר", color: "from-violet-500 to-violet-600" },
               { icon: Zap, title: "שירות מהיר", desc: "התקנה מקצועית ומהירה. סינון בסיסי תוך 5 דקות, צריבה תוך 30-60 דקות", color: "from-amber-500 to-orange-500" },
               { icon: HeartHandshake, title: "מחירים הוגנים", desc: "סינון בסיסי מ-20₪ בלבד. מחירים שקופים ללא עלויות נסתרות, עם אחריות מלאה", color: "from-emerald-500 to-green-600" },
             ].map((feature, i) => (
@@ -312,16 +348,28 @@ const Index = () => {
           <h2 className="text-xl md:text-2xl font-heading font-bold text-foreground mb-6 text-center">סינון טלפונים וצריבת גרסאות באשדוד – FilterPhone פילטר פון</h2>
           <div className="prose prose-lg max-w-none text-muted-foreground leading-relaxed space-y-4">
             <p>
-              <strong className="text-foreground">FilterPhone (פילטר פון)</strong> הוא הכתובת המקצועית מספר 1 ל<strong className="text-foreground">סינון טלפונים באשדוד</strong> ו<strong className="text-foreground">צריבת גרסאות</strong>. אנו משווקים מורשים של מערכות הסינון המובילות בישראל – <strong className="text-foreground">הדרן (Hadran)</strong>, <strong className="text-foreground">עסקן (Askan)</strong> ו<strong className="text-foreground">כושר פליי (Kosher Play)</strong>.
+              <strong className="text-foreground">FilterPhone (פילטר פון)</strong> הוא הכתובת המקצועית מספר 1 ל<strong className="text-foreground">סינון טלפונים באשדוד</strong>, <strong className="text-foreground">חסימת תוכן באינטרנט</strong> ו<strong className="text-foreground">צריבת גרסאות כשרות</strong>. אנו משווקים מורשים של מערכות הסינון המובילות בישראל – <strong className="text-foreground">הדרן (Hadran)</strong>, <strong className="text-foreground">עסקן (Askan)</strong> ו<strong className="text-foreground">כושר פליי (Kosher Play)</strong>.
+            </p>
+
+            <h3 className="text-lg font-heading font-semibold text-foreground !mb-2">סינון לכל סוגי המכשירים והפלטפורמות</h3>
+            <p>
+              אנחנו מתמחים ב<strong className="text-foreground">סינון לכל מכשיר בשוק</strong>: <strong className="text-foreground">סינון אייפון (iPhone)</strong> – כל הדגמים כולל iPhone 15, 14, 13 ומטה. <strong className="text-foreground">סינון סמסונג גלקסי (Galaxy)</strong> – כולל Galaxy S24, Galaxy A, Galaxy Note. <strong className="text-foreground">סינון שיאומי (Xiaomi)</strong> – כולל מכשירי Qin F21 Pro ו-Qin F25 עם צריבת גרסה כשרה. <strong className="text-foreground">סינון וואווי (Huawei)</strong>, <strong className="text-foreground">סינון אופו (Oppo)</strong>, <strong className="text-foreground">סינון ואן פלוס (OnePlus)</strong> – כל מכשיר אנדרואיד.
             </p>
             <p>
-              <strong className="text-foreground">התקנת הדרן באשדוד</strong> – ההגנה ההרמטית ביותר בשוק. גרסת מערכת שלמה שלא ניתנת להסרה בשום צורה. מחיר: <strong className="text-foreground">300₪</strong>. <strong className="text-foreground">התקנת עסקן באשדוד</strong> – סינון AI חכם עם צריבה עמוקה. מחיר: <strong className="text-foreground">300₪</strong>. <strong className="text-foreground">כושר פליי התקנה</strong> – חנות אפליקציות כשרה עם MDM. מחיר: <strong className="text-foreground">70₪</strong>. <strong className="text-foreground">סינון בסיסי</strong> מ-<strong className="text-foreground">20₪</strong> בלבד.
+              לא רק טלפונים – אנחנו מספקים גם פתרונות <strong className="text-foreground">סינון למחשב</strong>, <strong className="text-foreground">סינון לטאבלט</strong> (כולל <strong className="text-foreground">אייפד iPad</strong> וטאבלטים אנדרואיד), ו<strong className="text-foreground">סינון אינטרנט ביתי</strong>. הכתובת האחת והיחידה לכל צרכי הסינון שלכם.
+            </p>
+
+            <h3 className="text-lg font-heading font-semibold text-foreground !mb-2">חברות הסינון המובילות בישראל</h3>
+            <p>
+              <strong className="text-foreground">התקנת הדרן באשדוד</strong> – ההגנה ההרמטית ביותר בשוק, גרסת מערכת שלמה שלא ניתנת להסרה. מחיר: <strong className="text-foreground">300₪</strong>. <strong className="text-foreground">התקנת עסקן באשדוד</strong> – סינון AI חכם עם צריבה עמוקה, מושלם לאנשי עסקים. מחיר: <strong className="text-foreground">300₪</strong>. <strong className="text-foreground">התקנת כושר פליי</strong> – חנות אפליקציות כשרה עם MDM ווואטסאפ מסונן. מחיר: <strong className="text-foreground">70₪</strong>. <strong className="text-foreground">סינון בסיסי</strong> לאייפון, גלקסי ואנדרואיד – מ-<strong className="text-foreground">20₪</strong> בלבד.
+            </p>
+
+            <h3 className="text-lg font-heading font-semibold text-foreground !mb-2">למה לבחור ב-FilterPhone?</h3>
+            <p>
+              <strong className="text-foreground">500+ לקוחות מרוצים</strong> עם דירוג <strong className="text-foreground">5 כוכבים</strong>. שירות ביום הפנייה. מחירים הנמוכים ביותר בשוק. ניסיון רב בכל סוגי המכשירים. תמיכה טכנית גם אחרי ההתקנה. אנו ממוקמים ב<strong className="text-foreground">רחוב חטיבת גבעתי 2, רובע ג׳, אשדוד</strong>. לתיאום: <strong className="text-foreground">052-718-6881</strong>.
             </p>
             <p>
-              המומחיות שלנו כוללת <strong className="text-foreground">סינון לאייפון</strong> ו<strong className="text-foreground">סינון אנדרואיד</strong>, התקנת מערכות הגנה מתקדמות, וצריבת גרסאות כשרות למכשירי <strong className="text-foreground">שיאומי Qin F21 Pro</strong> ו-<strong className="text-foreground">Qin F25</strong> (70₪). כל עבודה מתבצעת באופן מקצועי עם תמיכה טכנית מלאה.
-            </p>
-            <p>
-              אנו ממוקמים ב<strong className="text-foreground">רחוב חטיבת גבעתי 2, רובע ג׳, אשדוד</strong> – ומספקים שירות אמין, מהיר ובמחירים הוגנים. לתיאום: <strong className="text-foreground">052-718-6881</strong>. בין אם אתם מחפשים <strong className="text-foreground">סינון טלפון זול</strong>, <strong className="text-foreground">חסימת אינטרנט באשדוד</strong> או פתרון הרמטי כמו <strong className="text-foreground">הדרן</strong>, אנחנו כאן בשבילכם.
+              בין אם אתם מחפשים <strong className="text-foreground">סינון טלפון לילדים</strong>, <strong className="text-foreground">סינון טלפון זול</strong>, <strong className="text-foreground">חסימת אינטרנט באשדוד</strong>, <strong className="text-foreground">סינון תוכן למבוגרים</strong>, או פתרון הרמטי ברמה הגבוהה ביותר כמו <strong className="text-foreground">הדרן</strong> – FilterPhone פילטר פון הוא הכתובת שלכם. <strong className="text-foreground">כל מכשיר, כל פלטפורמה, כל רמת סינון – מקום אחד.</strong>
             </p>
           </div>
         </div>
