@@ -4,7 +4,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://filterphone.com/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <priority>1.0</priority>
     <changefreq>weekly</changefreq>
     <image:image>
@@ -14,73 +14,73 @@
   </url>
   <url>
     <loc>https://filterphone.com/about</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <priority>0.8</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://filterphone.com/services</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <priority>0.95</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://filterphone.com/services/basic-filtering</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <priority>0.85</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://filterphone.com/services/kosher-play</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <priority>0.85</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://filterphone.com/services/hadran</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <priority>0.9</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://filterphone.com/services/askan</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <priority>0.85</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://filterphone.com/services/qin-f21-pro</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <priority>0.8</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://filterphone.com/services/qin-f25</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <priority>0.8</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://filterphone.com/blog</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <priority>0.7</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://filterphone.com/contact</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <priority>0.8</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://filterphone.com/privacy</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <priority>0.3</priority>
     <changefreq>yearly</changefreq>
   </url>
   <url>
     <loc>https://filterphone.com/refund-policy</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <priority>0.3</priority>
     <changefreq>yearly</changefreq>
   </url>
