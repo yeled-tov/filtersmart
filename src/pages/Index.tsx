@@ -116,13 +116,20 @@ const Index = () => {
       </Helmet>
 
       {/* Hero */}
-      <section className="relative overflow-hidden min-h-[520px] md:min-h-[600px] flex items-center hero-bg-gradient">
-        <div className="absolute inset-0 pointer-events-none">
-          {/* CSS-only hero background: fast (no 6.5MB image), great LCP, still beautiful */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[hsl(217_72%_22%)] via-[hsl(217_72%_18%)] to-[hsl(195_80%_20%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,hsl(217_72%_48%/0.35)_0%,transparent_55%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_70%,hsl(160_60%_42%/0.28)_0%,transparent_55%)]" />
-          <div className="absolute inset-0 bg-gradient-to-t from-foreground/20 to-transparent" />
+      <section className="relative overflow-hidden min-h-[520px] md:min-h-[600px] flex items-center">
+        <div className="absolute inset-0">
+          {/* Branded FilterPhone hero banner (optimized JPG, ~125KB) */}
+          <img
+            src="/hero.jpg"
+            alt="FilterPhone – סינון טלפונים מקצועי באשדוד"
+            className="absolute inset-0 w-full h-full object-cover"
+            width={1377}
+            height={768}
+            loading="eager"
+            fetchPriority="high"
+          />
+          {/* Dark overlay so white headline text remains readable on the banner */}
+          <div className="absolute inset-0 bg-gradient-to-l from-foreground/65 via-foreground/40 to-foreground/15" />
         </div>
         <div className="relative container-custom py-20 md:py-28 lg:py-36">
           <motion.div

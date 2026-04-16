@@ -9,7 +9,7 @@ const Footer = () => (
         {/* Brand */}
         <div className="lg:col-span-1">
           <div className="flex items-center gap-2.5 mb-5">
-            <img src="/logo.svg" alt="FilterPhone לוגו" className="w-10 h-10 rounded-xl object-contain" width={40} height={40} loading="lazy" />
+            <img src="/logo.png" alt="FilterPhone לוגו" className="w-10 h-10 rounded-xl object-contain" width={40} height={40} loading="lazy" />
             <span className="text-xl font-heading font-bold">FilterPhone</span>
           </div>
           <p className="text-background/60 text-sm leading-relaxed mb-5">
