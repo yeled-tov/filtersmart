@@ -27,7 +27,7 @@ const SEOHead = ({
 }: SEOHeadProps) => {
   const baseUrl = "https://filterphone.com";
   const fullUrl = `${baseUrl}${path}`;
-  const ogImage = image || "https://storage.googleapis.com/gpt-engineer-file-uploads/zQzpmcciMefmd1jcMZlCnfScdqW2/social-images/social-1772354974246-Gemini_Generated_Image_8ki41m8ki41m8ki4.webp";
+  const ogImage = image || "https://filterphone.com/hero.jpg";
   const altText = imageAlt || "FilterPhone – סינון טלפונים מקצועי באשדוד";
   const siteName = "FilterPhone – פילטר פון";
 
@@ -50,10 +50,10 @@ const SEOHead = ({
       <meta property="og:site_name" content={siteName} />
       <meta property="og:image" content={ogImage} />
       <meta property="og:image:secure_url" content={ogImage} />
-      <meta property="og:image:width" content="1200" />
-      <meta property="og:image:height" content="630" />
+      <meta property="og:image:width" content="1377" />
+      <meta property="og:image:height" content="768" />
       <meta property="og:image:alt" content={altText} />
-      <meta property="og:image:type" content="image/webp" />
+      <meta property="og:image:type" content="image/jpeg" />
 
       {/* Facebook specific */}
       <meta property="fb:app_id" content="" />

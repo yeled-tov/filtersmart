@@ -4,7 +4,7 @@ const Logo = () => (
   <Link to="/" className="flex items-center gap-2.5 group" aria-label="FilterPhone – דף הבית">
     <div className="relative">
       <img
-        src="/logo.svg"
+        src="/logo.png"
         alt="FilterPhone לוגו"
         className="w-9 h-9 rounded-xl object-contain transition-transform duration-300 group-hover:scale-105"
         width={36}

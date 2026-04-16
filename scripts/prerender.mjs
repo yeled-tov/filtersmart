@@ -13,8 +13,7 @@ const distDir = path.resolve(__dirname, "..", "dist");
 const indexPath = path.join(distDir, "index.html");
 
 const SITE_URL = "https://filterphone.com";
-const OG_IMAGE =
-  "https://storage.googleapis.com/gpt-engineer-file-uploads/zQzpmcciMefmd1jcMZlCnfScdqW2/social-images/social-1772354974246-Gemini_Generated_Image_8ki41m8ki41m8ki4.webp";
+const OG_IMAGE = "https://filterphone.com/hero.jpg";
 
 // Per-route SEO metadata + fallback body content
 // Every route here will get its own prerendered HTML shell.
