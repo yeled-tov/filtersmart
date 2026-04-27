@@ -8,10 +8,10 @@ Disallow: /reset-password
 Crawl-delay: 1
 
 # Sitemaps
-Sitemap: https://filterphone.com/sitemap.xml
+Sitemap: https://www.filterphone.com/sitemap.xml
 
 # Host
-Host: https://filterphone.com
+Host: https://www.filterphone.com
 
 # Social media bots
 User-agent: Twitterbot
