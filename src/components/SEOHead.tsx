@@ -25,9 +25,9 @@ const SEOHead = ({
   imageAlt,
   article,
 }: SEOHeadProps) => {
-  const baseUrl = "https://filterphone.com";
+  const baseUrl = "https://www.filterphone.com";
   const fullUrl = `${baseUrl}${path}`;
-  const ogImage = image || "https://filterphone.com/hero.jpg";
+  const ogImage = image || "https://www.filterphone.com/hero.jpg";
   const altText = imageAlt || "FilterPhone – סינון טלפונים מקצועי באשדוד";
   const siteName = "FilterPhone – פילטר פון";
 

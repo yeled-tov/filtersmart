@@ -50,7 +50,7 @@ const Footer = () => (
           <nav aria-label="שירותים">
             <ul className="space-y-2.5">
               {[
-                { href: "/services/basic-filtering", label: "סינון בסיסי", price: "20₪" },
+                { href: "/services/basic-filtering", label: "סינון בסיסי", price: "100₪" },
                 { href: "/services/kosher-play", label: "כושר פליי", price: "70₪" },
                 { href: "/services/hadran", label: "הדרן", price: "300₪" },
                 { href: "/services/askan", label: "עסקן", price: "300₪" },

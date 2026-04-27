@@ -1,0 +1,1 @@
+UPDATE public.services SET price = '100₪' WHERE slug = 'basic-filtering';

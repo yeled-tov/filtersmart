@@ -22,7 +22,7 @@ const seoDescMap: Record<string, string> = {
   hadran: "התקנת הדרן באשדוד ב-300₪ – ההגנה ההרמטית ביותר בשוק. גרסת מערכת שלמה שלא ניתנת להסרה. משווק מורשה FilterPhone ☎ 052-718-6881",
   askan: "התקנת עסקן באשדוד ב-300₪ – סינון AI חכם עם צריבה עמוקה. מיועד לאנשי עסקים. שירות מקצועי FilterPhone ☎ 052-718-6881",
   "kosher-play": "התקנת כושר פליי באשדוד ב-70₪ – חנות אפליקציות כשרה, צריבת MDM, וואטסאפ מסונן. FilterPhone ☎ 052-718-6881",
-  "basic-filtering": "סינון בסיסי לאייפון ואנדרואיד באשדוד ב-20₪ בלבד – התקנה תוך 5 דקות, לא מאט את הטלפון. FilterPhone ☎ 052-718-6881",
+  "basic-filtering": "סינון בסיסי לאייפון ואנדרואיד באשדוד ב-100₪ בלבד – התקנה תוך 5 דקות, לא מאט את הטלפון. FilterPhone ☎ 052-718-6881",
   "qin-f21-pro": "צריבת גרסה כשרה ל-Qin F21 Pro באשדוד ב-70₪ – סינון מובנה וממשק מותאם. FilterPhone ☎ 052-718-6881",
   "qin-f25": "צריבת גרסה כשרה ל-Qin F25 באשדוד ב-70₪ – אופטימיזציה מלאה וסינון מובנה. FilterPhone ☎ 052-718-6881",
 };
@@ -70,7 +70,7 @@ const ServiceDetail = () => {
     provider: {
       "@type": "LocalBusiness",
       name: "FilterPhone – פילטר פון",
-      url: "https://filterphone.com",
+      url: "https://www.filterphone.com",
       telephone: "+972-52-718-6881",
       address: {
         "@type": "PostalAddress",
@@ -92,9 +92,9 @@ const ServiceDetail = () => {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "בית", item: "https://filterphone.com/" },
-      { "@type": "ListItem", position: 2, name: "שירותים", item: "https://filterphone.com/services" },
-      { "@type": "ListItem", position: 3, name: h1Text, item: `https://filterphone.com/services/${service.slug}` },
+      { "@type": "ListItem", position: 1, name: "בית", item: "https://www.filterphone.com/" },
+      { "@type": "ListItem", position: 2, name: "שירותים", item: "https://www.filterphone.com/services" },
+      { "@type": "ListItem", position: 3, name: h1Text, item: `https://www.filterphone.com/services/${service.slug}` },
     ],
   };
 

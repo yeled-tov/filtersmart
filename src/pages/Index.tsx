@@ -30,7 +30,7 @@ const Index = () => {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "בית", "item": "https://filterphone.com/" }
+      { "@type": "ListItem", "position": 1, "name": "בית", "item": "https://www.filterphone.com/" }
     ]
   };
 
@@ -41,7 +41,7 @@ const Index = () => {
       {
         "@type": "Question",
         "name": "כמה עולה סינון טלפון באשדוד?",
-        "acceptedAnswer": { "@type": "Answer", "text": "סינון בסיסי לאייפון, גלקסי ואנדרואיד עולה 20₪ בלבד. מערכת כושר פליי עולה 70₪. מערכות הדרן ועסקן עולות 300₪. צריבת גרסה Qin עולה 70₪." }
+        "acceptedAnswer": { "@type": "Answer", "text": "סינון בסיסי לאייפון, גלקסי ואנדרואיד עולה 100₪ בלבד. מערכת כושר פליי עולה 70₪. מערכות הדרן ועסקן עולות 300₪. צריבת גרסה Qin עולה 70₪." }
       },
       {
         "@type": "Question",
@@ -61,7 +61,7 @@ const Index = () => {
       {
         "@type": "Question",
         "name": "מה ההבדל בין הדרן, עסקן וכושר פליי?",
-        "acceptedAnswer": { "@type": "Answer", "text": "הדרן (300₪) – ההגנה ההרמטית ביותר, צריבה שלא ניתנת להסרה. עסקן (300₪) – סינון AI חכם עם צריבה עמוקה, מיועד לאנשי עסקים. כושר פליי (70₪) – חנות אפליקציות כשרה עם MDM ווואטסאפ מסונן. סינון בסיסי (20₪) – פתרון פשוט ומהיר לחסימת אתרים." }
+        "acceptedAnswer": { "@type": "Answer", "text": "הדרן (300₪) – ההגנה ההרמטית ביותר, צריבה שלא ניתנת להסרה. עסקן (300₪) – סינון AI חכם עם צריבה עמוקה, מיועד לאנשי עסקים. כושר פליי (70₪) – חנות אפליקציות כשרה עם MDM ווואטסאפ מסונן. סינון בסיסי (100₪) – פתרון פשוט ומהיר לחסימת אתרים." }
       },
       {
         "@type": "Question",
@@ -92,9 +92,9 @@ const Index = () => {
     "name": "איך לסנן טלפון באשדוד – FilterPhone",
     "description": "מדריך קצר להזמנת שירות סינון טלפון אצל FilterPhone באשדוד",
     "totalTime": "PT1H",
-    "estimatedCost": { "@type": "MonetaryAmount", "currency": "ILS", "value": "20" },
+    "estimatedCost": { "@type": "MonetaryAmount", "currency": "ILS", "value": "100" },
     "step": [
-      { "@type": "HowToStep", "name": "בחרו סוג סינון", "text": "בחרו את רמת הסינון המתאימה: סינון בסיסי (20₪), כושר פליי (70₪), עסקן (300₪) או הדרן (300₪)." },
+      { "@type": "HowToStep", "name": "בחרו סוג סינון", "text": "בחרו את רמת הסינון המתאימה: סינון בסיסי (100₪), כושר פליי (70₪), עסקן (300₪) או הדרן (300₪)." },
       { "@type": "HowToStep", "name": "צרו קשר", "text": "התקשרו ל-052-718-6881 או שלחו הודעת WhatsApp לתיאום." },
       { "@type": "HowToStep", "name": "הגיעו אלינו", "text": "הגיעו לרחוב חטיבת גבעתי 2, כניסה ו׳, רובע ג׳, אשדוד." },
       { "@type": "HowToStep", "name": "התקנה מקצועית", "text": "הצוות המקצועי שלנו יתקין את הסינון תוך 5 דקות עד שעה, תלוי בסוג." }
@@ -104,8 +104,8 @@ const Index = () => {
   return (
     <>
       <SEOHead
-        title="סינון טלפונים באשדוד מ-20₪ ⭐ 5.0 (47 חוות דעת) | FilterPhone פילטר פון"
-        description="✅ הכתובת #1 לסינון טלפונים בישראל! סינון אייפון, גלקסי, אנדרואיד, מחשב – כל מכשיר, כל פלטפורמה. הדרן 300₪ | עסקן 300₪ | כושר פליי 70₪ | סינון בסיסי 20₪. משווק מורשה ✓ 500+ לקוחות מרוצים ☎ 052-718-6881"
+        title="סינון טלפונים באשדוד מ-100₪ ⭐ 5.0 (47 חוות דעת) | FilterPhone פילטר פון"
+        description="✅ הכתובת #1 לסינון טלפונים בישראל! סינון אייפון, גלקסי, אנדרואיד, מחשב – כל מכשיר, כל פלטפורמה. הדרן 300₪ | עסקן 300₪ | כושר פליי 70₪ | סינון בסיסי 100₪. משווק מורשה ✓ 500+ לקוחות מרוצים ☎ 052-718-6881"
         path="/"
         keywords="סינון טלפון, סינון טלפון אשדוד, סינון אייפון, סינון אנדרואיד, סינון גלקסי, סינון סמסונג, סינון שיאומי, סינון מחשב, חסימת אינטרנט, הדרן, עסקן, כושר פליי, פילטר פון, FilterPhone, התקנת הדרן אשדוד, מחיר הדרן, מחיר סינון טלפון, סינון טלפון זול, סינון טלפון ילדים, סינון תוכן אינטרנט, צריבת גרסה שיאומי, סינון טלפון מחיר, חסימת אתרים בטלפון, סינון אייפון אשדוד, סינון גלקסי אשדוד, סינון טלפון לילדים, סינון נייד, חסימת אינטרנט באשדוד, נטפרי, רימון, סינון תוכן"
       />
@@ -166,7 +166,7 @@ const Index = () => {
             <div className="flex items-center gap-6 mt-10 pt-8 border-t border-white/10">
               {[
                 { value: "500+", label: "לקוחות מרוצים" },
-                { value: "20₪", label: "סינון בסיסי מ-" },
+                { value: "100₪", label: "סינון בסיסי מ-" },
                 { value: "5 דק׳", label: "זמן התקנה" },
               ].map((stat, i) => (
                 <motion.div
@@ -203,7 +203,7 @@ const Index = () => {
               { icon: Shield, title: "הגנה מקצועית", desc: "פתרונות סינון ברמה הגבוהה ביותר עם שכבות הגנה מרובות – הדרן, עסקן וכושר פליי", color: "from-blue-500 to-blue-600" },
               { icon: Smartphone, title: "כל מכשיר, כל פלטפורמה", desc: "אייפון, גלקסי, סמסונג, שיאומי, וואווי, אנדרואיד, טאבלט ומחשב – הכתובת לכל סוג מכשיר", color: "from-violet-500 to-violet-600" },
               { icon: Zap, title: "שירות מהיר", desc: "התקנה מקצועית ומהירה. סינון בסיסי תוך 5 דקות, צריבה תוך 30-60 דקות", color: "from-amber-500 to-orange-500" },
-              { icon: HeartHandshake, title: "מחירים הוגנים", desc: "סינון בסיסי מ-20₪ בלבד. מחירים שקופים ללא עלויות נסתרות, עם אחריות מלאה", color: "from-emerald-500 to-green-600" },
+              { icon: HeartHandshake, title: "מחירים הוגנים", desc: "סינון בסיסי מ-100₪ בלבד. מחירים שקופים ללא עלויות נסתרות, עם אחריות מלאה", color: "from-emerald-500 to-green-600" },
             ].map((feature, i) => (
               <AnimatedSection key={i} delay={i * 0.08}>
                 <div className="bg-card rounded-2xl p-7 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group h-full border border-border/50 card-shine">
@@ -229,7 +229,7 @@ const Index = () => {
                 סינון טלפונים והגנה
               </div>
               <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4 text-balance">שירותי סינון טלפון והגנה דיגיטלית</h2>
-              <p className="text-muted-foreground text-lg">פתרונות סינון מקצועיים לאייפון ואנדרואיד – מ-20₪ בלבד</p>
+              <p className="text-muted-foreground text-lg">פתרונות סינון מקצועיים לאייפון ואנדרואיד – מ-100₪ בלבד</p>
             </div>
           </AnimatedSection>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -369,7 +369,7 @@ const Index = () => {
 
             <h3 className="text-lg font-heading font-semibold text-foreground !mb-2">חברות הסינון המובילות בישראל</h3>
             <p>
-              <strong className="text-foreground">התקנת הדרן באשדוד</strong> – ההגנה ההרמטית ביותר בשוק, גרסת מערכת שלמה שלא ניתנת להסרה. מחיר: <strong className="text-foreground">300₪</strong>. <strong className="text-foreground">התקנת עסקן באשדוד</strong> – סינון AI חכם עם צריבה עמוקה, מושלם לאנשי עסקים. מחיר: <strong className="text-foreground">300₪</strong>. <strong className="text-foreground">התקנת כושר פליי</strong> – חנות אפליקציות כשרה עם MDM ווואטסאפ מסונן. מחיר: <strong className="text-foreground">70₪</strong>. <strong className="text-foreground">סינון בסיסי</strong> לאייפון, גלקסי ואנדרואיד – מ-<strong className="text-foreground">20₪</strong> בלבד.
+              <strong className="text-foreground">התקנת הדרן באשדוד</strong> – ההגנה ההרמטית ביותר בשוק, גרסת מערכת שלמה שלא ניתנת להסרה. מחיר: <strong className="text-foreground">300₪</strong>. <strong className="text-foreground">התקנת עסקן באשדוד</strong> – סינון AI חכם עם צריבה עמוקה, מושלם לאנשי עסקים. מחיר: <strong className="text-foreground">300₪</strong>. <strong className="text-foreground">התקנת כושר פליי</strong> – חנות אפליקציות כשרה עם MDM ווואטסאפ מסונן. מחיר: <strong className="text-foreground">70₪</strong>. <strong className="text-foreground">סינון בסיסי</strong> לאייפון, גלקסי ואנדרואיד – מ-<strong className="text-foreground">100₪</strong> בלבד.
             </p>
 
             <h3 className="text-lg font-heading font-semibold text-foreground !mb-2">למה לבחור ב-FilterPhone?</h3>

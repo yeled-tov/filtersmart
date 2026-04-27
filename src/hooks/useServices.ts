@@ -21,7 +21,7 @@ export const fallbackServices: ServiceRow[] = [
   {
     id: "fb-1", name: "סינון בסיסי לאייפון ואנדרואיד", slug: "basic-filtering",
     short_desc: "פתרון מהיר ויעיל לחסימת תוכן לא רצוי – התקנה תוך 5 דקות בלבד",
-    description: null, price: "20₪", category: "filtering", logo_url: null,
+    description: null, price: "100₪", category: "filtering", logo_url: null,
     features: ["התקנה מהירה תוך 5 דקות", "תמיכה באייפון ואנדרואיד"],
     visible: true, sort_order: 1, is_popular: false, emoji_icon: "🛡️",
   },
