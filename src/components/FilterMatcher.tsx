@@ -15,7 +15,7 @@ interface Message {
 const results: Record<string, { name: string; slug: string; desc: string }> = {
   protection: { name: "מערכת הדרן (Hadran)", slug: "hadran", desc: "ההגנה ההרמטית ביותר בשוק – צריבה שלא ניתנת להסרה." },
   speed: { name: "מערכת כושר פליי (Kosher Play)", slug: "kosher-play", desc: "שדרוג ענק עם VPN מקומי שלא מאט את הגלישה." },
-  price: { name: "סינון בסיסי", slug: "basic-filtering", desc: "פתרון מהיר ויעיל ב-20₪ בלבד, התקנה תוך 5 דקות." },
+  price: { name: "סינון בסיסי", slug: "basic-filtering", desc: "פתרון מהיר ויעיל ב-100₪ בלבד, התקנה תוך 5 דקות." },
 };
 
 const botQuestions: Record<string, { text: string; options: { label: string; value: Answer }[] }> = {

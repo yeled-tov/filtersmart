@@ -32,7 +32,7 @@ const About = () => (
               { icon: Users, title: "500+ לקוחות מרוצים", desc: "כל לקוח מקבל יחס אישי והתאמת הפתרון לצרכים שלו. דירוג 5 כוכבים", color: "from-violet-500 to-purple-600" },
               { icon: MapPin, title: "מיקום נוח באשדוד", desc: "רחוב חטיבת גבעתי 2, כניסה ו׳, רובע ג׳ – נגישים וזמינים", color: "from-emerald-500 to-green-600" },
               { icon: Clock, title: "שירות מהיר", desc: "סינון בסיסי תוך 5 דקות. צריבת גרסה תוך 30-60 דקות. בדרך כלל ביום הפנייה", color: "from-cyan-500 to-teal-600" },
-              { icon: Heart, title: "מחירים הוגנים", desc: "מחירים שקופים מ-20₪ בלבד, ללא עלויות נסתרות, עם אחריות מלאה", color: "from-rose-500 to-pink-600" },
+              { icon: Heart, title: "מחירים הוגנים", desc: "מחירים שקופים מ-100₪ בלבד, ללא עלויות נסתרות, עם אחריות מלאה", color: "from-rose-500 to-pink-600" },
             ].map((item, i) => (
               <AnimatedSection key={i} delay={i * 0.06}>
                 <div className="bg-card rounded-2xl p-6 card-shadow border border-border/50 hover:card-shadow-hover transition-all duration-300 h-full">
