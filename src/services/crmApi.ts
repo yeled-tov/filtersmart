@@ -3,8 +3,7 @@
 // ===================================
 
 const PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID;
-const CRM_BASE = `https://${PROJECT_ID}.supabase.co/functions/v1/crm-proxy`;
-
+const CRM_BASE = "/api/proxy";
 const TOKEN_KEY = "fp_crm_token";
 const USER_KEY = "fp_crm_user";
 
