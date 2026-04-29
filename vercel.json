@@ -3,6 +3,10 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/api/proxy/:path*",
+      "destination": "http://151.145.88.42:3001/:path*"
+    },
+    {
       "source": "/((?!api|_next|.*\\..*).*)",
       "destination": "/index.html"
     }
