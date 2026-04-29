@@ -80,10 +80,16 @@ const Footer = () => (
                 <div className="w-8 h-8 rounded-lg bg-background/10 flex items-center justify-center shrink-0 mt-0.5">
                   <MapPin className="w-4 h-4 text-background/70" />
                 </div>
-                <div>
-                  <span className="text-background/55 text-sm leading-relaxed">חטיבת גבעתי 2, כניסה ו׳</span>
-                  <span className="block text-background/40 text-xs">רובע ג׳, אשדוד</span>
-                </div>
+                <a
+                  href="https://www.google.com/maps/dir/?api=1&destination=%D7%97%D7%98%D7%99%D7%91%D7%AA+%D7%92%D7%91%D7%A2%D7%AA%D7%99+2+%D7%90%D7%A9%D7%93%D7%95%D7%93"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group"
+                  aria-label="נווט אלינו: חטיבת גבעתי 2, אשדוד"
+                >
+                  <span className="text-background/55 group-hover:text-background transition-colors text-sm leading-relaxed">חטיבת גבעתי 2, כניסה ו׳</span>
+                  <span className="block text-background/40 group-hover:text-background/70 transition-colors text-xs">רובע ג׳, אשדוד · נווט בגוגל מפות ←</span>
+                </a>
               </li>
               <li className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-background/10 flex items-center justify-center shrink-0">
