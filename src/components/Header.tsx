@@ -13,6 +13,7 @@ const navLinks = [
   { href: "/services", label: "שירותים" },
   { href: "/blog", label: "בלוג" },
   { href: "/contact", label: "צור קשר" },
+  { href: "/my-account", label: "אזור אישי" },
 ];
 
 const Header = () => {
