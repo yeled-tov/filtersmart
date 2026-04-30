@@ -171,6 +171,25 @@ const routes = [
     h1: "מדיניות החזרים",
     lead: "במסמך זה תמצאו את המידע המלא על מדיניות ההחזרים והביטולים שלנו.",
   },
+  {
+    path: "/my-account",
+    title: "אזור אישי – ניהול הסינון שלי | FilterPhone",
+    description:
+      "התחבר לאזור האישי שלך ב-FilterPhone לניהול רמת הסינון, צפייה בסטטיסטיקות, הורדת קונפיג VPN ושליחת בקשות לשינוי הגדרות.",
+    keywords: "אזור אישי, ניהול סינון, FilterPhone login, פילטר פון התחברות",
+    h1: "אזור אישי – FilterPhone",
+    lead: "התחבר כדי לראות את סטטוס הסינון שלך, לעדכן הגדרות ולשלוח בקשות.",
+    noindex: true,
+  },
+  {
+    path: "/crm-dashboard",
+    title: "ניהול CRM – פאנל מנהלים | FilterPhone",
+    description:
+      "פאנל ניהול CRM ל-FilterPhone: ניהול לקוחות, בקשות, לוגים, VPN, AdGuard וסינון תמונות.",
+    h1: "פאנל ניהול CRM",
+    lead: "כניסה למנהלים בלבד.",
+    noindex: true,
+  },
 ];
 
 // Generate the fallback body content for a route
@@ -186,7 +205,7 @@ function buildFallback(route) {
     })
     .join("");
 
-  return `<div id="seo-fallback" style="font-family:'Heebo',sans-serif;padding:24px;max-width:900px;margin:0 auto;text-align:right;direction:rtl;">
+  return `<div id="seo-fallback" aria-hidden="true" style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;">
     <header>
       <h1>${route.h1}</h1>
       <p>${route.lead}</p>
@@ -219,6 +238,18 @@ function injectRoute(template, route) {
   const escKw = route.keywords ? escapeHtml(route.keywords) : "";
 
   let html = template;
+
+  // robots (noindex for private routes)
+  if (route.noindex) {
+    html = html.replace(
+      /<meta\s+name=["']robots["']\s+content=["'][^"']*["']\s*\/?>/i,
+      `<meta name="robots" content="noindex, nofollow" />`,
+    );
+    html = html.replace(
+      /<meta\s+name=["']googlebot["']\s+content=["'][^"']*["']\s*\/?>/i,
+      `<meta name="googlebot" content="noindex, nofollow" />`,
+    );
+  }
 
   // <title>
   html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escTitle}</title>`);
