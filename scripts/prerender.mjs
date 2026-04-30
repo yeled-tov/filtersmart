@@ -171,6 +171,25 @@ const routes = [
     h1: "מדיניות החזרים",
     lead: "במסמך זה תמצאו את המידע המלא על מדיניות ההחזרים והביטולים שלנו.",
   },
+  {
+    path: "/my-account",
+    title: "אזור אישי – ניהול הסינון שלי | FilterPhone",
+    description:
+      "התחבר לאזור האישי שלך ב-FilterPhone לניהול רמת הסינון, צפייה בסטטיסטיקות, הורדת קונפיג VPN ושליחת בקשות לשינוי הגדרות.",
+    keywords: "אזור אישי, ניהול סינון, FilterPhone login, פילטר פון התחברות",
+    h1: "אזור אישי – FilterPhone",
+    lead: "התחבר כדי לראות את סטטוס הסינון שלך, לעדכן הגדרות ולשלוח בקשות.",
+    noindex: true,
+  },
+  {
+    path: "/crm-dashboard",
+    title: "ניהול CRM – פאנל מנהלים | FilterPhone",
+    description:
+      "פאנל ניהול CRM ל-FilterPhone: ניהול לקוחות, בקשות, לוגים, VPN, AdGuard וסינון תמונות.",
+    h1: "פאנל ניהול CRM",
+    lead: "כניסה למנהלים בלבד.",
+    noindex: true,
+  },
 ];
 
 // Generate the fallback body content for a route
