@@ -22,6 +22,7 @@ const Admin = lazy(() => import("./pages/Admin"));
 const AdminLogin = lazy(() => import("./pages/AdminLogin"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const MyAccount = lazy(() => import("./pages/MyAccount"));
+const CrmDashboard = lazy(() => import("./pages/CrmDashboard"));
 
 const queryClient = new QueryClient();
 
