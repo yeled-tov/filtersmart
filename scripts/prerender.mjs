@@ -239,6 +239,18 @@ function injectRoute(template, route) {
 
   let html = template;
 
+  // robots (noindex for private routes)
+  if (route.noindex) {
+    html = html.replace(
+      /<meta\s+name=["']robots["']\s+content=["'][^"']*["']\s*\/?>/i,
+      `<meta name="robots" content="noindex, nofollow" />`,
+    );
+    html = html.replace(
+      /<meta\s+name=["']googlebot["']\s+content=["'][^"']*["']\s*\/?>/i,
+      `<meta name="googlebot" content="noindex, nofollow" />`,
+    );
+  }
+
   // <title>
   html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escTitle}</title>`);
   // meta description
