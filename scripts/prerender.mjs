@@ -205,7 +205,7 @@ function buildFallback(route) {
     })
     .join("");
 
-  return `<div id="seo-fallback" style="font-family:'Heebo',sans-serif;padding:24px;max-width:900px;margin:0 auto;text-align:right;direction:rtl;">
+  return `<div id="seo-fallback" aria-hidden="true" style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;">
     <header>
       <h1>${route.h1}</h1>
       <p>${route.lead}</p>
