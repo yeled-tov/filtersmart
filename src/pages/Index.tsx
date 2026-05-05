@@ -224,17 +224,17 @@ const Index = () => {
           </AnimatedSection>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { icon: Shield, title: "הגנה מקצועית", desc: "פתרונות סינון ברמה הגבוהה ביותר עם שכבות הגנה מרובות – הדרן, עסקן וכושר פליי", color: "from-blue-500 to-blue-600" },
-              { icon: Smartphone, title: "כל מכשיר, כל פלטפורמה", desc: "אייפון, גלקסי, סמסונג, שיאומי, וואווי, אנדרואיד, טאבלט ומחשב – הכתובת לכל סוג מכשיר", color: "from-violet-500 to-violet-600" },
-              { icon: Zap, title: "שירות מהיר", desc: "התקנה מקצועית ומהירה. סינון בסיסי תוך 5 דקות, צריבה תוך 30-60 דקות", color: "from-amber-500 to-orange-500" },
-              { icon: HeartHandshake, title: "מחירים הוגנים", desc: "סינון בסיסי מ-100₪ בלבד. מחירים שקופים ללא עלויות נסתרות, עם אחריות מלאה", color: "from-emerald-500 to-green-600" },
+              { icon: Shield, title: "הגנה מקצועית", desc: "פתרונות סינון ברמה הגבוהה ביותר עם שכבות הגנה מרובות – הדרן, עסקן וכושר פליי" },
+              { icon: Smartphone, title: "כל מכשיר, כל פלטפורמה", desc: "אייפון, גלקסי, סמסונג, שיאומי, וואווי, אנדרואיד, טאבלט ומחשב – הכתובת לכל סוג מכשיר" },
+              { icon: Zap, title: "שירות מהיר", desc: "התקנה מקצועית ומהירה. סינון בסיסי תוך 5 דקות, צריבה תוך 30-60 דקות" },
+              { icon: HeartHandshake, title: "מחירים הוגנים", desc: "סינון בסיסי מ-100₪ בלבד. מחירים שקופים ללא עלויות נסתרות, עם אחריות מלאה" },
             ].map((feature, i) => (
               <AnimatedSection key={i} delay={i * 0.08}>
-                <div className="bg-card rounded-2xl p-7 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group h-full border border-border/50 card-shine">
-                  <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-5 group-hover:scale-105 transition-transform shadow-sm`}>
-                    <feature.icon className="w-5 h-5 text-white" />
+                <div className="card-premium p-7 group h-full card-shine">
+                  <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-colors">
+                    <feature.icon className="w-5 h-5 text-primary" />
                   </div>
-                  <h3 className="text-base font-heading font-semibold text-card-foreground mb-2">{feature.title}</h3>
+                  <h3 className="text-base md:text-lg font-heading font-semibold text-foreground mb-2">{feature.title}</h3>
                   <p className="text-muted-foreground leading-relaxed text-sm">{feature.desc}</p>
                 </div>
               </AnimatedSection>
@@ -319,18 +319,18 @@ const Index = () => {
               <AnimatedSection key={service.slug} delay={i * 0.08}>
                 <Link
                   to={`/services/${service.slug}`}
-                  className="block bg-card rounded-2xl p-6 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group border border-border/50"
+                  className="block card-premium p-6 group"
                 >
                   <div className="flex items-start justify-between mb-4">
-                    <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">
+                    <h3 className="text-lg font-heading font-semibold text-foreground group-hover:text-primary transition-colors">
                       {service.name}
                     </h3>
-                    <span className="text-xl font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
+                    <span className="text-2xl font-bold text-white whitespace-nowrap mr-3">{service.price}</span>
                   </div>
                   <p className="text-muted-foreground text-sm mb-5 leading-relaxed">{service.short_desc}</p>
-                  <div className="flex items-center text-primary text-sm font-medium">
+                  <div className="flex items-center text-primary text-sm font-medium gap-1">
                     <span>פרטים נוספים</span>
-                    <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
+                    <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                   </div>
                 </Link>
               </AnimatedSection>
