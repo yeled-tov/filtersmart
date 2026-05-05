@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { MapPin, Phone, Mail, Clock, ArrowLeft } from "lucide-react";
 
 const Footer = () => (
-  <footer className="bg-foreground text-background" role="contentinfo">
+  <footer className="bg-card border-t border-border text-foreground" role="contentinfo">
     <div className="container-custom pt-14 pb-8 md:pt-20 md:pb-10">
       {/* Main grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
