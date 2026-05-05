@@ -345,30 +345,35 @@ const Index = () => {
       <Reviews />
       <FAQ />
 
-      {/* CTA */}
-      <section className="relative overflow-hidden" aria-label="יצירת קשר">
-        <div className="absolute inset-0 gradient-primary" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,_rgba(255,255,255,0.08)_0%,_transparent_60%)]" />
-        <div className="relative container-custom py-16 md:py-24 text-center">
+      {/* CTA — Tesla-style minimal */}
+      <section className="relative overflow-hidden bg-background" aria-label="יצירת קשר">
+        <div className="absolute inset-0 bg-radial-blue opacity-90" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-primary/15 rounded-full blur-[140px] pointer-events-none" />
+        <div className="relative container-custom py-24 md:py-36 text-center">
           <AnimatedSection>
-            <h2 className="text-2xl md:text-4xl font-heading font-bold text-white mb-4 text-balance">מוכנים להגן על הטלפון שלכם?</h2>
-            <p className="text-white/70 text-lg mb-10 max-w-xl mx-auto">צרו קשר עוד היום ונתאים לכם את פתרון הסינון המושלם – שירות מקצועי באשדוד</p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <a href={waLink} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="bg-white text-primary hover:bg-white/95 text-base px-8 h-12 shadow-lg hover:shadow-xl transition-all font-semibold">
-                  WhatsApp – 052-718-6881
+            <h2 className="text-4xl md:text-6xl font-heading font-extrabold text-white mb-6 text-balance leading-[1.05]">
+              מוכנים להגן<br />על הטלפון שלכם?
+            </h2>
+            <p className="text-white/60 text-lg md:text-xl mb-12 max-w-xl mx-auto">
+              צרו קשר עוד היום ונתאים לכם את פתרון הסינון המושלם
+            </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              <a href="tel:0527186881">
+                <Button size="lg" className="bg-white text-black hover:bg-white/90 text-base px-8 h-14 rounded-full font-semibold gap-2 transition-all hover:scale-[1.03]">
+                  <Phone className="w-4 h-4" />
+                  052-718-6881
                 </Button>
               </a>
-              <a href={bitLink} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="outline" className="bg-transparent text-white border-white/25 hover:bg-white/10 text-base px-8 h-12 backdrop-blur-sm">
-                  שלם ב-BIT
+              <a href={waLink} target="_blank" rel="noopener noreferrer">
+                <Button size="lg" variant="outline" className="bg-transparent text-white border-white/20 hover:bg-white/10 hover:border-white/40 text-base px-8 h-14 rounded-full font-semibold backdrop-blur-md">
+                  WhatsApp
                 </Button>
               </a>
             </div>
-            <div className="flex items-center justify-center gap-6 mt-8 text-white/50 text-sm">
-              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-green-300" /> אחריות מלאה</span>
-              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-green-300" /> שירות מהיר</span>
-              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-green-300" /> מחירים הוגנים</span>
+            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mt-12 text-white/40 text-sm">
+              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-primary" /> אחריות מלאה</span>
+              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-primary" /> שירות מהיר</span>
+              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-primary" /> מחירים הוגנים</span>
             </div>
           </AnimatedSection>
         </div>
