@@ -261,10 +261,10 @@ const Index = () => {
               <AnimatedSection key={service.slug} delay={i * 0.08}>
                 <Link
                   to={`/services/${service.slug}`}
-                  className="block bg-card rounded-2xl p-6 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden border border-border/50"
+                  className="block card-premium p-6 group relative overflow-hidden"
                 >
                   {service.slug === "hadran" && (
-                    <div className="absolute top-4 left-4 flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                    <div className="absolute top-4 left-4 flex items-center gap-1.5 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full">
                       <Star className="w-3 h-3 fill-current" />
                       הכי פופולרי
                     </div>
@@ -272,21 +272,21 @@ const Index = () => {
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
                       {service.logo_url && (
-                        <img src={service.logo_url} alt={`${service.name} לוגו`} className="w-11 h-11 rounded-xl object-contain bg-muted p-1.5" loading="lazy" />
+                        <img src={service.logo_url} alt={`${service.name} לוגו`} className="w-11 h-11 rounded-xl object-contain bg-white/5 p-1.5" loading="lazy" />
                       )}
                       <div>
-                        <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">
+                        <h3 className="text-lg font-heading font-semibold text-foreground group-hover:text-primary transition-colors">
                           {service.name}
                         </h3>
                       </div>
                     </div>
-                    <span className="text-xl font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
+                    <span className="text-2xl font-bold text-white whitespace-nowrap mr-3">{service.price}</span>
                   </div>
                   <p className="text-muted-foreground text-sm mb-5 leading-relaxed">{service.short_desc}</p>
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center text-primary text-sm font-medium group-hover:gap-2 transition-all">
+                    <div className="flex items-center text-primary text-sm font-medium gap-1">
                       <span>פרטים נוספים</span>
-                      <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
+                      <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                     </div>
                     <div className="flex items-center gap-0.5">
                       {[1,2,3,4,5].map(n => (
