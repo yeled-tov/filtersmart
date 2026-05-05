@@ -115,74 +115,98 @@ const Index = () => {
         <script type="application/ld+json">{JSON.stringify(howToJsonLd)}</script>
       </Helmet>
 
-      {/* Hero */}
-      <section className="relative overflow-hidden min-h-[520px] md:min-h-[600px] flex items-center">
-        <div className="absolute inset-0">
-          {/* Branded FilterPhone hero banner (optimized JPG, ~125KB) */}
-          <img
-            src="/hero.jpg"
-            alt="FilterPhone – סינון טלפונים מקצועי באשדוד"
-            className="absolute inset-0 w-full h-full object-cover"
-            width={1377}
-            height={768}
-            loading="eager"
-            fetchPriority="high"
-          />
-          {/* Dark overlay so white headline text remains readable on the banner */}
-          <div className="absolute inset-0 bg-gradient-to-l from-foreground/65 via-foreground/40 to-foreground/15" />
+      {/* Hero — Tesla-style minimalist */}
+      <section className="relative overflow-hidden min-h-[88vh] flex items-center bg-radial-blue">
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 bg-mesh opacity-60" />
+        {/* Floating particles */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(12)].map((_, i) => (
+            <span
+              key={i}
+              className="particle"
+              style={{
+                top: `${(i * 37) % 100}%`,
+                left: `${(i * 53) % 100}%`,
+                animation: `particle-float ${3 + (i % 4)}s ease-in-out ${i * 0.3}s infinite`,
+              }}
+            />
+          ))}
         </div>
-        <div className="relative container-custom py-20 md:py-28 lg:py-36">
+        {/* Top blue glow */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
+
+        <div className="relative container-custom py-24 md:py-32 text-center">
           <motion.div
-            className="max-w-2xl"
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white text-sm font-medium mb-6 backdrop-blur-md border border-white/15">
-              <Shield className="w-4 h-4 text-green-300" />
-              משווק מורשה – הדרן, עסקן, כושר פליי
+            {/* Rating chip */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/80 text-xs font-medium mb-8 backdrop-blur-md">
+              <div className="flex items-center gap-0.5">
+                {[1,2,3,4,5].map(n => <Star key={n} className="w-3 h-3 fill-amber-400 text-amber-400" />)}
+              </div>
+              <span>5.0 · 47 חוות דעת · משווק מורשה</span>
             </div>
-            <h1 className="text-3xl md:text-5xl lg:text-[3.5rem] font-heading font-bold text-white leading-[1.15] mb-6 text-balance">
-              {heroTitle}
-              <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-l from-green-300 to-emerald-200">{heroSubtitle}</span>
+
+            {/* Massive headline */}
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading font-extrabold text-white mb-6 text-balance leading-[1.05]">
+              סינון טלפונים
+              <span className="block text-gradient-blue mt-2">באשדוד</span>
             </h1>
-            <p className="text-base md:text-lg text-white/75 mb-8 leading-relaxed max-w-xl">{heroDesc}</p>
 
-            <div className="flex flex-wrap items-center gap-3">
-              <a href={waLink} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="gradient-primary text-white border-0 shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-all text-base px-7 h-12">
-                  WhatsApp – הזמן עכשיו
+            <p className="text-base md:text-xl text-white/60 mb-10 max-w-2xl mx-auto leading-relaxed">
+              משווק מורשה של הדרן, עסקן וכושר פליי. סינון מקצועי לאייפון, גלקסי, שיאומי ואנדרואיד – החל מ-100₪.
+            </p>
+
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <a href="tel:0527186881">
+                <Button size="lg" className="bg-white text-black hover:bg-white/90 text-base px-8 h-14 rounded-full font-semibold gap-2 transition-all hover:scale-[1.03]">
+                  <Phone className="w-4 h-4" />
+                  התקשר עכשיו
                 </Button>
               </a>
-              <a href="tel:0527186881">
-                <Button size="lg" variant="outline" className="bg-white/10 text-white border-white/20 hover:bg-white/20 backdrop-blur-sm text-base px-7 h-12 gap-2">
-                  <Phone className="w-4 h-4" />
-                  052-718-6881
+              <a href={waLink} target="_blank" rel="noopener noreferrer">
+                <Button size="lg" variant="outline" className="bg-transparent text-white border-white/20 hover:bg-white/10 hover:border-white/40 text-base px-8 h-14 rounded-full font-semibold backdrop-blur-md">
+                  WhatsApp
                 </Button>
               </a>
             </div>
 
-            {/* Quick stats */}
-            <div className="flex items-center gap-6 mt-10 pt-8 border-t border-white/10">
+            {/* Stats */}
+            <div className="flex items-center justify-center gap-8 md:gap-16 mt-16 pt-12 border-t border-white/5 max-w-2xl mx-auto">
               {[
-                { value: "500+", label: "לקוחות מרוצים" },
-                { value: "100₪", label: "סינון בסיסי מ-" },
-                { value: "5 דק׳", label: "זמן התקנה" },
+                { value: "500+", label: "לקוחות" },
+                { value: "5.0", label: "דירוג" },
+                { value: "5 דק׳", label: "התקנה" },
               ].map((stat, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 + i * 0.1 }}
+                  transition={{ delay: 0.5 + i * 0.1 }}
                   className="text-center"
                 >
-                  <div className="text-xl md:text-2xl font-heading font-bold text-white">{stat.value}</div>
-                  <div className="text-xs text-white/50 mt-0.5">{stat.label}</div>
+                  <div className="text-2xl md:text-4xl font-heading font-bold text-white">{stat.value}</div>
+                  <div className="text-xs md:text-sm text-white/40 mt-1">{stat.label}</div>
                 </motion.div>
               ))}
             </div>
           </motion.div>
         </div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <div className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-1.5">
+            <div className="w-1 h-2 bg-white/40 rounded-full" />
+          </div>
+        </motion.div>
       </section>
 
       <TrustStrip />
