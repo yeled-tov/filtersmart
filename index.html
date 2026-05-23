@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="he" dir="rtl" class="dark" style="background:#0a0a0a;color-scheme:dark">
+<html lang="he" dir="rtl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,10 +13,11 @@
     <!-- Performance: Preload critical font -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" as="style" />
 
-    <!-- Hero is now CSS-based; no large image to preload -->
+    <!-- Performance: Preload hero image (LCP) -->
+    <link rel="preload" as="image" href="/hero.jpg" fetchpriority="high" />
 
     <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="theme-color" content="#2563c4" />
     <link rel="icon" type="image/png" href="/logo.png" sizes="any" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -81,7 +82,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
     <!-- Microsoft -->
-    <meta name="msapplication-TileColor" content="#0a0a0a" />
+    <meta name="msapplication-TileColor" content="#2563c4" />
 
     <!-- Schema.org itemprop (Google search enrichment) -->
     <meta itemprop="name" content="FilterPhone – סינון טלפונים מקצועי באשדוד" />

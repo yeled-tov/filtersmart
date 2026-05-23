@@ -115,98 +115,74 @@ const Index = () => {
         <script type="application/ld+json">{JSON.stringify(howToJsonLd)}</script>
       </Helmet>
 
-      {/* Hero — Tesla-style minimalist */}
-      <section className="relative overflow-hidden min-h-[88vh] flex items-center bg-radial-blue">
-        {/* Subtle grid pattern */}
-        <div className="absolute inset-0 bg-mesh opacity-60" />
-        {/* Floating particles */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(12)].map((_, i) => (
-            <span
-              key={i}
-              className="particle"
-              style={{
-                top: `${(i * 37) % 100}%`,
-                left: `${(i * 53) % 100}%`,
-                animation: `particle-float ${3 + (i % 4)}s ease-in-out ${i * 0.3}s infinite`,
-              }}
-            />
-          ))}
+      {/* Hero */}
+      <section className="relative overflow-hidden min-h-[520px] md:min-h-[600px] flex items-center">
+        <div className="absolute inset-0">
+          {/* Branded FilterPhone hero banner (optimized JPG, ~125KB) */}
+          <img
+            src="/hero.jpg"
+            alt="FilterPhone – סינון טלפונים מקצועי באשדוד"
+            className="absolute inset-0 w-full h-full object-cover"
+            width={1377}
+            height={768}
+            loading="eager"
+            fetchPriority="high"
+          />
+          {/* Dark overlay so white headline text remains readable on the banner */}
+          <div className="absolute inset-0 bg-gradient-to-l from-foreground/65 via-foreground/40 to-foreground/15" />
         </div>
-        {/* Top blue glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
-
-        <div className="relative container-custom py-24 md:py-32 text-center">
+        <div className="relative container-custom py-20 md:py-28 lg:py-36">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            className="max-w-2xl"
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="max-w-4xl mx-auto"
+            transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            {/* Rating chip */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/80 text-xs font-medium mb-8 backdrop-blur-md">
-              <div className="flex items-center gap-0.5">
-                {[1,2,3,4,5].map(n => <Star key={n} className="w-3 h-3 fill-amber-400 text-amber-400" />)}
-              </div>
-              <span>5.0 · 47 חוות דעת · משווק מורשה</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white text-sm font-medium mb-6 backdrop-blur-md border border-white/15">
+              <Shield className="w-4 h-4 text-green-300" />
+              משווק מורשה – הדרן, עסקן, כושר פליי
             </div>
-
-            {/* Massive headline */}
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading font-extrabold text-white mb-6 text-balance leading-[1.05]">
-              סינון טלפונים
-              <span className="block text-gradient-blue mt-2">באשדוד</span>
+            <h1 className="text-3xl md:text-5xl lg:text-[3.5rem] font-heading font-bold text-white leading-[1.15] mb-6 text-balance">
+              {heroTitle}
+              <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-l from-green-300 to-emerald-200">{heroSubtitle}</span>
             </h1>
+            <p className="text-base md:text-lg text-white/75 mb-8 leading-relaxed max-w-xl">{heroDesc}</p>
 
-            <p className="text-base md:text-xl text-white/60 mb-10 max-w-2xl mx-auto leading-relaxed">
-              משווק מורשה של הדרן, עסקן וכושר פליי. סינון מקצועי לאייפון, גלקסי, שיאומי ואנדרואיד – החל מ-100₪.
-            </p>
-
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              <a href="tel:0527186881">
-                <Button size="lg" className="bg-white text-black hover:bg-white/90 text-base px-8 h-14 rounded-full font-semibold gap-2 transition-all hover:scale-[1.03]">
-                  <Phone className="w-4 h-4" />
-                  התקשר עכשיו
+            <div className="flex flex-wrap items-center gap-3">
+              <a href={waLink} target="_blank" rel="noopener noreferrer">
+                <Button size="lg" className="gradient-primary text-white border-0 shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-all text-base px-7 h-12">
+                  WhatsApp – הזמן עכשיו
                 </Button>
               </a>
-              <a href={waLink} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="outline" className="bg-transparent text-white border-white/20 hover:bg-white/10 hover:border-white/40 text-base px-8 h-14 rounded-full font-semibold backdrop-blur-md">
-                  WhatsApp
+              <a href="tel:0527186881">
+                <Button size="lg" variant="outline" className="bg-white/10 text-white border-white/20 hover:bg-white/20 backdrop-blur-sm text-base px-7 h-12 gap-2">
+                  <Phone className="w-4 h-4" />
+                  052-718-6881
                 </Button>
               </a>
             </div>
 
-            {/* Stats */}
-            <div className="flex items-center justify-center gap-8 md:gap-16 mt-16 pt-12 border-t border-white/5 max-w-2xl mx-auto">
+            {/* Quick stats */}
+            <div className="flex items-center gap-6 mt-10 pt-8 border-t border-white/10">
               {[
-                { value: "500+", label: "לקוחות" },
-                { value: "5.0", label: "דירוג" },
-                { value: "5 דק׳", label: "התקנה" },
+                { value: "500+", label: "לקוחות מרוצים" },
+                { value: "100₪", label: "סינון בסיסי מ-" },
+                { value: "5 דק׳", label: "זמן התקנה" },
               ].map((stat, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 + i * 0.1 }}
+                  transition={{ delay: 0.4 + i * 0.1 }}
                   className="text-center"
                 >
-                  <div className="text-2xl md:text-4xl font-heading font-bold text-white">{stat.value}</div>
-                  <div className="text-xs md:text-sm text-white/40 mt-1">{stat.label}</div>
+                  <div className="text-xl md:text-2xl font-heading font-bold text-white">{stat.value}</div>
+                  <div className="text-xs text-white/50 mt-0.5">{stat.label}</div>
                 </motion.div>
               ))}
             </div>
           </motion.div>
         </div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <div className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-1.5">
-            <div className="w-1 h-2 bg-white/40 rounded-full" />
-          </div>
-        </motion.div>
       </section>
 
       <TrustStrip />
@@ -224,17 +200,17 @@ const Index = () => {
           </AnimatedSection>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { icon: Shield, title: "הגנה מקצועית", desc: "פתרונות סינון ברמה הגבוהה ביותר עם שכבות הגנה מרובות – הדרן, עסקן וכושר פליי" },
-              { icon: Smartphone, title: "כל מכשיר, כל פלטפורמה", desc: "אייפון, גלקסי, סמסונג, שיאומי, וואווי, אנדרואיד, טאבלט ומחשב – הכתובת לכל סוג מכשיר" },
-              { icon: Zap, title: "שירות מהיר", desc: "התקנה מקצועית ומהירה. סינון בסיסי תוך 5 דקות, צריבה תוך 30-60 דקות" },
-              { icon: HeartHandshake, title: "מחירים הוגנים", desc: "סינון בסיסי מ-100₪ בלבד. מחירים שקופים ללא עלויות נסתרות, עם אחריות מלאה" },
+              { icon: Shield, title: "הגנה מקצועית", desc: "פתרונות סינון ברמה הגבוהה ביותר עם שכבות הגנה מרובות – הדרן, עסקן וכושר פליי", color: "from-blue-500 to-blue-600" },
+              { icon: Smartphone, title: "כל מכשיר, כל פלטפורמה", desc: "אייפון, גלקסי, סמסונג, שיאומי, וואווי, אנדרואיד, טאבלט ומחשב – הכתובת לכל סוג מכשיר", color: "from-violet-500 to-violet-600" },
+              { icon: Zap, title: "שירות מהיר", desc: "התקנה מקצועית ומהירה. סינון בסיסי תוך 5 דקות, צריבה תוך 30-60 דקות", color: "from-amber-500 to-orange-500" },
+              { icon: HeartHandshake, title: "מחירים הוגנים", desc: "סינון בסיסי מ-100₪ בלבד. מחירים שקופים ללא עלויות נסתרות, עם אחריות מלאה", color: "from-emerald-500 to-green-600" },
             ].map((feature, i) => (
               <AnimatedSection key={i} delay={i * 0.08}>
-                <div className="card-premium p-7 group h-full card-shine">
-                  <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-colors">
-                    <feature.icon className="w-5 h-5 text-primary" />
+                <div className="bg-card rounded-2xl p-7 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group h-full border border-border/50 card-shine">
+                  <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-5 group-hover:scale-105 transition-transform shadow-sm`}>
+                    <feature.icon className="w-5 h-5 text-white" />
                   </div>
-                  <h3 className="text-base md:text-lg font-heading font-semibold text-foreground mb-2">{feature.title}</h3>
+                  <h3 className="text-base font-heading font-semibold text-card-foreground mb-2">{feature.title}</h3>
                   <p className="text-muted-foreground leading-relaxed text-sm">{feature.desc}</p>
                 </div>
               </AnimatedSection>
@@ -261,10 +237,10 @@ const Index = () => {
               <AnimatedSection key={service.slug} delay={i * 0.08}>
                 <Link
                   to={`/services/${service.slug}`}
-                  className="block card-premium p-6 group relative overflow-hidden"
+                  className="block bg-card rounded-2xl p-6 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden border border-border/50"
                 >
                   {service.slug === "hadran" && (
-                    <div className="absolute top-4 left-4 flex items-center gap-1.5 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full">
+                    <div className="absolute top-4 left-4 flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
                       <Star className="w-3 h-3 fill-current" />
                       הכי פופולרי
                     </div>
@@ -272,21 +248,21 @@ const Index = () => {
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
                       {service.logo_url && (
-                        <img src={service.logo_url} alt={`${service.name} לוגו`} className="w-11 h-11 rounded-xl object-contain bg-white/5 p-1.5" loading="lazy" />
+                        <img src={service.logo_url} alt={`${service.name} לוגו`} className="w-11 h-11 rounded-xl object-contain bg-muted p-1.5" loading="lazy" />
                       )}
                       <div>
-                        <h3 className="text-lg font-heading font-semibold text-foreground group-hover:text-primary transition-colors">
+                        <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">
                           {service.name}
                         </h3>
                       </div>
                     </div>
-                    <span className="text-2xl font-bold text-white whitespace-nowrap mr-3">{service.price}</span>
+                    <span className="text-xl font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
                   </div>
                   <p className="text-muted-foreground text-sm mb-5 leading-relaxed">{service.short_desc}</p>
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center text-primary text-sm font-medium gap-1">
+                    <div className="flex items-center text-primary text-sm font-medium group-hover:gap-2 transition-all">
                       <span>פרטים נוספים</span>
-                      <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+                      <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
                     </div>
                     <div className="flex items-center gap-0.5">
                       {[1,2,3,4,5].map(n => (
@@ -319,18 +295,18 @@ const Index = () => {
               <AnimatedSection key={service.slug} delay={i * 0.08}>
                 <Link
                   to={`/services/${service.slug}`}
-                  className="block card-premium p-6 group"
+                  className="block bg-card rounded-2xl p-6 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group border border-border/50"
                 >
                   <div className="flex items-start justify-between mb-4">
-                    <h3 className="text-lg font-heading font-semibold text-foreground group-hover:text-primary transition-colors">
+                    <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">
                       {service.name}
                     </h3>
-                    <span className="text-2xl font-bold text-white whitespace-nowrap mr-3">{service.price}</span>
+                    <span className="text-xl font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
                   </div>
                   <p className="text-muted-foreground text-sm mb-5 leading-relaxed">{service.short_desc}</p>
-                  <div className="flex items-center text-primary text-sm font-medium gap-1">
+                  <div className="flex items-center text-primary text-sm font-medium">
                     <span>פרטים נוספים</span>
-                    <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+                    <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
                   </div>
                 </Link>
               </AnimatedSection>
@@ -345,35 +321,30 @@ const Index = () => {
       <Reviews />
       <FAQ />
 
-      {/* CTA — Tesla-style minimal */}
-      <section className="relative overflow-hidden bg-background" aria-label="יצירת קשר">
-        <div className="absolute inset-0 bg-radial-blue opacity-90" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-primary/15 rounded-full blur-[140px] pointer-events-none" />
-        <div className="relative container-custom py-24 md:py-36 text-center">
+      {/* CTA */}
+      <section className="relative overflow-hidden" aria-label="יצירת קשר">
+        <div className="absolute inset-0 gradient-primary" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,_rgba(255,255,255,0.08)_0%,_transparent_60%)]" />
+        <div className="relative container-custom py-16 md:py-24 text-center">
           <AnimatedSection>
-            <h2 className="text-4xl md:text-6xl font-heading font-extrabold text-white mb-6 text-balance leading-[1.05]">
-              מוכנים להגן<br />על הטלפון שלכם?
-            </h2>
-            <p className="text-white/60 text-lg md:text-xl mb-12 max-w-xl mx-auto">
-              צרו קשר עוד היום ונתאים לכם את פתרון הסינון המושלם
-            </p>
-            <div className="flex flex-wrap justify-center gap-3">
-              <a href="tel:0527186881">
-                <Button size="lg" className="bg-white text-black hover:bg-white/90 text-base px-8 h-14 rounded-full font-semibold gap-2 transition-all hover:scale-[1.03]">
-                  <Phone className="w-4 h-4" />
-                  052-718-6881
+            <h2 className="text-2xl md:text-4xl font-heading font-bold text-white mb-4 text-balance">מוכנים להגן על הטלפון שלכם?</h2>
+            <p className="text-white/70 text-lg mb-10 max-w-xl mx-auto">צרו קשר עוד היום ונתאים לכם את פתרון הסינון המושלם – שירות מקצועי באשדוד</p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <a href={waLink} target="_blank" rel="noopener noreferrer">
+                <Button size="lg" className="bg-white text-primary hover:bg-white/95 text-base px-8 h-12 shadow-lg hover:shadow-xl transition-all font-semibold">
+                  WhatsApp – 052-718-6881
                 </Button>
               </a>
-              <a href={waLink} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="outline" className="bg-transparent text-white border-white/20 hover:bg-white/10 hover:border-white/40 text-base px-8 h-14 rounded-full font-semibold backdrop-blur-md">
-                  WhatsApp
+              <a href={bitLink} target="_blank" rel="noopener noreferrer">
+                <Button size="lg" variant="outline" className="bg-transparent text-white border-white/25 hover:bg-white/10 text-base px-8 h-12 backdrop-blur-sm">
+                  שלם ב-BIT
                 </Button>
               </a>
             </div>
-            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mt-12 text-white/40 text-sm">
-              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-primary" /> אחריות מלאה</span>
-              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-primary" /> שירות מהיר</span>
-              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-primary" /> מחירים הוגנים</span>
+            <div className="flex items-center justify-center gap-6 mt-8 text-white/50 text-sm">
+              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-green-300" /> אחריות מלאה</span>
+              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-green-300" /> שירות מהיר</span>
+              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-green-300" /> מחירים הוגנים</span>
             </div>
           </AnimatedSection>
         </div>
