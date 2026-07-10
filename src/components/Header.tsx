@@ -11,6 +11,7 @@ const navLinks = [
   { href: "/", label: "בית" },
   { href: "/about", label: "אודות" },
   { href: "/services", label: "שירותים" },
+  { href: "/filtertube", label: "FilterTube" },
   { href: "/blog", label: "בלוג" },
   { href: "/contact", label: "צור קשר" },
   { href: "/my-account", label: "אזור אישי" },

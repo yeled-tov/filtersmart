@@ -61,6 +61,12 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://www.filterphone.com/filtertube</loc>
+    <lastmod>2026-07-10</lastmod>
+    <priority>0.95</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://www.filterphone.com/blog</loc>
     <lastmod>2026-04-16</lastmod>
     <priority>0.7</priority>

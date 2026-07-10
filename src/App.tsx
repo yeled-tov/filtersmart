@@ -23,6 +23,7 @@ const AdminLogin = lazy(() => import("./pages/AdminLogin"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const MyAccount = lazy(() => import("./pages/MyAccount"));
 const CrmDashboard = lazy(() => import("./pages/CrmDashboard"));
+const FilterTube = lazy(() => import("./pages/FilterTube"));
 
 const queryClient = new QueryClient();
 
@@ -53,6 +54,7 @@ const App = () => (
                 <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="/refund-policy" element={<RefundPolicy />} />
                 <Route path="/my-account" element={<MyAccount />} />
+                <Route path="/filtertube" element={<FilterTube />} />
               </Route>
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin" element={<Admin />} />
