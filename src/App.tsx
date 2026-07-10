@@ -23,6 +23,7 @@ const AdminLogin = lazy(() => import("./pages/AdminLogin"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const MyAccount = lazy(() => import("./pages/MyAccount"));
 const CrmDashboard = lazy(() => import("./pages/CrmDashboard"));
+const FilterTube = lazy(() => import("./pages/FilterTube"));
 
 const queryClient = new QueryClient();
 
