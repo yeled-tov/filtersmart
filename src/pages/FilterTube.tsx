@@ -210,19 +210,21 @@ const FilterTube = () => {
                 className="mt-8 flex flex-wrap gap-3"
               >
                 <a
+                  href={APK_URL}
+                  download
+                  className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-red-500 to-orange-500 px-6 py-3.5 text-sm font-bold text-white shadow-[0_10px_40px_-10px_rgba(239,68,68,0.7)] transition hover:brightness-110 hover:shadow-[0_15px_50px_-10px_rgba(239,68,68,0.9)]"
+                >
+                  <Download className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
+                  הורד APK · חינם
+                </a>
+                <a
                   href="https://wa.me/972527186881?text=שלום%20אשמח%20לפרטים%20על%20FilterTube"
                   target="_blank" rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-2 rounded-full bg-red-500 px-6 py-3.5 text-sm font-bold text-white shadow-[0_10px_40px_-10px_rgba(239,68,68,0.6)] transition hover:bg-red-400 hover:shadow-[0_15px_50px_-10px_rgba(239,68,68,0.8)]"
+                  className="group inline-flex items-center gap-2 rounded-full border border-red-400/40 bg-red-500/10 px-6 py-3.5 text-sm font-bold text-white backdrop-blur transition hover:bg-red-500/20"
                 >
                   התחל 60 יום חינם
                   <Zap className="h-4 w-4 transition-transform group-hover:rotate-12" />
                 </a>
-                <Link
-                  to="/contact"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3.5 text-sm font-bold text-white backdrop-blur transition hover:bg-white/10"
-                >
-                  דבר איתנו
-                </Link>
               </motion.div>
 
               <motion.div
