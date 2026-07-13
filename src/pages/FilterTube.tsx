@@ -7,19 +7,21 @@ import {
   Radio, Video, Headphones, Settings2, Layers, Zap, Star, Check
 } from "lucide-react";
 
-// App screenshots (uploaded assets)
+// App screenshots (bundled in /public/filtertube – works on any host)
 const SHOTS = {
-  login:     "/__l5e/assets-v1/d682db2b-4fa3-4af6-967b-8a9670088303/142557.jpg",
-  password:  "/__l5e/assets-v1/e3e998d5-76b4-49a7-bd27-635f097f55d3/142641.jpg",
-  levels:    "/__l5e/assets-v1/5f3b2793-6a81-450c-9c65-6ab7a3243798/142652.jpg",
-  music:     "/__l5e/assets-v1/919bc3b7-6291-433a-9c7c-e7181ab7e4e1/142658.jpg",
-  success:   "/__l5e/assets-v1/343261fd-af07-41f3-9ae5-56307371f220/142705.jpg",
-  feed:      "/__l5e/assets-v1/b165193b-8ba1-4ade-b448-1c57b9ca2f13/142716.jpg",
-  player:    "/__l5e/assets-v1/6c65db35-21a7-41f9-acbf-693f47422e0b/142911.jpg",
-  overlay:   "/__l5e/assets-v1/4cce40b5-69f2-442c-be1e-f23833d055cf/143005.jpg",
-  quality:   "/__l5e/assets-v1/6cc3082f-960f-4855-a688-ac0cc9d82549/143022.jpg",
-  shorts:    "/__l5e/assets-v1/8de9a25d-cd2a-4a1b-8d13-3ca000a3dd1e/143258.jpg",
+  login:    "/filtertube/142557.jpg",
+  password: "/filtertube/142641.jpg",
+  levels:   "/filtertube/142652.jpg",
+  music:    "/filtertube/142658.jpg",
+  success:  "/filtertube/142705.jpg",
+  feed:     "/filtertube/142716.jpg",
+  player:   "/filtertube/142911.jpg",
+  overlay:  "/filtertube/143005.jpg",
+  quality:  "/filtertube/143022.jpg",
+  shorts:   "/filtertube/143258.jpg",
 };
+
+const APK_URL = "https://github.com/yeled-tov/filtertube-android/releases/latest/download/FilterTube-debug.apk";
 
 /* ---------- 3D Phone frame ---------- */
 const PhoneFrame = ({
@@ -115,14 +117,26 @@ const FilterTube = () => {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     name: "FilterTube – יוטיוב מסונן כשר",
-    operatingSystem: "Android",
+    alternateName: ["פילטר טיוב", "FilterTube APK", "יוטיוב כשר", "יוטיוב מסונן"],
+    operatingSystem: "Android 7.0+",
     applicationCategory: "MultimediaApplication",
+    applicationSubCategory: "VideoApplication",
     inLanguage: "he",
-    offers: { "@type": "Offer", price: "0", priceCurrency: "ILS" },
-    aggregateRating: { "@type": "AggregateRating", ratingValue: "5", ratingCount: "47" },
+    downloadUrl: APK_URL,
+    installUrl: APK_URL,
+    softwareVersion: "latest",
+    fileSize: "25MB",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "ILS", availability: "https://schema.org/InStock" },
+    aggregateRating: { "@type": "AggregateRating", ratingValue: "5", ratingCount: "47", bestRating: "5" },
     description:
-      "FilterTube – אפליקציית יוטיוב מסונן וכשרה לחלוטין. סינון תוכן ברמה גבוהה, מצב אודיו בלבד, נגן ברקע, הורדות למצב לא מקוון, שירים ותכני קודש.",
-    publisher: { "@type": "Organization", name: "FilterPhone" },
+      "FilterTube – אפליקציית יוטיוב מסונן וכשרה לחלוטין בעברית. חלופה חוקית ליוטיוב פרוץ / YouTube Vanced / NewPipe. סינון תוכן AI, 3 רמות סינון, מצב אודיו, נגן ברקע, חלון צף, הורדות לצפייה אופליין, אפס פרסומות, מוזיקה יהודית.",
+    publisher: { "@type": "Organization", name: "FilterPhone", url: "https://www.filterphone.com" },
+    screenshot: [
+      "https://www.filterphone.com/filtertube/142716.jpg",
+      "https://www.filterphone.com/filtertube/142911.jpg",
+      "https://www.filterphone.com/filtertube/143258.jpg",
+    ],
+    keywords: "יוטיוב מסונן, יוטיוב כשר, יוטיוב פרוץ, YouTube Vanced חלופה, NewPipe עברית, יוטיוב ללא פרסומות, יוטיוב לילדים, יוטיוב לחרדים",
   };
 
   const faqLd = {
@@ -130,24 +144,30 @@ const FilterTube = () => {
     "@type": "FAQPage",
     mainEntity: [
       { "@type": "Question", name: "מה זה FilterTube?", acceptedAnswer: { "@type": "Answer", text: "FilterTube היא אפליקציית יוטיוב מסוננת וכשרה עם שלוש רמות סינון, מצב אודיו, נגן ברקע והורדות." } },
-      { "@type": "Question", name: "האם FilterTube חלופה ליוטיוב פרוץ?", acceptedAnswer: { "@type": "Answer", text: "כן. FilterTube מספקת את כל התכונות שאתם מחפשים ביוטיוב פרוץ – הורדות, נגן ברקע, ללא פרסומות – אך בסביבה מסוננת וכשרה." } },
+      { "@type": "Question", name: "האם FilterTube חלופה ליוטיוב פרוץ?", acceptedAnswer: { "@type": "Answer", text: "כן. FilterTube מספקת את כל התכונות של יוטיוב פרוץ, YouTube Vanced ו-NewPipe – הורדות, נגן ברקע, ללא פרסומות – אך בסביבה מסוננת, כשרה וחוקית." } },
+      { "@type": "Question", name: "איפה להוריד את FilterTube APK?", acceptedAnswer: { "@type": "Answer", text: "אפשר להוריד את קובץ ה-APK ישירות מהאתר בכפתור \"הורד APK\", או מ-GitHub של הפרויקט. ההתקנה חינמית ולא דורשת חשבון." } },
       { "@type": "Question", name: "האם יש רמות סינון?", acceptedAnswer: { "@type": "Answer", text: "כן, שלוש רמות: מחמיר (אודיו בלבד), רגיל (וידאו מלא), וקל דתי (תכני קודש כאודיו)." } },
       { "@type": "Question", name: "האם יש נגן ברקע?", acceptedAnswer: { "@type": "Answer", text: "כן, נגן ברקע וחלון צף (Floating window) זמינים במנוי הפרימיום, כולל 60 יום ניסיון חינם." } },
     ],
   };
 
   return (
-    <div className="relative overflow-hidden bg-black text-white" dir="rtl">
+    <div className="relative overflow-hidden bg-[#0a0508] text-white [background-image:radial-gradient(1200px_600px_at_80%_-10%,rgba(239,68,68,0.18),transparent_60%),radial-gradient(900px_500px_at_0%_30%,rgba(249,115,22,0.10),transparent_60%),radial-gradient(1000px_600px_at_50%_110%,rgba(236,72,153,0.10),transparent_60%)]" dir="rtl">
       <Helmet>
-        <title>FilterTube – יוטיוב מסונן וכשר | האלטרנטיבה החוקית ליוטיוב פרוץ | FilterPhone</title>
-        <meta name="description" content="FilterTube – יוטיוב מסונן וכשר בעברית. 3 רמות סינון, מצב אודיו, נגן ברקע, הורדות ואפס פרסומות. האלטרנטיבה הכשרה והחוקית ליוטיוב פרוץ. 60 יום ניסיון חינם." />
-        <meta name="keywords" content="יוטיוב מסונן, יוטיוב כשר, יוטיוב פרוץ, FilterTube, יוטיוב ללא פרסומות, YouTube כשר, סינון יוטיוב, יוטיוב לילדים, יוטיוב לחרדים, יוטיוב דתי, הורדת סרטונים, נגן ברקע יוטיוב" />
+        <title>FilterTube – יוטיוב מסונן וכשר להורדה APK | חלופה ליוטיוב פרוץ</title>
+        <meta name="description" content="FilterTube – יוטיוב מסונן וכשר בעברית להורדה חינם (APK). 3 רמות סינון, מצב אודיו, נגן ברקע, הורדות אופליין ואפס פרסומות. החלופה החוקית והבטוחה ליוטיוב פרוץ / YouTube Vanced / NewPipe. 60 יום פרימיום חינם." />
+        <meta name="keywords" content="יוטיוב מסונן, יוטיוב כשר, יוטיוב פרוץ, יוטיוב פרוץ להורדה, יוטיוב APK, YouTube כשר, YouTube Vanced חלופה, YouTube ReVanced עברית, NewPipe עברית, FilterTube, FilterTube APK, פילטר טיוב, סינון יוטיוב, יוטיוב לילדים, יוטיוב לחרדים, יוטיוב דתי, יוטיוב ללא פרסומות, הורדת סרטוני יוטיוב, נגן יוטיוב ברקע, יוטיוב אופליין, יוטיוב חלון צף, יוטיוב פרימיום חינם, אפליקציית וידאו כשרה, יוטיוב מסונן אנדרואיד" />
         <link rel="canonical" href="https://www.filterphone.com/filtertube" />
-        <meta property="og:title" content="FilterTube – יוטיוב מסונן וכשר | FilterPhone" />
-        <meta property="og:description" content="האלטרנטיבה הכשרה ליוטיוב פרוץ – 3 רמות סינון, מצב אודיו, נגן ברקע, הורדות. 60 יום ניסיון חינם." />
+        <meta property="og:title" content="FilterTube – יוטיוב מסונן וכשר להורדה חינם | חלופה ליוטיוב פרוץ" />
+        <meta property="og:description" content="החלופה הכשרה והחוקית ליוטיוב פרוץ – 3 רמות סינון, מצב אודיו, נגן ברקע, הורדות ואפס פרסומות. הורד APK חינם." />
         <meta property="og:url" content="https://www.filterphone.com/filtertube" />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="he_IL" />
+        <meta property="og:image" content="https://www.filterphone.com/filtertube/142716.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="FilterTube – יוטיוב מסונן וכשר להורדה" />
+        <meta name="twitter:description" content="החלופה החוקית והכשרה ליוטיוב פרוץ. הורד APK חינם." />
+        <meta name="twitter:image" content="https://www.filterphone.com/filtertube/142716.jpg" />
         <script type="application/ld+json">{JSON.stringify(softwareLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
       </Helmet>
@@ -208,19 +228,21 @@ const FilterTube = () => {
                 className="mt-8 flex flex-wrap gap-3"
               >
                 <a
+                  href={APK_URL}
+                  download
+                  className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-red-500 to-orange-500 px-6 py-3.5 text-sm font-bold text-white shadow-[0_10px_40px_-10px_rgba(239,68,68,0.7)] transition hover:brightness-110 hover:shadow-[0_15px_50px_-10px_rgba(239,68,68,0.9)]"
+                >
+                  <Download className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
+                  הורד APK · חינם
+                </a>
+                <a
                   href="https://wa.me/972527186881?text=שלום%20אשמח%20לפרטים%20על%20FilterTube"
                   target="_blank" rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-2 rounded-full bg-red-500 px-6 py-3.5 text-sm font-bold text-white shadow-[0_10px_40px_-10px_rgba(239,68,68,0.6)] transition hover:bg-red-400 hover:shadow-[0_15px_50px_-10px_rgba(239,68,68,0.8)]"
+                  className="group inline-flex items-center gap-2 rounded-full border border-red-400/40 bg-red-500/10 px-6 py-3.5 text-sm font-bold text-white backdrop-blur transition hover:bg-red-500/20"
                 >
                   התחל 60 יום חינם
                   <Zap className="h-4 w-4 transition-transform group-hover:rotate-12" />
                 </a>
-                <Link
-                  to="/contact"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3.5 text-sm font-bold text-white backdrop-blur transition hover:bg-white/10"
-                >
-                  דבר איתנו
-                </Link>
               </motion.div>
 
               <motion.div
@@ -477,19 +499,21 @@ const FilterTube = () => {
             </p>
             <div className="relative mt-8 flex flex-wrap justify-center gap-3">
               <a
+                href={APK_URL}
+                download
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-red-500 to-orange-500 px-8 py-4 text-sm font-bold text-white shadow-[0_10px_40px_-10px_rgba(239,68,68,0.8)] transition hover:brightness-110"
+              >
+                <Download className="h-4 w-4" />
+                הורד APK עכשיו
+              </a>
+              <a
                 href="https://wa.me/972527186881?text=שלום%20אשמח%20לפרטים%20על%20FilterTube"
                 target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-red-500 px-8 py-4 text-sm font-bold text-white shadow-[0_10px_40px_-10px_rgba(239,68,68,0.7)] transition hover:bg-red-400"
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-4 text-sm font-bold text-white backdrop-blur transition hover:bg-white/10"
               >
-                התחל 60 יום חינם
+                דבר איתנו
                 <Zap className="h-4 w-4" />
               </a>
-              <Link
-                to="/services"
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-8 py-4 text-sm font-bold text-white backdrop-blur hover:bg-white/10"
-              >
-                השירותים שלנו
-              </Link>
             </div>
           </div>
         </div>
