@@ -152,7 +152,7 @@ const FilterTube = () => {
   };
 
   return (
-    <div className="relative overflow-hidden bg-black text-white" dir="rtl">
+    <div className="relative overflow-hidden bg-[#0a0508] text-white [background-image:radial-gradient(1200px_600px_at_80%_-10%,rgba(239,68,68,0.18),transparent_60%),radial-gradient(900px_500px_at_0%_30%,rgba(249,115,22,0.10),transparent_60%),radial-gradient(1000px_600px_at_50%_110%,rgba(236,72,153,0.10),transparent_60%)]" dir="rtl">
       <Helmet>
         <title>FilterTube – יוטיוב מסונן וכשר להורדה APK | חלופה ליוטיוב פרוץ</title>
         <meta name="description" content="FilterTube – יוטיוב מסונן וכשר בעברית להורדה חינם (APK). 3 רמות סינון, מצב אודיו, נגן ברקע, הורדות אופליין ואפס פרסומות. החלופה החוקית והבטוחה ליוטיוב פרוץ / YouTube Vanced / NewPipe. 60 יום פרימיום חינם." />
