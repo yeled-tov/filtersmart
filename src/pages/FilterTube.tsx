@@ -481,19 +481,21 @@ const FilterTube = () => {
             </p>
             <div className="relative mt-8 flex flex-wrap justify-center gap-3">
               <a
+                href={APK_URL}
+                download
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-red-500 to-orange-500 px-8 py-4 text-sm font-bold text-white shadow-[0_10px_40px_-10px_rgba(239,68,68,0.8)] transition hover:brightness-110"
+              >
+                <Download className="h-4 w-4" />
+                הורד APK עכשיו
+              </a>
+              <a
                 href="https://wa.me/972527186881?text=שלום%20אשמח%20לפרטים%20על%20FilterTube"
                 target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-red-500 px-8 py-4 text-sm font-bold text-white shadow-[0_10px_40px_-10px_rgba(239,68,68,0.7)] transition hover:bg-red-400"
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-4 text-sm font-bold text-white backdrop-blur transition hover:bg-white/10"
               >
-                התחל 60 יום חינם
+                דבר איתנו
                 <Zap className="h-4 w-4" />
               </a>
-              <Link
-                to="/services"
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-8 py-4 text-sm font-bold text-white backdrop-blur hover:bg-white/10"
-              >
-                השירותים שלנו
-              </Link>
             </div>
           </div>
         </div>
