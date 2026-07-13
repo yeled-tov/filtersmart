@@ -117,14 +117,26 @@ const FilterTube = () => {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     name: "FilterTube – יוטיוב מסונן כשר",
-    operatingSystem: "Android",
+    alternateName: ["פילטר טיוב", "FilterTube APK", "יוטיוב כשר", "יוטיוב מסונן"],
+    operatingSystem: "Android 7.0+",
     applicationCategory: "MultimediaApplication",
+    applicationSubCategory: "VideoApplication",
     inLanguage: "he",
-    offers: { "@type": "Offer", price: "0", priceCurrency: "ILS" },
-    aggregateRating: { "@type": "AggregateRating", ratingValue: "5", ratingCount: "47" },
+    downloadUrl: APK_URL,
+    installUrl: APK_URL,
+    softwareVersion: "latest",
+    fileSize: "25MB",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "ILS", availability: "https://schema.org/InStock" },
+    aggregateRating: { "@type": "AggregateRating", ratingValue: "5", ratingCount: "47", bestRating: "5" },
     description:
-      "FilterTube – אפליקציית יוטיוב מסונן וכשרה לחלוטין. סינון תוכן ברמה גבוהה, מצב אודיו בלבד, נגן ברקע, הורדות למצב לא מקוון, שירים ותכני קודש.",
-    publisher: { "@type": "Organization", name: "FilterPhone" },
+      "FilterTube – אפליקציית יוטיוב מסונן וכשרה לחלוטין בעברית. חלופה חוקית ליוטיוב פרוץ / YouTube Vanced / NewPipe. סינון תוכן AI, 3 רמות סינון, מצב אודיו, נגן ברקע, חלון צף, הורדות לצפייה אופליין, אפס פרסומות, מוזיקה יהודית.",
+    publisher: { "@type": "Organization", name: "FilterPhone", url: "https://www.filterphone.com" },
+    screenshot: [
+      "https://www.filterphone.com/filtertube/142716.jpg",
+      "https://www.filterphone.com/filtertube/142911.jpg",
+      "https://www.filterphone.com/filtertube/143258.jpg",
+    ],
+    keywords: "יוטיוב מסונן, יוטיוב כשר, יוטיוב פרוץ, YouTube Vanced חלופה, NewPipe עברית, יוטיוב ללא פרסומות, יוטיוב לילדים, יוטיוב לחרדים",
   };
 
   const faqLd = {
@@ -132,7 +144,8 @@ const FilterTube = () => {
     "@type": "FAQPage",
     mainEntity: [
       { "@type": "Question", name: "מה זה FilterTube?", acceptedAnswer: { "@type": "Answer", text: "FilterTube היא אפליקציית יוטיוב מסוננת וכשרה עם שלוש רמות סינון, מצב אודיו, נגן ברקע והורדות." } },
-      { "@type": "Question", name: "האם FilterTube חלופה ליוטיוב פרוץ?", acceptedAnswer: { "@type": "Answer", text: "כן. FilterTube מספקת את כל התכונות שאתם מחפשים ביוטיוב פרוץ – הורדות, נגן ברקע, ללא פרסומות – אך בסביבה מסוננת וכשרה." } },
+      { "@type": "Question", name: "האם FilterTube חלופה ליוטיוב פרוץ?", acceptedAnswer: { "@type": "Answer", text: "כן. FilterTube מספקת את כל התכונות של יוטיוב פרוץ, YouTube Vanced ו-NewPipe – הורדות, נגן ברקע, ללא פרסומות – אך בסביבה מסוננת, כשרה וחוקית." } },
+      { "@type": "Question", name: "איפה להוריד את FilterTube APK?", acceptedAnswer: { "@type": "Answer", text: "אפשר להוריד את קובץ ה-APK ישירות מהאתר בכפתור \"הורד APK\", או מ-GitHub של הפרויקט. ההתקנה חינמית ולא דורשת חשבון." } },
       { "@type": "Question", name: "האם יש רמות סינון?", acceptedAnswer: { "@type": "Answer", text: "כן, שלוש רמות: מחמיר (אודיו בלבד), רגיל (וידאו מלא), וקל דתי (תכני קודש כאודיו)." } },
       { "@type": "Question", name: "האם יש נגן ברקע?", acceptedAnswer: { "@type": "Answer", text: "כן, נגן ברקע וחלון צף (Floating window) זמינים במנוי הפרימיום, כולל 60 יום ניסיון חינם." } },
     ],
@@ -141,15 +154,20 @@ const FilterTube = () => {
   return (
     <div className="relative overflow-hidden bg-black text-white" dir="rtl">
       <Helmet>
-        <title>FilterTube – יוטיוב מסונן וכשר | האלטרנטיבה החוקית ליוטיוב פרוץ | FilterPhone</title>
-        <meta name="description" content="FilterTube – יוטיוב מסונן וכשר בעברית. 3 רמות סינון, מצב אודיו, נגן ברקע, הורדות ואפס פרסומות. האלטרנטיבה הכשרה והחוקית ליוטיוב פרוץ. 60 יום ניסיון חינם." />
-        <meta name="keywords" content="יוטיוב מסונן, יוטיוב כשר, יוטיוב פרוץ, FilterTube, יוטיוב ללא פרסומות, YouTube כשר, סינון יוטיוב, יוטיוב לילדים, יוטיוב לחרדים, יוטיוב דתי, הורדת סרטונים, נגן ברקע יוטיוב" />
+        <title>FilterTube – יוטיוב מסונן וכשר להורדה APK | חלופה ליוטיוב פרוץ</title>
+        <meta name="description" content="FilterTube – יוטיוב מסונן וכשר בעברית להורדה חינם (APK). 3 רמות סינון, מצב אודיו, נגן ברקע, הורדות אופליין ואפס פרסומות. החלופה החוקית והבטוחה ליוטיוב פרוץ / YouTube Vanced / NewPipe. 60 יום פרימיום חינם." />
+        <meta name="keywords" content="יוטיוב מסונן, יוטיוב כשר, יוטיוב פרוץ, יוטיוב פרוץ להורדה, יוטיוב APK, YouTube כשר, YouTube Vanced חלופה, YouTube ReVanced עברית, NewPipe עברית, FilterTube, FilterTube APK, פילטר טיוב, סינון יוטיוב, יוטיוב לילדים, יוטיוב לחרדים, יוטיוב דתי, יוטיוב ללא פרסומות, הורדת סרטוני יוטיוב, נגן יוטיוב ברקע, יוטיוב אופליין, יוטיוב חלון צף, יוטיוב פרימיום חינם, אפליקציית וידאו כשרה, יוטיוב מסונן אנדרואיד" />
         <link rel="canonical" href="https://www.filterphone.com/filtertube" />
-        <meta property="og:title" content="FilterTube – יוטיוב מסונן וכשר | FilterPhone" />
-        <meta property="og:description" content="האלטרנטיבה הכשרה ליוטיוב פרוץ – 3 רמות סינון, מצב אודיו, נגן ברקע, הורדות. 60 יום ניסיון חינם." />
+        <meta property="og:title" content="FilterTube – יוטיוב מסונן וכשר להורדה חינם | חלופה ליוטיוב פרוץ" />
+        <meta property="og:description" content="החלופה הכשרה והחוקית ליוטיוב פרוץ – 3 רמות סינון, מצב אודיו, נגן ברקע, הורדות ואפס פרסומות. הורד APK חינם." />
         <meta property="og:url" content="https://www.filterphone.com/filtertube" />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="he_IL" />
+        <meta property="og:image" content="https://www.filterphone.com/filtertube/142716.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="FilterTube – יוטיוב מסונן וכשר להורדה" />
+        <meta name="twitter:description" content="החלופה החוקית והכשרה ליוטיוב פרוץ. הורד APK חינם." />
+        <meta name="twitter:image" content="https://www.filterphone.com/filtertube/142716.jpg" />
         <script type="application/ld+json">{JSON.stringify(softwareLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
       </Helmet>
