@@ -7,19 +7,21 @@ import {
   Radio, Video, Headphones, Settings2, Layers, Zap, Star, Check
 } from "lucide-react";
 
-// App screenshots (uploaded assets)
+// App screenshots (bundled in /public/filtertube – works on any host)
 const SHOTS = {
-  login:     "/__l5e/assets-v1/d682db2b-4fa3-4af6-967b-8a9670088303/142557.jpg",
-  password:  "/__l5e/assets-v1/e3e998d5-76b4-49a7-bd27-635f097f55d3/142641.jpg",
-  levels:    "/__l5e/assets-v1/5f3b2793-6a81-450c-9c65-6ab7a3243798/142652.jpg",
-  music:     "/__l5e/assets-v1/919bc3b7-6291-433a-9c7c-e7181ab7e4e1/142658.jpg",
-  success:   "/__l5e/assets-v1/343261fd-af07-41f3-9ae5-56307371f220/142705.jpg",
-  feed:      "/__l5e/assets-v1/b165193b-8ba1-4ade-b448-1c57b9ca2f13/142716.jpg",
-  player:    "/__l5e/assets-v1/6c65db35-21a7-41f9-acbf-693f47422e0b/142911.jpg",
-  overlay:   "/__l5e/assets-v1/4cce40b5-69f2-442c-be1e-f23833d055cf/143005.jpg",
-  quality:   "/__l5e/assets-v1/6cc3082f-960f-4855-a688-ac0cc9d82549/143022.jpg",
-  shorts:    "/__l5e/assets-v1/8de9a25d-cd2a-4a1b-8d13-3ca000a3dd1e/143258.jpg",
+  login:    "/filtertube/142557.jpg",
+  password: "/filtertube/142641.jpg",
+  levels:   "/filtertube/142652.jpg",
+  music:    "/filtertube/142658.jpg",
+  success:  "/filtertube/142705.jpg",
+  feed:     "/filtertube/142716.jpg",
+  player:   "/filtertube/142911.jpg",
+  overlay:  "/filtertube/143005.jpg",
+  quality:  "/filtertube/143022.jpg",
+  shorts:   "/filtertube/143258.jpg",
 };
+
+const APK_URL = "https://github.com/yeled-tov/filtertube-android/releases/latest/download/FilterTube-debug.apk";
 
 /* ---------- 3D Phone frame ---------- */
 const PhoneFrame = ({
