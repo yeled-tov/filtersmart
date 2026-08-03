@@ -24,6 +24,7 @@ const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const MyAccount = lazy(() => import("./pages/MyAccount"));
 const CrmDashboard = lazy(() => import("./pages/CrmDashboard"));
 const FilterTube = lazy(() => import("./pages/FilterTube"));
+const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
 
 const queryClient = new QueryClient();
 
@@ -60,6 +61,7 @@ const App = () => (
               <Route path="/admin" element={<Admin />} />
               <Route path="/crm-dashboard" element={<CrmDashboard />} />
               <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
