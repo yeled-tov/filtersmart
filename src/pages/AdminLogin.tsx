@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { lovable } from "@/integrations/lovable/index";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,6 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Shield, Mail } from "lucide-react";
 import { toast } from "sonner";
+
+// Only same-origin relative paths are accepted as a post-login destination.
+const safeNext = (value: string | null) =>
+  value && value.startsWith("/") && !value.startsWith("//") ? value : null;
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
@@ -16,15 +20,22 @@ const AdminLogin = () => {
   const [showForgot, setShowForgot] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotLoading, setForgotLoading] = useState(false);
-  const { signIn, isAdmin, loading: authLoading } = useAuth();
+  const { signIn, session, isAdmin, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const next = safeNext(params.get("next"));
 
-  // Redirect if already admin
+  // Redirect once signed in — back to `next` (e.g. an OAuth consent page) or the admin panel
   useEffect(() => {
-    if (!authLoading && isAdmin) {
+    if (authLoading) return;
+    if (next && session) {
+      window.location.href = next;
+      return;
+    }
+    if (isAdmin) {
       navigate("/admin", { replace: true });
     }
-  }, [isAdmin, authLoading, navigate]);
+  }, [isAdmin, session, next, authLoading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +51,7 @@ const AdminLogin = () => {
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
     const { error } = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
+      redirect_uri: next ? `${window.location.origin}${next}` : window.location.origin,
     });
     setGoogleLoading(false);
     if (error) {
