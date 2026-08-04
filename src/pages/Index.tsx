@@ -115,80 +115,135 @@ const Index = () => {
         <script type="application/ld+json">{JSON.stringify(howToJsonLd)}</script>
       </Helmet>
 
-      {/* Hero */}
-      <section className="relative overflow-hidden min-h-[520px] md:min-h-[600px] flex items-center">
-        <div className="absolute inset-0">
-          {/* Branded FilterPhone hero banner (optimized JPG, ~125KB) */}
-          <img
-            src="/hero.jpg"
-            alt="FilterPhone – סינון טלפונים מקצועי באשדוד"
-            className="absolute inset-0 w-full h-full object-cover"
-            width={1377}
-            height={768}
-            loading="eager"
-            fetchPriority="high"
-          />
-          {/* Dark overlay so white headline text remains readable on the banner */}
-          <div className="absolute inset-0 bg-gradient-to-l from-foreground/65 via-foreground/40 to-foreground/15" />
-        </div>
-        <div className="relative container-custom py-20 md:py-28 lg:py-36">
-          <motion.div
-            className="max-w-2xl"
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white text-sm font-medium mb-6 backdrop-blur-md border border-white/15">
-              <Shield className="w-4 h-4 text-green-300" />
-              משווק מורשה – הדרן, עסקן, כושר פליי
-            </div>
-            <h1 className="text-3xl md:text-5xl lg:text-[3.5rem] font-heading font-bold text-white leading-[1.15] mb-6 text-balance">
-              {heroTitle}
-              <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-l from-green-300 to-emerald-200">{heroSubtitle}</span>
-            </h1>
-            <p className="text-base md:text-lg text-white/75 mb-8 leading-relaxed max-w-xl">{heroDesc}</p>
+      {/* Hero – 3D bento grid */}
+      <section className="relative overflow-hidden bg-background bg-mesh scene-3d" aria-label="FilterPhone – סינון טלפונים באשדוד">
+        <div className="absolute inset-0 bg-grid" />
+        <div className="glow-orb w-[26rem] h-[26rem] bg-primary/40 -top-32 right-[-6rem]" />
+        <div className="glow-orb w-[22rem] h-[22rem] bg-accent/30 top-40 left-[-5rem]" />
+        <div className="glow-orb w-[20rem] h-[20rem] bg-secondary/25 bottom-[-6rem] left-1/3" />
 
-            <div className="flex flex-wrap items-center gap-3">
-              <a href={waLink} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="gradient-primary text-white border-0 shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-all text-base px-7 h-12">
-                  WhatsApp – הזמן עכשיו
-                </Button>
-              </a>
-              <a href="tel:0527186881">
-                <Button size="lg" variant="outline" className="bg-white/10 text-white border-white/20 hover:bg-white/20 backdrop-blur-sm text-base px-7 h-12 gap-2">
-                  <Phone className="w-4 h-4" />
-                  052-718-6881
-                </Button>
-              </a>
-            </div>
+        <div className="relative container-custom py-12 md:py-20">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:auto-rows-[168px]">
+            {/* Main hero tile */}
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="tile-3d md:col-span-8 md:row-span-3 p-7 md:p-10 flex flex-col justify-between overflow-hidden"
+            >
+              <div className="relative z-10">
+                <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/15 border border-primary/30 text-primary text-sm font-semibold mb-6">
+                  <Shield className="w-4 h-4" />
+                  משווק מורשה – הדרן, עסקן, כושר פליי
+                </span>
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold leading-[1.05] tracking-tight mb-5 text-balance">
+                  {heroTitle}
+                  <span className="block mt-2 gradient-text text-glow">{heroSubtitle}</span>
+                </h1>
+                <p className="text-base md:text-lg text-muted-foreground max-w-xl leading-relaxed">{heroDesc}</p>
+              </div>
 
-            {/* Quick stats */}
-            <div className="flex items-center gap-6 mt-10 pt-8 border-t border-white/10">
-              {[
-                { value: "500+", label: "לקוחות מרוצים" },
-                { value: "100₪", label: "סינון בסיסי מ-" },
-                { value: "5 דק׳", label: "זמן התקנה" },
-              ].map((stat, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 + i * 0.1 }}
-                  className="text-center"
-                >
-                  <div className="text-xl md:text-2xl font-heading font-bold text-white">{stat.value}</div>
-                  <div className="text-xs text-white/50 mt-0.5">{stat.label}</div>
-                </motion.div>
+              <div className="relative z-10 flex flex-wrap items-center gap-3 mt-8">
+                <a href="tel:0527186881">
+                  <Button size="lg" className="gradient-primary text-white border-0 h-12 px-7 text-base gap-2 shadow-lg shadow-primary/30 hover:scale-[1.03] transition-transform">
+                    <Phone className="w-4 h-4" />
+                    052-718-6881
+                  </Button>
+                </a>
+                <a href={waLink} target="_blank" rel="noopener noreferrer">
+                  <Button size="lg" variant="outline" className="h-12 px-7 text-base bg-white/5 border-white/15 hover:bg-white/10 backdrop-blur-md">
+                    WhatsApp – הזמן עכשיו
+                  </Button>
+                </a>
+              </div>
+            </motion.div>
+
+            {/* FilterTube tile */}
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="tile-3d md:col-span-4 md:row-span-2 p-7 flex flex-col justify-center text-center card-shine"
+            >
+              <div className="relative z-10 flex flex-col items-center">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-accent to-highlight flex items-center justify-center mb-4 shadow-lg shadow-accent/30">
+                  <Youtube className="w-8 h-8 text-white" />
+                </div>
+                <span className="text-[0.7rem] font-bold tracking-[0.2em] text-highlight mb-2">חדש</span>
+                <h2 className="text-2xl font-heading font-bold mb-2">FilterTube</h2>
+                <p className="text-sm text-muted-foreground mb-5 leading-relaxed">
+                  יוטיוב מסונן וכשר – ללא פרסומות וללא תכנים לא הולמים, עם 3 רמות סינון ומנעול הורים.
+                </p>
+                <Link to="/filtertube" className="w-full">
+                  <Button className="w-full h-11 bg-white text-background hover:bg-white/90 font-bold gap-2">
+                    לעמוד FilterTube
+                    <ArrowLeft className="w-4 h-4" />
+                  </Button>
+                </Link>
+              </div>
+            </motion.div>
+
+            {/* Stats */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }} className="tile-3d md:col-span-2 p-6 flex flex-col justify-center">
+              <div className="text-3xl font-heading font-bold gradient-text leading-none mb-1">500+</div>
+              <div className="text-xs text-muted-foreground tracking-wider">לקוחות מרוצים</div>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.24 }} className="tile-3d md:col-span-2 p-6 flex flex-col justify-center">
+              <div className="flex gap-0.5 mb-2">
+                {[1, 2, 3, 4, 5].map((n) => (
+                  <Star key={n} className="w-4 h-4 fill-highlight text-highlight" />
+                ))}
+              </div>
+              <div className="text-xs text-muted-foreground tracking-wider">5 כוכבים בגוגל</div>
+            </motion.div>
+
+            {/* Price anchor */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="tile-3d md:col-span-3 p-6 flex flex-col items-center justify-center gradient-border">
+              <div className="text-xs font-bold text-secondary mb-1">סינון בסיסי החל מ-</div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-4xl font-heading font-bold">100</span>
+                <span className="text-xl font-bold text-muted-foreground">₪</span>
+              </div>
+              <div className="text-xs text-muted-foreground mt-1">התקנה תוך 5 דקות</div>
+            </motion.div>
+
+            {/* Authorized partners */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.36 }} className="tile-3d md:col-span-5 p-6 flex items-center justify-around gap-3">
+              {["הדרן", "עסקן", "כושר פליי"].map((brand, i) => (
+                <div key={brand} className="flex items-center gap-3">
+                  {i > 0 && <span className="h-6 w-px bg-white/10" />}
+                  <span className="text-sm font-heading font-bold text-muted-foreground">{brand}</span>
+                </div>
               ))}
-            </div>
-          </motion.div>
+            </motion.div>
+
+            {/* WhatsApp helper */}
+            <motion.a
+              href={waLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.42 }}
+              className="tile-3d md:col-span-4 p-6 flex items-center gap-4 group"
+            >
+              <span className="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center shrink-0 shadow-lg shadow-[#25D366]/30">
+                <MessageCircle className="w-6 h-6 text-white" />
+              </span>
+              <span className="flex flex-col text-right">
+                <span className="font-bold text-foreground">צריכים עזרה בבחירה?</span>
+                <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">דברו איתנו בוואטסאפ</span>
+              </span>
+            </motion.a>
+          </div>
         </div>
       </section>
 
       <TrustStrip />
 
       {/* Features */}
-      <section className="section-padding bg-background bg-mesh" aria-label="יתרונות FilterPhone">
+      <section className="section-padding bg-background bg-mesh scene-3d" aria-label="יתרונות FilterPhone">
         <div className="container-custom">
           <AnimatedSection>
             <div className="text-center max-w-2xl mx-auto mb-14">
@@ -198,26 +253,27 @@ const Index = () => {
               <p className="text-muted-foreground text-lg">המומחים לסינון טלפונים והגנה דיגיטלית באשדוד</p>
             </div>
           </AnimatedSection>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { icon: Shield, title: "הגנה מקצועית", desc: "פתרונות סינון ברמה הגבוהה ביותר עם שכבות הגנה מרובות – הדרן, עסקן וכושר פליי", color: "from-blue-500 to-blue-600" },
-              { icon: Smartphone, title: "כל מכשיר, כל פלטפורמה", desc: "אייפון, גלקסי, סמסונג, שיאומי, וואווי, אנדרואיד, טאבלט ומחשב – הכתובת לכל סוג מכשיר", color: "from-violet-500 to-violet-600" },
-              { icon: Zap, title: "שירות מהיר", desc: "התקנה מקצועית ומהירה. סינון בסיסי תוך 5 דקות, צריבה תוך 30-60 דקות", color: "from-amber-500 to-orange-500" },
-              { icon: HeartHandshake, title: "מחירים הוגנים", desc: "סינון בסיסי מ-100₪ בלבד. מחירים שקופים ללא עלויות נסתרות, עם אחריות מלאה", color: "from-emerald-500 to-green-600" },
+              { icon: Shield, title: "הגנה מקצועית", desc: "פתרונות סינון ברמה הגבוהה ביותר עם שכבות הגנה מרובות – הדרן, עסקן וכושר פליי", color: "from-primary to-accent" },
+              { icon: Smartphone, title: "כל מכשיר, כל פלטפורמה", desc: "אייפון, גלקסי, סמסונג, שיאומי, וואווי, אנדרואיד, טאבלט ומחשב – הכתובת לכל סוג מכשיר", color: "from-secondary to-primary" },
+              { icon: Zap, title: "שירות מהיר", desc: "התקנה מקצועית ומהירה. סינון בסיסי תוך 5 דקות, צריבה תוך 30-60 דקות", color: "from-highlight to-accent" },
+              { icon: HeartHandshake, title: "מחירים הוגנים", desc: "סינון בסיסי מ-100₪ בלבד. מחירים שקופים ללא עלויות נסתרות, עם אחריות מלאה", color: "from-accent to-primary" },
             ].map((feature, i) => (
               <AnimatedSection key={i} delay={i * 0.08}>
-                <div className="bg-card rounded-2xl p-7 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group h-full border border-border/50 card-shine">
-                  <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-5 group-hover:scale-105 transition-transform shadow-sm`}>
+                <div className="tile-3d p-7 h-full card-shine">
+                  <div className={`relative z-10 w-12 h-12 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-5 shadow-lg shadow-primary/20`}>
                     <feature.icon className="w-5 h-5 text-white" />
                   </div>
-                  <h3 className="text-base font-heading font-semibold text-card-foreground mb-2">{feature.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed text-sm">{feature.desc}</p>
+                  <h3 className="relative z-10 text-base font-heading font-bold text-card-foreground mb-2">{feature.title}</h3>
+                  <p className="relative z-10 text-muted-foreground leading-relaxed text-sm">{feature.desc}</p>
                 </div>
               </AnimatedSection>
             ))}
           </div>
         </div>
       </section>
+
 
       {/* Filtering Services */}
       <section className="section-padding bg-muted/40" aria-label="שירותי סינון טלפונים">
