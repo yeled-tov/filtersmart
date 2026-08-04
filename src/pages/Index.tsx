@@ -276,7 +276,7 @@ const Index = () => {
 
 
       {/* Filtering Services */}
-      <section className="section-padding bg-muted/40" aria-label="שירותי סינון טלפונים">
+      <section className="section-padding bg-background bg-mesh scene-3d" aria-label="שירותי סינון טלפונים">
         <div className="container-custom">
           <AnimatedSection>
             <div className="text-center max-w-2xl mx-auto mb-14">
@@ -293,7 +293,7 @@ const Index = () => {
               <AnimatedSection key={service.slug} delay={i * 0.08}>
                 <Link
                   to={`/services/${service.slug}`}
-                  className="block bg-card rounded-2xl p-6 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden border border-border/50"
+                  className="tile-3d block p-6 group relative overflow-hidden card-shine"
                 >
                   {service.slug === "hadran" && (
                     <div className="absolute top-4 left-4 flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
@@ -304,7 +304,7 @@ const Index = () => {
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
                       {service.logo_url && (
-                        <img src={service.logo_url} alt={`${service.name} לוגו`} className="w-11 h-11 rounded-xl object-contain bg-muted p-1.5" loading="lazy" />
+                        <img src={service.logo_url} alt={`${service.name} לוגו`} className="w-11 h-11 rounded-xl object-contain bg-white/90 p-1.5" loading="lazy" />
                       )}
                       <div>
                         <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">
@@ -334,7 +334,7 @@ const Index = () => {
       </section>
 
       {/* Flashing Services */}
-      <section className="section-padding bg-background bg-mesh" aria-label="שירותי צריבת גרסאות">
+      <section className="section-padding bg-background scene-3d" aria-label="שירותי צריבת גרסאות">
         <div className="container-custom">
           <AnimatedSection>
             <div className="text-center max-w-2xl mx-auto mb-14">
@@ -351,7 +351,7 @@ const Index = () => {
               <AnimatedSection key={service.slug} delay={i * 0.08}>
                 <Link
                   to={`/services/${service.slug}`}
-                  className="block bg-card rounded-2xl p-6 card-shadow hover:card-shadow-hover hover:-translate-y-1 transition-all duration-300 group border border-border/50"
+                  className="tile-3d block p-6 group card-shine"
                 >
                   <div className="flex items-start justify-between mb-4">
                     <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">
