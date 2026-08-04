@@ -152,12 +152,20 @@
     @apply bg-card/85 backdrop-blur-2xl border border-border/60;
   }
 
-  /* Subtle gradient mesh background */
+  /* Vivid gradient mesh background */
   .bg-mesh {
     background-image:
-      radial-gradient(at 20% 20%, hsl(217 72% 48% / 0.04) 0px, transparent 50%),
-      radial-gradient(at 80% 80%, hsl(160 60% 42% / 0.04) 0px, transparent 50%),
-      radial-gradient(at 50% 50%, hsl(195 80% 42% / 0.02) 0px, transparent 50%);
+      radial-gradient(at 15% 10%, hsl(265 90% 62% / 0.20) 0px, transparent 55%),
+      radial-gradient(at 85% 15%, hsl(328 90% 60% / 0.16) 0px, transparent 55%),
+      radial-gradient(at 50% 95%, hsl(190 95% 52% / 0.14) 0px, transparent 55%);
+  }
+
+  .bg-grid {
+    background-image:
+      linear-gradient(hsl(0 0% 100% / 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(0 0% 100% / 0.035) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse at 50% 0%, black, transparent 75%);
   }
 
   /* Shine effect for premium cards */
@@ -172,13 +180,13 @@
     background: linear-gradient(
       105deg,
       transparent 40%,
-      hsl(0 0% 100% / 0.03) 45%,
-      hsl(0 0% 100% / 0.05) 50%,
-      hsl(0 0% 100% / 0.03) 55%,
+      hsl(0 0% 100% / 0.05) 45%,
+      hsl(0 0% 100% / 0.12) 50%,
+      hsl(0 0% 100% / 0.05) 55%,
       transparent 60%
     );
     pointer-events: none;
-    transition: transform 0.6s ease;
+    transition: transform 0.7s ease;
     transform: translateX(-100%);
   }
   .card-shine:hover::before {
@@ -196,9 +204,52 @@
     position: absolute;
     inset: -1px;
     border-radius: calc(var(--radius) + 1px);
-    background: linear-gradient(135deg, hsl(217 72% 48% / 0.2), hsl(160 60% 42% / 0.2));
+    background: var(--hero-gradient);
+    opacity: 0.5;
     z-index: -1;
   }
+
+  /* ===== 3D depth system ===== */
+  .scene-3d {
+    perspective: 1400px;
+    perspective-origin: 50% 40%;
+  }
+
+  .tile-3d {
+    position: relative;
+    transform-style: preserve-3d;
+    background: var(--gradient-tile);
+    border: 1px solid hsl(0 0% 100% / 0.08);
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease, border-color 0.4s ease;
+    will-change: transform;
+  }
+  .tile-3d::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(150deg, hsl(0 0% 100% / 0.07), transparent 45%);
+    pointer-events: none;
+  }
+  .tile-3d:hover {
+    transform: translateY(-6px) rotateX(3deg) rotateY(-3deg) scale(1.012);
+    box-shadow: var(--card-shadow-hover);
+    border-color: hsl(var(--primary) / 0.45);
+  }
+
+  .glow-orb {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(90px);
+    pointer-events: none;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 40px hsl(var(--primary) / 0.55);
+  }
+
 
   /* Floating animation */
   .animate-float {
