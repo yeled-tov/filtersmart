@@ -188,7 +188,7 @@ const Index = () => {
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-accent to-highlight flex items-center justify-center mb-4 shadow-lg shadow-accent/30">
                   <Youtube className="w-8 h-8 text-white" />
                 </div>
-                <span className="text-[0.7rem] font-bold tracking-[0.2em] text-highlight mb-2">חדש</span>
+                <span className="text-[0.7rem] font-bold text-highlight mb-2">חדש · אפליקציה</span>
                 <h2 className="text-2xl font-heading font-bold mb-2">FilterTube</h2>
                 <p className="text-sm text-muted-foreground mb-5 leading-relaxed">
                   יוטיוב מסונן וכשר – ללא פרסומות וללא תכנים לא הולמים, עם 3 רמות סינון ומנעול הורים.
