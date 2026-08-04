@@ -80,6 +80,11 @@ const Index = () => {
       },
       {
         "@type": "Question",
+        "name": "האם יש יוטיוב מסונן וכשר?",
+        "acceptedAnswer": { "@type": "Answer", "text": "כן – FilterTube היא אפליקציית יוטיוב מסונן וכשר שפיתחנו: 3 רמות סינון (מחמיר, רגיל, דתי-קל), מנעול הורים, מצב שמע בלבד, נגינה ברקע וללא פרסומות. ההורדה זמינה בעמוד FilterTube באתר: https://www.filterphone.com/filtertube" }
+      },
+      {
+        "@type": "Question",
         "name": "האם אתם מסננים גם גלקסי וסמסונג?",
         "acceptedAnswer": { "@type": "Answer", "text": "בהחלט! אנחנו מסננים את כל מכשירי סמסונג גלקסי (Galaxy S, Galaxy A, Galaxy Note) וכל מכשיר אנדרואיד אחר. כולל התקנת הדרן, עסקן, כושר פליי וסינון בסיסי." }
       }
@@ -101,18 +106,32 @@ const Index = () => {
     ]
   };
 
+  const serviceListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "שירותי סינון טלפונים – FilterPhone אשדוד",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "item": { "@type": "Service", "name": "סינון בסיסי לאייפון ואנדרואיד", "areaServed": "אשדוד", "provider": { "@type": "LocalBusiness", "name": "FilterPhone" }, "offers": { "@type": "Offer", "price": "100", "priceCurrency": "ILS" }, "url": "https://www.filterphone.com/services" } },
+      { "@type": "ListItem", "position": 2, "item": { "@type": "Service", "name": "התקנת כושר פליי (Kosher Play)", "areaServed": "אשדוד", "offers": { "@type": "Offer", "price": "70", "priceCurrency": "ILS" }, "url": "https://www.filterphone.com/services" } },
+      { "@type": "ListItem", "position": 3, "item": { "@type": "Service", "name": "התקנת הדרן (Hadran)", "areaServed": "אשדוד", "offers": { "@type": "Offer", "price": "300", "priceCurrency": "ILS" }, "url": "https://www.filterphone.com/services" } },
+      { "@type": "ListItem", "position": 4, "item": { "@type": "Service", "name": "התקנת עסקן (Askan)", "areaServed": "אשדוד", "offers": { "@type": "Offer", "price": "300", "priceCurrency": "ILS" }, "url": "https://www.filterphone.com/services" } },
+      { "@type": "ListItem", "position": 5, "item": { "@type": "Service", "name": "צריבת גרסה כשרה Xiaomi Qin", "areaServed": "אשדוד", "offers": { "@type": "Offer", "price": "70", "priceCurrency": "ILS" }, "url": "https://www.filterphone.com/services" } }
+    ]
+  };
+
   return (
     <>
       <SEOHead
         title="סינון טלפונים באשדוד מ-100₪ ⭐ 5.0 (47 חוות דעת) | FilterPhone פילטר פון"
         description="✅ הכתובת #1 לסינון טלפונים בישראל! סינון אייפון, גלקסי, אנדרואיד, מחשב – כל מכשיר, כל פלטפורמה. הדרן 300₪ | עסקן 300₪ | כושר פליי 70₪ | סינון בסיסי 100₪. משווק מורשה ✓ 500+ לקוחות מרוצים ☎ 052-718-6881"
         path="/"
-        keywords="סינון טלפון, סינון טלפון אשדוד, סינון אייפון, סינון אנדרואיד, סינון גלקסי, סינון סמסונג, סינון שיאומי, סינון מחשב, חסימת אינטרנט, הדרן, עסקן, כושר פליי, פילטר פון, FilterPhone, התקנת הדרן אשדוד, מחיר הדרן, מחיר סינון טלפון, סינון טלפון זול, סינון טלפון ילדים, סינון תוכן אינטרנט, צריבת גרסה שיאומי, סינון טלפון מחיר, חסימת אתרים בטלפון, סינון אייפון אשדוד, סינון גלקסי אשדוד, סינון טלפון לילדים, סינון נייד, חסימת אינטרנט באשדוד, נטפרי, רימון, סינון תוכן"
+        keywords="סינון טלפון, סינון טלפון אשדוד, סינון אייפון, סינון אנדרואיד, סינון גלקסי, סינון סמסונג, סינון שיאומי, סינון מחשב, חסימת אינטרנט, הדרן, עסקן, כושר פליי, פילטר פון, FilterPhone, התקנת הדרן אשדוד, מחיר הדרן, מחיר סינון טלפון, סינון טלפון זול, סינון טלפון ילדים, סינון תוכן אינטרנט, צריבת גרסה שיאומי, סינון טלפון מחיר, חסימת אתרים בטלפון, סינון אייפון אשדוד, סינון גלקסי אשדוד, סינון טלפון לילדים, סינון נייד, חסימת אינטרנט באשדוד, נטפרי, רימון, סינון תוכן, יוטיוב מסונן, יוטיוב כשר, FilterTube, אפליקציית יוטיוב מסונן"
       />
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(howToJsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(serviceListJsonLd)}</script>
       </Helmet>
 
       {/* Hero – 3D bento grid */}
@@ -434,6 +453,9 @@ const Index = () => {
             </p>
             <p>
               בין אם אתם מחפשים <strong className="text-foreground">סינון טלפון לילדים</strong>, <strong className="text-foreground">סינון טלפון זול</strong>, <strong className="text-foreground">חסימת אינטרנט באשדוד</strong>, <strong className="text-foreground">סינון תוכן למבוגרים</strong>, או פתרון הרמטי ברמה הגבוהה ביותר כמו <strong className="text-foreground">הדרן</strong> – FilterPhone פילטר פון הוא הכתובת שלכם. <strong className="text-foreground">כל מכשיר, כל פלטפורמה, כל רמת סינון – מקום אחד.</strong>
+            </p>
+            <p>
+              בנוסף פיתחנו את <Link to="/filtertube" className="text-primary font-semibold underline underline-offset-4">FilterTube – יוטיוב מסונן וכשר</Link>: אפליקציית אנדרואיד עם שלוש רמות סינון, מנעול הורים, מצב שמע בלבד ונגינה ברקע – חלופה נקייה ובטוחה לצפייה ביוטיוב.
             </p>
           </div>
         </div>
