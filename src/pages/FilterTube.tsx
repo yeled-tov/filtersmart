@@ -21,7 +21,7 @@ const SHOTS = {
   shorts:   "/filtertube/143258.jpg",
 };
 
-const APK_URL = "https://github.com/yeled-tov/filtertube-android/releases/latest/download/FilterTube-debug.apk";
+const APK_URL = "https://github.com/yeled-tov/filtertube-android/releases/latest/download/FilterTube.apk";
 
 /* ---------- 3D Phone frame ---------- */
 const PhoneFrame = ({
@@ -147,7 +147,7 @@ const FilterTube = () => {
       { "@type": "Question", name: "האם FilterTube חלופה ליוטיוב פרוץ?", acceptedAnswer: { "@type": "Answer", text: "כן. FilterTube מספקת את כל התכונות של יוטיוב פרוץ, YouTube Vanced ו-NewPipe – הורדות, נגן ברקע, ללא פרסומות – אך בסביבה מסוננת, כשרה וחוקית." } },
       { "@type": "Question", name: "איפה להוריד את FilterTube APK?", acceptedAnswer: { "@type": "Answer", text: "אפשר להוריד את קובץ ה-APK ישירות מהאתר בכפתור \"הורד APK\", או מ-GitHub של הפרויקט. ההתקנה חינמית ולא דורשת חשבון." } },
       { "@type": "Question", name: "האם יש רמות סינון?", acceptedAnswer: { "@type": "Answer", text: "כן, שלוש רמות: מחמיר (אודיו בלבד), רגיל (וידאו מלא), וקל דתי (תכני קודש כאודיו)." } },
-      { "@type": "Question", name: "האם יש נגן ברקע?", acceptedAnswer: { "@type": "Answer", text: "כן, נגן ברקע וחלון צף (Floating window) זמינים במנוי הפרימיום, כולל 60 יום ניסיון חינם." } },
+      { "@type": "Question", name: "האם יש נגן ברקע?", acceptedAnswer: { "@type": "Answer", text: "כן, נגן ברקע וחלון צף (Floating window) זמינים במנוי הפרימיום, כולל 30 יום ניסיון חינם." } },
     ],
   };
 
@@ -155,7 +155,7 @@ const FilterTube = () => {
     <div className="relative overflow-hidden bg-[#0a0508] text-white [background-image:radial-gradient(1200px_600px_at_80%_-10%,rgba(239,68,68,0.18),transparent_60%),radial-gradient(900px_500px_at_0%_30%,rgba(249,115,22,0.10),transparent_60%),radial-gradient(1000px_600px_at_50%_110%,rgba(236,72,153,0.10),transparent_60%)]" dir="rtl">
       <Helmet>
         <title>FilterTube – יוטיוב מסונן וכשר להורדה APK | חלופה ליוטיוב פרוץ</title>
-        <meta name="description" content="FilterTube – יוטיוב מסונן וכשר בעברית להורדה חינם (APK). 3 רמות סינון, מצב אודיו, נגן ברקע, הורדות אופליין ואפס פרסומות. החלופה החוקית והבטוחה ליוטיוב פרוץ / YouTube Vanced / NewPipe. 60 יום פרימיום חינם." />
+        <meta name="description" content="FilterTube – יוטיוב מסונן וכשר בעברית להורדה חינם (APK). 3 רמות סינון, מצב אודיו, נגן ברקע, הורדות אופליין ואפס פרסומות. החלופה החוקית והבטוחה ליוטיוב פרוץ / YouTube Vanced / NewPipe. 30 יום פרימיום חינם." />
         <meta name="keywords" content="יוטיוב מסונן, יוטיוב כשר, יוטיוב פרוץ, יוטיוב פרוץ להורדה, יוטיוב APK, YouTube כשר, YouTube Vanced חלופה, YouTube ReVanced עברית, NewPipe עברית, FilterTube, FilterTube APK, פילטר טיוב, סינון יוטיוב, יוטיוב לילדים, יוטיוב לחרדים, יוטיוב דתי, יוטיוב ללא פרסומות, הורדת סרטוני יוטיוב, נגן יוטיוב ברקע, יוטיוב אופליין, יוטיוב חלון צף, יוטיוב פרימיום חינם, אפליקציית וידאו כשרה, יוטיוב מסונן אנדרואיד" />
         <link rel="canonical" href="https://www.filterphone.com/filtertube" />
         <meta property="og:title" content="FilterTube – יוטיוב מסונן וכשר להורדה חינם | חלופה ליוטיוב פרוץ" />
@@ -196,7 +196,7 @@ const FilterTube = () => {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" />
                 </span>
-                חדש · 60 יום ניסיון חינם
+                חדש · 30 יום ניסיון חינם
               </motion.div>
 
               <motion.h1
@@ -240,7 +240,7 @@ const FilterTube = () => {
                   target="_blank" rel="noopener noreferrer"
                   className="group inline-flex items-center gap-2 rounded-full border border-red-400/40 bg-red-500/10 px-6 py-3.5 text-sm font-bold text-white backdrop-blur transition hover:bg-red-500/20"
                 >
-                  התחל 60 יום חינם
+                  התחל 30 יום חינם
                   <Zap className="h-4 w-4 transition-transform group-hover:rotate-12" />
                 </a>
               </motion.div>
@@ -340,7 +340,7 @@ const FilterTube = () => {
                 האפליקציה תדע איזה תוכן להראות – ובעיקר – איזה להסתיר.
               </p>
               <ul className="space-y-3">
-                {["התאמה לפי מגדר וגיל", "קוד הורים לנעילת הגדרות", "3 רמות סינון בלחיצה אחת", "60 יום פרימיום חינם"].map((t) => (
+                {["התאמה לפי מגדר וגיל", "קוד הורים לנעילת הגדרות", "3 רמות סינון בלחיצה אחת", "30 יום פרימיום חינם"].map((t) => (
                   <li key={t} className="flex items-center gap-3 text-white/80">
                     <div className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500/20 ring-1 ring-red-500/40">
                       <Check className="h-3 w-3 text-red-400" />
@@ -464,7 +464,7 @@ const FilterTube = () => {
               { q: "מה זה FilterTube ואיך זה שונה מיוטיוב רגיל?", a: "FilterTube היא אפליקציית וידאו כשרה שמבוססת על תוכן יוטיוב אבל עם סינון AI קפדני, שלוש רמות סינון להורים ותכונות פרימיום כמו נגן ברקע והורדות – בלי פרסומות ובלי סיכון תוכן לא ראוי." },
               { q: "האם זו חלופה חוקית ליוטיוב פרוץ?", a: "בהחלט. FilterTube נותנת את כל התכונות של יוטיוב פרימיום ואפליקציות פרוצות (הורדות, רקע, ללא פרסומות) – אבל בסביבה חוקית, בטוחה וכשרה." },
               { q: "יש רמות סינון שונות?", a: "כן. מחמיר – אודיו בלבד, ללא וידאו. רגיל – וידאו מסונן. קל דתי – רוב התוכן וידאו, אך תכני קודש עוברים לאודיו כדי לשמור על כבוד." },
-              { q: "האם הפרימיום באמת חינם ל-60 יום?", a: "כן, 60 ימי ניסיון מלאים – כולל הורדות, נגן ברקע, חלון צף וכל שאר התכונות. לא נדרש אמצעי תשלום להתחלה." },
+              { q: "האם הפרימיום באמת חינם ל-30 יום?", a: "כן, 30 ימי ניסיון מלאים – כולל הורדות, נגן ברקע, חלון צף וכל שאר התכונות. לא נדרש אמצעי תשלום להתחלה." },
               { q: "האם ילדים יכולים להשתמש?", a: "כן. יש קוד הורים בן 4 ספרות שנועל את ההגדרות, כך שרק ההורה יכול לשנות רמת סינון או להסיר אמנים." },
               { q: "האם FilterTube זמין לאייפון?", a: "בשלב זה האפליקציה זמינה לאנדרואיד. גרסת iOS בפיתוח – השאירו פרטים ונעדכן אתכם." },
             ].map((item, i) => (
@@ -495,7 +495,7 @@ const FilterTube = () => {
               <span className="bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">רגוע יותר.</span>
             </h2>
             <p className="relative mt-5 text-lg text-white/70 max-w-xl mx-auto">
-              60 יום פרימיום חינם. ללא כרטיס אשראי. ללא סיכון.
+              30 יום פרימיום חינם. ללא כרטיס אשראי. ללא סיכון.
             </p>
             <div className="relative mt-8 flex flex-wrap justify-center gap-3">
               <a
