@@ -177,10 +177,9 @@ const FilterTube = () => {
       <section ref={heroRef} className="relative isolate min-h-[100vh] pt-24 pb-16">
         {/* Background */}
         <div className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(239,68,68,0.25),transparent_60%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,rgba(0,0,0,0.4)_60%,#000_100%)]" />
-          <div className="absolute inset-0 opacity-[0.06]"
-               style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(239,68,68,0.16),transparent_58%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,rgba(0,0,0,0.55)_60%,#000_100%)]" />
+          <div className="absolute inset-0 texture-weave opacity-70" />
         </div>
 
         <motion.div style={{ y: heroY, opacity: heroOpacity }} className="container-custom">
@@ -191,32 +190,27 @@ const FilterTube = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="mb-6 inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/10 px-4 py-1.5 text-xs font-medium text-red-300 backdrop-blur"
+                className="mb-7 inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/[0.07] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-red-400"
               >
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" />
-                </span>
-                חדש · 30 יום ניסיון חינם
+                <span className="h-1 w-1 animate-pulse rounded-full bg-red-500" />
+                30 יום ניסיון חינם
               </motion.div>
 
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.1 }}
-                className="text-5xl md:text-7xl font-black leading-[0.95] tracking-tight"
+                className="font-display text-[2.85rem] md:text-[4.6rem] font-black leading-[0.95] tracking-tight"
               >
-                <span className="block">יוטיוב שסוף־סוף</span>
-                <span className="block bg-gradient-to-r from-red-400 via-red-500 to-orange-400 bg-clip-text text-transparent">
-                  אפשר לסמוך עליו.
-                </span>
+                <span className="block">הדרך הנקייה</span>
+                <span className="block text-red-500">לצפות ביוטיוב.</span>
               </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.25 }}
-                className="mt-6 max-w-xl text-lg md:text-xl text-white/70 leading-relaxed"
+                className="mt-6 max-w-md text-base md:text-lg font-light text-white/60 leading-relaxed"
               >
                 FilterTube – החלופה הכשרה, המסוננת והחוקית ליוטיוב פרוץ.
                 שלוש רמות סינון, מצב אודיו, נגן ברקע, הורדות ואפס פרסומות – הכל בעברית.
@@ -226,31 +220,40 @@ const FilterTube = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="mt-8 flex flex-wrap gap-3"
+                className="mt-9 max-w-sm space-y-3"
               >
-                <ApkDownloadButton href={APK_URL} />
+                <ApkDownloadButton href={APK_URL} label="הורדה ישירה APK" block />
                 <a
                   href="https://wa.me/972527186881?text=שלום%20אשמח%20לפרטים%20על%20FilterTube"
                   target="_blank" rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-2 rounded-full border border-red-400/40 bg-red-500/10 px-6 py-3.5 text-sm font-bold text-white backdrop-blur transition hover:bg-red-500/20"
+                  className="group flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-transparent py-3 text-sm font-semibold text-white/80 transition-colors hover:bg-white/5"
                 >
-                  התחל 30 יום חינם
-                  <Zap className="h-4 w-4 transition-transform group-hover:rotate-12" />
+                  מענה אנושי בוואטסאפ
+                  <Zap className="h-4 w-4 text-emerald-400 transition-transform group-hover:rotate-12" />
                 </a>
               </motion.div>
 
               <motion.div
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
-                className="mt-8 flex items-center gap-6 text-xs text-white/50"
+                className="mt-9 flex max-w-sm items-center justify-between hairline-t pt-7"
               >
-                <div className="flex items-center gap-1.5">
-                  <div className="flex">{Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />)}</div>
-                  <span>5.0 · 47 חוות דעת</span>
+                <div className="text-center">
+                  <div className="font-display text-lg font-bold">5.0</div>
+                  <div className="text-[9px] uppercase tracking-widest text-white/40">דירוג</div>
                 </div>
-                <div className="flex items-center gap-1.5"><Users className="h-3.5 w-3.5" />500+ משתמשים</div>
-                <div className="flex items-center gap-1.5"><Shield className="h-3.5 w-3.5" />100% כשר</div>
+                <div className="h-8 w-px bg-white/[0.08]" />
+                <div className="text-center">
+                  <div className="font-display text-lg font-bold">500+</div>
+                  <div className="text-[9px] uppercase tracking-widest text-white/40">משתמשים</div>
+                </div>
+                <div className="h-8 w-px bg-white/[0.08]" />
+                <div className="text-center">
+                  <Shield className="mx-auto h-5 w-5 text-red-500" />
+                  <div className="text-[9px] uppercase tracking-widest text-white/40">כשר ומוגן</div>
+                </div>
               </motion.div>
             </div>
+
 
             {/* 3 Floating phones */}
             <div className="relative h-[560px] md:h-[640px]">

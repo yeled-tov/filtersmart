@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Heebo:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Frank+Ruhl+Libre:wght@500;700;900&family=Assistant:wght@300;400;600;700&family=Heebo:wght@300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -254,6 +254,24 @@
   /* Floating animation */
   .animate-float {
     animation: float 6s ease-in-out infinite;
+  }
+
+  /* Editorial serif display type (Hebrew) */
+  .font-display {
+    font-family: 'Frank Ruhl Libre', 'Heebo', serif;
+    font-feature-settings: "kern" 1;
+  }
+
+  /* Fine carbon-weave texture for premium dark surfaces */
+  .texture-weave {
+    background-image:
+      repeating-linear-gradient(45deg, hsl(0 0% 100% / 0.022) 0 1px, transparent 1px 4px),
+      repeating-linear-gradient(-45deg, hsl(0 0% 100% / 0.022) 0 1px, transparent 1px 4px);
+    background-size: 6px 6px;
+  }
+
+  .hairline-t {
+    border-top: 1px solid hsl(0 0% 100% / 0.07);
   }
 
   /* Text balance for Hebrew */

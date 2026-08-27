@@ -15,6 +15,7 @@ export default {
     extend: {
       fontFamily: {
         heading: ["Space Grotesk", "Heebo", "sans-serif"],
+        display: ["Frank Ruhl Libre", "Heebo", "serif"],
         body: ["Heebo", "sans-serif"],
       },
 
