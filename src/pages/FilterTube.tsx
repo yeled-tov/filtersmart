@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
+import ApkDownloadButton from "@/components/ApkDownloadButton";
 import {
   Shield, Music, Lock, Download, Play, Sparkles, Users, ChevronDown,
   Radio, Video, Headphones, Settings2, Layers, Zap, Star, Check
@@ -227,14 +228,7 @@ const FilterTube = () => {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="mt-8 flex flex-wrap gap-3"
               >
-                <a
-                  href={APK_URL}
-                  download
-                  className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-red-500 to-orange-500 px-6 py-3.5 text-sm font-bold text-white shadow-[0_10px_40px_-10px_rgba(239,68,68,0.7)] transition hover:brightness-110 hover:shadow-[0_15px_50px_-10px_rgba(239,68,68,0.9)]"
-                >
-                  <Download className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
-                  הורד APK · חינם
-                </a>
+                <ApkDownloadButton href={APK_URL} />
                 <a
                   href="https://wa.me/972527186881?text=שלום%20אשמח%20לפרטים%20על%20FilterTube"
                   target="_blank" rel="noopener noreferrer"
@@ -498,14 +492,7 @@ const FilterTube = () => {
               30 יום פרימיום חינם. ללא כרטיס אשראי. ללא סיכון.
             </p>
             <div className="relative mt-8 flex flex-wrap justify-center gap-3">
-              <a
-                href={APK_URL}
-                download
-                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-red-500 to-orange-500 px-8 py-4 text-sm font-bold text-white shadow-[0_10px_40px_-10px_rgba(239,68,68,0.8)] transition hover:brightness-110"
-              >
-                <Download className="h-4 w-4" />
-                הורד APK עכשיו
-              </a>
+              <ApkDownloadButton href={APK_URL} label="הורד APK עכשיו" size="lg" className="items-center" />
               <a
                 href="https://wa.me/972527186881?text=שלום%20אשמח%20לפרטים%20על%20FilterTube"
                 target="_blank" rel="noopener noreferrer"
