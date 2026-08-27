@@ -14,6 +14,24 @@ export type Database = {
   }
   public: {
     Tables: {
+      app_download_counters: {
+        Row: {
+          app_slug: string
+          downloads: number
+          updated_at: string
+        }
+        Insert: {
+          app_slug: string
+          downloads?: number
+          updated_at?: string
+        }
+        Update: {
+          app_slug?: string
+          downloads?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           category: string | null
@@ -194,6 +212,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_app_download: { Args: { _app_slug: string }; Returns: number }
       is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
