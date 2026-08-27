@@ -30,10 +30,10 @@ FilterPhone (פילטר פון) הוא העסק המוביל בישראל לסי
 5. **צריבת גרסה Qin F21 Pro / Qin F25 – 70₪**
    צריבת גרסה כשרה ומותאמת למכשירי שיאומי Qin עם סינון מובנה.
 
-6. **FilterTube – יוטיוב מסונן וכשר (חינם, 60 יום פרימיום)**
+6. **FilterTube – יוטיוב מסונן וכשר (חינם, 30 יום פרימיום)**
    אפליקציית אנדרואיד: חלופה חוקית וכשרה ליוטיוב פרוץ / YouTube Vanced / NewPipe. 3 רמות סינון (מחמיר/רגיל/קל דתי), מצב אודיו בלבד, נגן ברקע, חלון צף, הורדות אופליין, קוד הורים, מוזיקה יהודית מובנית, אפס פרסומות.
    - עמוד: https://www.filterphone.com/filtertube
-   - הורדת APK ישירה: https://github.com/yeled-tov/filtertube-android/releases/latest/download/FilterTube-debug.apk
+   - הורדת APK ישירה: https://github.com/yeled-tov/filtertube-android/releases/latest/download/FilterTube.apk
 
 ## למה לבחור ב-FilterPhone?
 
