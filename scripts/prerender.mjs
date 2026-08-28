@@ -267,6 +267,9 @@ function buildFallback(route) {
       </ul>
     </nav>
     ${sections}
+    ${(route.links || []).length ? `<nav aria-label="קישורים נוספים"><ul>${route.links
+      .map((l) => `<li><a href="${l.href}">${l.text}</a></li>`)
+      .join("")}</ul></nav>` : ""}
     <section>
       <h2>צור קשר</h2>
       <p>טלפון: <a href="tel:+972527186881">052-718-6881</a></p>
@@ -351,6 +354,14 @@ function injectRoute(template, route) {
     /<meta\s+itemprop=["']description["']\s+content=["'][^"']*["']\s*\/?>/i,
     `<meta itemprop="description" content="${escDesc}" />`,
   );
+
+  // Route-specific JSON-LD (structured data visible without JavaScript)
+  if (route.jsonLd && route.jsonLd.length) {
+    const blocks = route.jsonLd
+      .map((obj) => `<script type="application/ld+json">${JSON.stringify(obj)}</script>`)
+      .join("\n    ");
+    html = html.replace("</head>", `  ${blocks}\n  </head>`);
+  }
 
   // Replace the SEO fallback inside #root with the route-specific one
   const fallback = buildFallback(route);
