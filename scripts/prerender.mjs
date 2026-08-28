@@ -14,6 +14,8 @@ const indexPath = path.join(distDir, "index.html");
 
 const SITE_URL = "https://www.filterphone.com";
 const OG_IMAGE = "https://www.filterphone.com/hero.jpg";
+const APK_URL =
+  "https://github.com/yeled-tov/filtertube-android/releases/latest/download/FilterTube.apk";
 
 // Per-route SEO metadata + fallback body content
 // Every route here will get its own prerendered HTML shell.
@@ -180,6 +182,71 @@ const routes = [
       {
         h2: "למי זה מתאים?",
         text: "להורים שרוצים יוטיוב לילדים בלי הפתעות, לבחורי ישיבה ולציבור החרדי והדתי שמחפשים יוטיוב כשר, ולכל מי שרוצה יוטיוב ללא פרסומות בצורה חוקית. מחפשים גם סינון לטלפון עצמו? ראו את שירותי הסינון שלנו – הדרן, עסקן וכושר פליי.",
+      },
+    ],
+    jsonLd: [
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        name: "FilterTube – יוטיוב מסונן כשר",
+        alternateName: ["פילטר טיוב", "FilterTube APK", "יוטיוב כשר", "יוטיוב מסונן"],
+        operatingSystem: "Android 7.0+",
+        applicationCategory: "MultimediaApplication",
+        applicationSubCategory: "VideoApplication",
+        inLanguage: "he",
+        url: "https://www.filterphone.com/filtertube",
+        downloadUrl: APK_URL,
+        installUrl: APK_URL,
+        softwareVersion: "latest",
+        fileSize: "25MB",
+        offers: { "@type": "Offer", price: "0", priceCurrency: "ILS", availability: "https://schema.org/InStock" },
+        aggregateRating: { "@type": "AggregateRating", ratingValue: "5", ratingCount: "47", bestRating: "5" },
+        description:
+          "אפליקציית יוטיוב מסונן וכשר בעברית לאנדרואיד. חלופה חוקית ליוטיוב פרוץ / YouTube Vanced / NewPipe: 3 רמות סינון, מצב אודיו, נגן ברקע, חלון צף, הורדות אופליין ואפס פרסומות.",
+        publisher: { "@type": "Organization", name: "FilterPhone", url: "https://www.filterphone.com" },
+        screenshot: [
+          "https://www.filterphone.com/filtertube/142716.jpg",
+          "https://www.filterphone.com/filtertube/142911.jpg",
+          "https://www.filterphone.com/filtertube/143258.jpg",
+        ],
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "בית", item: "https://www.filterphone.com/" },
+          { "@type": "ListItem", position: 2, name: "יוטיוב מסונן – FilterTube", item: "https://www.filterphone.com/filtertube" },
+        ],
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "מה זה יוטיוב מסונן ואיך מורידים אותו?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "יוטיוב מסונן הוא נגן וידאו שמציג רק תוכן שעבר סינון. FilterTube היא אפליקציית אנדרואיד חינמית להורדה כקובץ APK מהעמוד שלנו, ללא צורך בחשבון וללא רוט.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "האם FilterTube חלופה ליוטיוב פרוץ?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "כן. FilterTube מספקת את כל התכונות של יוטיוב פרוץ, YouTube Vanced ו-NewPipe – הורדות, נגן ברקע וללא פרסומות – בסביבה מסוננת, כשרה וחוקית.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "האם הפרימיום חינם?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "כן, 30 יום פרימיום חינם הכוללים הורדות, נגן ברקע וחלון צף, ללא צורך באמצעי תשלום.",
+            },
+          },
+        ],
       },
     ],
     links: [
