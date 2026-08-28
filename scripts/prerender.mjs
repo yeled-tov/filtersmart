@@ -12,8 +12,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.resolve(__dirname, "..", "dist");
 const indexPath = path.join(distDir, "index.html");
 
-const SITE_URL = "https://filterphone.com";
-const OG_IMAGE = "https://filterphone.com/hero.jpg";
+const SITE_URL = "https://www.filterphone.com";
+const OG_IMAGE = "https://www.filterphone.com/hero.jpg";
+const APK_URL =
+  "https://github.com/yeled-tov/filtertube-android/releases/latest/download/FilterTube.apk";
 
 // Per-route SEO metadata + fallback body content
 // Every route here will get its own prerendered HTML shell.
@@ -21,18 +23,18 @@ const routes = [
   {
     path: "/",
     title:
-      "סינון טלפונים באשדוד מ-20₪ ⭐ 5.0 (47 חוות דעת) | FilterPhone פילטר פון",
+      "סינון טלפונים באשדוד מ-100₪ ⭐ 5.0 (47 חוות דעת) | FilterPhone פילטר פון",
     description:
-      "✅ הכתובת #1 לסינון טלפונים בישראל! אייפון, גלקסי, אנדרואיד, מחשב – כל מכשיר. הדרן 300₪ | עסקן 300₪ | כושר פליי 70₪ | סינון בסיסי 20₪. משווק מורשה ✓ 500+ לקוחות ☎ 052-718-6881",
+      "✅ הכתובת #1 לסינון טלפונים בישראל! אייפון, גלקסי, אנדרואיד, מחשב – כל מכשיר. הדרן 300₪ | עסקן 300₪ | כושר פליי 70₪ | סינון בסיסי 100₪. משווק מורשה ✓ 500+ לקוחות ☎ 052-718-6881",
     keywords:
       "סינון טלפון, סינון טלפון אשדוד, סינון אייפון, סינון גלקסי, סינון סמסונג, סינון אנדרואיד, הדרן, עסקן, כושר פליי, FilterPhone, פילטר פון",
-    h1: "FilterPhone – סינון טלפונים מקצועי באשדוד מ-20₪",
+    h1: "FilterPhone – סינון טלפונים מקצועי באשדוד מ-100₪",
     lead: "הכתובת #1 בישראל לסינון טלפונים – אייפון, גלקסי, סמסונג, שיאומי, אנדרואיד, מחשב וטאבלט. משווק מורשה של הדרן, עסקן וכושר פליי. 500+ לקוחות מרוצים, דירוג 5.0 עם 47 חוות דעת.",
     sections: [
       {
         h2: "השירותים שלנו",
         items: [
-          "סינון בסיסי – 20₪ – התקנה תוך 5 דקות לאייפון ואנדרואיד",
+          "סינון בסיסי – 100₪ – התקנה תוך 5 דקות לאייפון ואנדרואיד",
           "כושר פליי (Kosher Play) – 70₪ – חנות אפליקציות כשרה + MDM",
           "הדרן (Hadran) – 300₪ – ההגנה ההרמטית ביותר, לא ניתן להסרה",
           "עסקן (Askan) – 300₪ – סינון AI חכם לאנשי עסקים",
@@ -48,9 +50,9 @@ const routes = [
   {
     path: "/services",
     title:
-      "שירותי סינון טלפון באשדוד מ-20₪ | אייפון, גלקסי, אנדרואיד – FilterPhone",
+      "שירותי סינון טלפון באשדוד מ-100₪ | אייפון, גלקסי, אנדרואיד – FilterPhone",
     description:
-      "✅ כל שירותי הסינון במקום אחד: סינון בסיסי 20₪, כושר פליי 70₪, הדרן 300₪, עסקן 300₪. אייפון, גלקסי, סמסונג, שיאומי – כל מכשיר. צריבת גרסה Qin 70₪ ☎ 052-718-6881",
+      "✅ כל שירותי הסינון במקום אחד: סינון בסיסי 100₪, כושר פליי 70₪, הדרן 300₪, עסקן 300₪. אייפון, גלקסי, סמסונג, שיאומי – כל מכשיר. צריבת גרסה Qin 70₪ ☎ 052-718-6881",
     keywords:
       "סינון טלפון אשדוד, סינון אייפון, סינון גלקסי, סינון סמסונג, התקנת הדרן, כושר פליי התקנה, עסקן התקנה, צריבת גרסה שיאומי",
     h1: "השירותים שלנו",
@@ -59,7 +61,7 @@ const routes = [
       {
         h2: "סינון טלפונים והגנה דיגיטלית",
         items: [
-          "סינון בסיסי לאייפון ואנדרואיד – 20₪",
+          "סינון בסיסי לאייפון ואנדרואיד – 100₪",
           "מערכת כושר פליי (Kosher Play) – 70₪",
           "מערכת הדרן (Hadran) – 300₪ – הכי פופולרי",
           "מערכת סינון עסקן (Askan) – 300₪",
@@ -76,11 +78,11 @@ const routes = [
   },
   {
     path: "/services/basic-filtering",
-    title: "סינון בסיסי לאייפון ואנדרואיד – 20₪ | FilterPhone אשדוד",
+    title: "סינון בסיסי לאייפון ואנדרואיד – 100₪ | FilterPhone אשדוד",
     description:
-      "סינון אינטרנט בסיסי לאייפון וגלקסי – התקנה תוך 5 דקות בלבד, חסימת אתרים לא רצויים, מחיר 20₪ בלבד. שירות מהיר באשדוד ☎ 052-718-6881",
+      "סינון אינטרנט בסיסי לאייפון וגלקסי – התקנה תוך 5 דקות בלבד, חסימת אתרים לא רצויים, מחיר 100₪ בלבד. שירות מהיר באשדוד ☎ 052-718-6881",
     keywords: "סינון בסיסי, סינון אייפון 20 שקל, סינון זול, חסימת אתרים",
-    h1: "סינון בסיסי לאייפון ואנדרואיד – 20₪",
+    h1: "סינון בסיסי לאייפון ואנדרואיד – 100₪",
     lead: "פתרון מהיר ויעיל לחסימת תוכן לא רצוי – התקנה תוך 5 דקות בלבד.",
   },
   {
@@ -148,13 +150,13 @@ const routes = [
   },
   {
     path: "/filtertube",
-    title: "FilterTube – יוטיוב מסונן וכשר | האלטרנטיבה החוקית ליוטיוב פרוץ | FilterPhone",
+    title: "יוטיוב מסונן וכשר להורדה – FilterTube APK | חלופה ליוטיוב פרוץ",
     description:
-      "FilterTube – יוטיוב מסונן וכשר בעברית. 3 רמות סינון, מצב אודיו, נגן ברקע, הורדות ואפס פרסומות. האלטרנטיבה הכשרה והחוקית ליוטיוב פרוץ. 60 יום ניסיון חינם.",
+      "יוטיוב מסונן וכשר בעברית להורדה חינם (APK) – FilterTube. 3 רמות סינון, מצב אודיו, נגן ברקע, הורדות אופליין ואפס פרסומות. החלופה החוקית ליוטיוב פרוץ / YouTube Vanced. 30 יום פרימיום חינם.",
     keywords:
-      "יוטיוב מסונן, יוטיוב כשר, יוטיוב פרוץ, FilterTube, יוטיוב ללא פרסומות, YouTube כשר, סינון יוטיוב, יוטיוב לילדים, יוטיוב לחרדים, יוטיוב דתי, הורדת סרטונים, נגן ברקע",
-    h1: "FilterTube – יוטיוב מסונן וכשר",
-    lead: "החלופה הכשרה, המסוננת והחוקית ליוטיוב פרוץ – 3 רמות סינון, מצב אודיו, נגן ברקע, הורדות ואפס פרסומות. 60 יום ניסיון חינם.",
+      "יוטיוב מסונן, יוטיוב מסונן להורדה, יוטיוב כשר, יוטיוב פרוץ, יוטיוב פרוץ להורדה, יוטיוב APK, FilterTube, FilterTube APK, פילטר טיוב, YouTube Vanced חלופה, YouTube ReVanced עברית, NewPipe עברית, סינון יוטיוב, יוטיוב לילדים, יוטיוב לחרדים, יוטיוב דתי, יוטיוב ללא פרסומות, נגן יוטיוב ברקע, יוטיוב אופליין, אפליקציית יוטיוב מסונן לאנדרואיד",
+    h1: "יוטיוב מסונן וכשר – FilterTube להורדה (APK)",
+    lead: "FilterTube היא אפליקציית יוטיוב מסונן וכשר בעברית לאנדרואיד – החלופה החוקית והבטוחה ליוטיוב פרוץ, YouTube Vanced ו-NewPipe. 3 רמות סינון, מצב אודיו, נגן ברקע, הורדות אופליין ואפס פרסומות. 30 יום פרימיום חינם.",
     sections: [
       {
         h2: "התכונות המרכזיות של FilterTube",
@@ -166,16 +168,99 @@ const routes = [
           "קוד הורים בן 4 ספרות לנעילת ההגדרות",
           "מוזיקה יהודית מובנית: אברהם פריד, 8thDay, שוואקי ועוד",
           "ללא פרסומות, ללא תגובות פרובוקטיביות, ללא אלגוריתם רעיל",
-          "60 יום פרימיום חינם – ללא כרטיס אשראי",
+          "30 יום פרימיום חינם – ללא כרטיס אשראי",
         ],
       },
       {
         h2: "החלופה הכשרה ליוטיוב פרוץ",
-        text: "FilterTube נותנת את כל התכונות של יוטיוב פרימיום ואפליקציות פרוצות – הורדות, נגן ברקע, ללא פרסומות – בסביבה חוקית, בטוחה וכשרה לחלוטין. סינון AI + סינון אנושי לפני כל סרטון.",
+        text: "מחפשים יוטיוב פרוץ להורדה? FilterTube נותנת את כל התכונות של יוטיוב פרימיום ואפליקציות פרוצות – הורדות, נגן ברקע, ללא פרסומות – בסביבה חוקית, בטוחה וכשרה לחלוטין, ללא סיכון של APK פרוץ, ללא ריגול וללא תוכן לא ראוי. סינון AI בשילוב סינון אנושי לפני כל סרטון.",
+      },
+      {
+        h2: "איך מורידים את יוטיוב המסונן?",
+        text: "לוחצים על כפתור ההורדה בעמוד ומקבלים את קובץ ה-APK הרשמי של FilterTube. ההתקנה חינמית, לא דורשת חשבון גוגל ולא דורשת רוט. מתאים לאנדרואיד 7.0 ומעלה. קישור הורדה ישיר: https://github.com/yeled-tov/filtertube-android/releases/latest/download/FilterTube.apk",
+      },
+      {
+        h2: "למי זה מתאים?",
+        text: "להורים שרוצים יוטיוב לילדים בלי הפתעות, לבחורי ישיבה ולציבור החרדי והדתי שמחפשים יוטיוב כשר, ולכל מי שרוצה יוטיוב ללא פרסומות בצורה חוקית. מחפשים גם סינון לטלפון עצמו? ראו את שירותי הסינון שלנו – הדרן, עסקן וכושר פליי.",
+      },
+    ],
+    jsonLd: [
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        name: "FilterTube – יוטיוב מסונן כשר",
+        alternateName: ["פילטר טיוב", "FilterTube APK", "יוטיוב כשר", "יוטיוב מסונן"],
+        operatingSystem: "Android 7.0+",
+        applicationCategory: "MultimediaApplication",
+        applicationSubCategory: "VideoApplication",
+        inLanguage: "he",
+        url: "https://www.filterphone.com/filtertube",
+        downloadUrl: APK_URL,
+        installUrl: APK_URL,
+        softwareVersion: "latest",
+        fileSize: "25MB",
+        offers: { "@type": "Offer", price: "0", priceCurrency: "ILS", availability: "https://schema.org/InStock" },
+        aggregateRating: { "@type": "AggregateRating", ratingValue: "5", ratingCount: "47", bestRating: "5" },
+        description:
+          "אפליקציית יוטיוב מסונן וכשר בעברית לאנדרואיד. חלופה חוקית ליוטיוב פרוץ / YouTube Vanced / NewPipe: 3 רמות סינון, מצב אודיו, נגן ברקע, חלון צף, הורדות אופליין ואפס פרסומות.",
+        publisher: { "@type": "Organization", name: "FilterPhone", url: "https://www.filterphone.com" },
+        screenshot: [
+          "https://www.filterphone.com/filtertube/142716.jpg",
+          "https://www.filterphone.com/filtertube/142911.jpg",
+          "https://www.filterphone.com/filtertube/143258.jpg",
+        ],
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "בית", item: "https://www.filterphone.com/" },
+          { "@type": "ListItem", position: 2, name: "יוטיוב מסונן – FilterTube", item: "https://www.filterphone.com/filtertube" },
+        ],
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "מה זה יוטיוב מסונן ואיך מורידים אותו?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "יוטיוב מסונן הוא נגן וידאו שמציג רק תוכן שעבר סינון. FilterTube היא אפליקציית אנדרואיד חינמית להורדה כקובץ APK מהעמוד שלנו, ללא צורך בחשבון וללא רוט.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "האם FilterTube חלופה ליוטיוב פרוץ?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "כן. FilterTube מספקת את כל התכונות של יוטיוב פרוץ, YouTube Vanced ו-NewPipe – הורדות, נגן ברקע וללא פרסומות – בסביבה מסוננת, כשרה וחוקית.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "האם הפרימיום חינם?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "כן, 30 יום פרימיום חינם הכוללים הורדות, נגן ברקע וחלון צף, ללא צורך באמצעי תשלום.",
+            },
+          },
+        ],
+      },
+    ],
+    links: [
+      { href: "/services", text: "שירותי סינון טלפונים באשדוד" },
+      { href: "/services/hadran", text: "סינון הדרן" },
+      { href: "/services/kosher-play", text: "כושר פליי" },
+      {
+        href: "https://github.com/yeled-tov/filtertube-android/releases/latest/download/FilterTube.apk",
+        text: "הורדת FilterTube APK – יוטיוב מסונן",
       },
     ],
   },
   {
+
     path: "/blog",
     title: "מאמרים וחדשות על סינון טלפונים | FilterPhone בלוג",
     description:
@@ -249,6 +334,9 @@ function buildFallback(route) {
       </ul>
     </nav>
     ${sections}
+    ${(route.links || []).length ? `<nav aria-label="קישורים נוספים"><ul>${route.links
+      .map((l) => `<li><a href="${l.href}">${l.text}</a></li>`)
+      .join("")}</ul></nav>` : ""}
     <section>
       <h2>צור קשר</h2>
       <p>טלפון: <a href="tel:+972527186881">052-718-6881</a></p>
@@ -333,6 +421,14 @@ function injectRoute(template, route) {
     /<meta\s+itemprop=["']description["']\s+content=["'][^"']*["']\s*\/?>/i,
     `<meta itemprop="description" content="${escDesc}" />`,
   );
+
+  // Route-specific JSON-LD (structured data visible without JavaScript)
+  if (route.jsonLd && route.jsonLd.length) {
+    const blocks = route.jsonLd
+      .map((obj) => `<script type="application/ld+json">${JSON.stringify(obj)}</script>`)
+      .join("\n    ");
+    html = html.replace("</head>", `  ${blocks}\n  </head>`);
+  }
 
   // Replace the SEO fallback inside #root with the route-specific one
   const fallback = buildFallback(route);
