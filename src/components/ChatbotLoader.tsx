@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { MessageCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import { MessageSquareText } from "lucide-react";
 
 declare global {
   interface Window {
@@ -7,52 +7,46 @@ declare global {
   }
 }
 
+/**
+ * Placeholder for the Chatbase assistant bubble (bottom-left).
+ * Chatbase is loaded a couple of seconds after `load` so it never competes with
+ * the first paint; until its own bubble appears we show this stand-in, which
+ * queues an "open" call if someone taps it early. It removes itself the moment
+ * the real widget mounts.
+ */
 const ChatbotLoader = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [widgetReady, setWidgetReady] = useState(false);
 
   useEffect(() => {
-    const checkChatbase = () => {
-      const chatbaseFrame = document.querySelector('iframe[src*="chatbase"]');
-      if (chatbaseFrame) {
-        setIsLoaded(true);
-        return true;
-      }
-      return false;
-    };
-
-    if (checkChatbase()) return;
-
-    const interval = setInterval(() => {
-      if (checkChatbase()) {
-        clearInterval(interval);
+    const found = () => Boolean(document.querySelector('iframe[src*="chatbase"]'));
+    if (found()) {
+      setWidgetReady(true);
+      return;
+    }
+    const interval = window.setInterval(() => {
+      if (found()) {
+        setWidgetReady(true);
+        window.clearInterval(interval);
       }
     }, 500);
-
-    return () => clearInterval(interval);
+    return () => window.clearInterval(interval);
   }, []);
 
-  if (isLoaded) return null;
+  if (widgetReady) return null;
 
   return (
-    <div className="fixed bottom-5 left-5 z-40">
-      <button
-        className="relative w-14 h-14 rounded-full flex items-center justify-center hover:scale-105 transition-transform z-10"
-        onClick={() => {
-          if (window.chatbase) {
-            window.chatbase("open");
-          }
-        }}
-      >
-        <span className="absolute inset-0 rounded-full border-[3px] border-primary animate-[chatbot-sonar_2s_ease-out_infinite] pointer-events-none" />
-        <span className="absolute inset-0 rounded-full border-[3px] border-primary animate-[chatbot-sonar_2s_ease-out_0.8s_infinite] pointer-events-none" />
-      </button>
-      <style>{`
-        @keyframes chatbot-sonar {
-          0% { transform: scale(1); opacity: 0.5; }
-          100% { transform: scale(1.8); opacity: 0; }
-        }
-      `}</style>
-    </div>
+    <button
+      type="button"
+      onClick={() => window.chatbase?.("open")}
+      className="group fixed bottom-5 left-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-float transition-transform duration-200 hover:scale-105"
+      aria-label="פתיחת הצ׳אט עם העוזר החכם"
+    >
+      <span
+        className="absolute inset-0 rounded-full border-2 border-primary/50 motion-safe:animate-ping"
+        aria-hidden="true"
+      />
+      <MessageSquareText className="relative h-6 w-6" />
+    </button>
   );
 };
 

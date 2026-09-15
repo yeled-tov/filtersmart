@@ -1,291 +1,276 @@
 import { Link } from "react-router-dom";
-import { Shield, ArrowLeft, Smartphone, Lock, Zap, Cpu, HeartHandshake, Star, CheckCircle, Phone, Youtube, MessageCircle } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
+import {
+  ArrowLeft, BadgeCheck, CalendarCheck, Clock3, Cpu, Lock, MessageCircle,
+  Phone, Play, ShieldCheck, Smartphone, Star, Wrench, Youtube,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/SEOHead";
-import { useServices, fallbackServices } from "@/hooks/useServices";
-import { useSiteSettings } from "@/hooks/useSiteSettings";
+import SectionHeading from "@/components/SectionHeading";
+import AnimatedSection from "@/components/AnimatedSection";
 import TrustStrip from "@/components/TrustStrip";
 import Reviews from "@/components/Reviews";
 import FAQ from "@/components/FAQ";
-import AnimatedSection from "@/components/AnimatedSection";
-import FilterMatcher from "@/components/FilterMatcher";
-import { Helmet } from "react-helmet-async";
+import FilterAdvisor from "@/components/FilterAdvisor";
+import { useServices, fallbackServices } from "@/hooks/useServices";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { SITE, waLink } from "@/lib/site";
+
+const valueProps = [
+  {
+    icon: BadgeCheck,
+    title: "משווק מורשה, לא מתווך",
+    body: "אנחנו מורשים רשמית להתקין הדרן, עסקן וכושר פליי. הצריבה נעשית כאן, במעבדה, ולא נשלחת לאף אחד אחר.",
+  },
+  {
+    icon: Smartphone,
+    title: "כל מכשיר, כל פלטפורמה",
+    body: "אייפון, סמסונג גלקסי, שיאומי, וואווי וכל אנדרואיד. גם טאבלטים, מחשבים ומכשירי Qin כשרים.",
+  },
+  {
+    icon: Clock3,
+    title: "התקנה ביום הפנייה",
+    body: "סינון בסיסי מוכן תוך חמש דקות. צריבה מלאה של הדרן או עסקן – בין 45 ל-90 דקות, בתיאום מראש.",
+  },
+  {
+    icon: Wrench,
+    title: "מלווים גם אחרי ההתקנה",
+    body: "רוצים לשנות רמת סינון, לפתוח אפליקציה או להבין איך משהו עובד? מרימים טלפון ופותרים.",
+  },
+];
+
+const processSteps = [
+  {
+    title: "מאבחנים את הצורך",
+    body: "בטלפון, בוואטסאפ או דרך יועץ הסינון באתר – מבינים למי המכשיר, מה חייב להישאר פתוח ומה חייב להיחסם.",
+  },
+  {
+    title: "בוחרים את המערכת",
+    body: "מסבירים בשקיפות מה כל פתרון עושה, כמה הוא עולה, כמה זמן ההתקנה לוקחת ומה קורה לתוכן שבמכשיר.",
+  },
+  {
+    title: "מתקינים ומוסרים",
+    body: "מבצעים את ההתקנה או הצריבה במעבדה שלנו באשדוד, בודקים איתכם שהכול עובד ומסבירים איך להמשיך מכאן.",
+  },
+];
 
 const Index = () => {
   const { data: services } = useServices();
   const { data: settings } = useSiteSettings();
 
-  const waLink = settings?.whatsapp_link || "https://wa.me/972527186881";
-  const bitLink = settings?.bit_link || "https://bitpay.co.il/app/me/0527186881";
+  const wa = settings?.whatsapp_link || SITE.whatsapp;
+  const bitLink = settings?.bit_link || SITE.bit;
   const heroTitle = settings?.hero_title || "סינון טלפונים מקצועי";
-  const heroSubtitle = settings?.hero_subtitle || "וצריבת גרסאות באשדוד";
-  const heroDesc = settings?.hero_description || "FilterPhone – פתרונות סינון לאייפון ואנדרואיד, התקנת הדרן, עסקן, כושר פליי וצריבת גרסה למכשירי שיאומי Qin. שירות מקצועי ואמין באשדוד.";
+  const heroSubtitle = settings?.hero_subtitle || "וצריבת גרסאות, באשדוד";
+  const heroDesc =
+    settings?.hero_description ||
+    "משווק מורשה של הדרן, עסקן וכושר פליי. מתקינים סינון לאייפון, לגלקסי, לכל אנדרואיד, לטאבלט ולמחשב – וצורבים גרסאות כשרות למכשירי שיאומי Qin.";
 
   const allServices = services && services.length > 0 ? services : fallbackServices;
   const filteringServices = allServices.filter((s) => s.category === "filtering");
   const flashingServices = allServices.filter((s) => s.category === "flashing");
 
-  const breadcrumbJsonLd = {
+  const webPageJsonLd = {
     "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "בית", "item": "https://www.filterphone.com/" }
-    ]
-  };
-
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "כמה עולה סינון טלפון באשדוד?",
-        "acceptedAnswer": { "@type": "Answer", "text": "סינון בסיסי לאייפון, גלקסי ואנדרואיד עולה 100₪ בלבד. מערכת כושר פליי עולה 70₪. מערכות הדרן ועסקן עולות 300₪. צריבת גרסה Qin עולה 70₪." }
-      },
-      {
-        "@type": "Question",
-        "name": "האם אפשר לסנן כל סוג טלפון?",
-        "acceptedAnswer": { "@type": "Answer", "text": "כן! FilterPhone מספקים סינון לכל הפלטפורמות: אייפון (iPhone), סמסונג גלקסי (Galaxy), שיאומי, וואווי, אנדרואיד כללי, מכשירי Qin ואפילו פתרונות סינון למחשבים. אנחנו הכתובת לכל מכשיר." }
-      },
-      {
-        "@type": "Question",
-        "name": "האם הצריבה פוגעת בטלפון?",
-        "acceptedAnswer": { "@type": "Answer", "text": "לא. מדובר בשכבת תוכנה מקצועית שמותקנת על המכשיר. הצריבה לא פוגעת בחומרה ולא משפיעה לרעה על ביצועי הטלפון." }
-      },
-      {
-        "@type": "Question",
-        "name": "כמה זמן לוקחת התקנת הדרן?",
-        "acceptedAnswer": { "@type": "Answer", "text": "התקנת הדרן לוקחת כ-45-90 דקות. סינון בסיסי לוקח כ-5 דקות בלבד. השירות בדרך כלל ניתן ביום הפנייה." }
-      },
-      {
-        "@type": "Question",
-        "name": "מה ההבדל בין הדרן, עסקן וכושר פליי?",
-        "acceptedAnswer": { "@type": "Answer", "text": "הדרן (300₪) – ההגנה ההרמטית ביותר, צריבה שלא ניתנת להסרה. עסקן (300₪) – סינון AI חכם עם צריבה עמוקה, מיועד לאנשי עסקים. כושר פליי (70₪) – חנות אפליקציות כשרה עם MDM ווואטסאפ מסונן. סינון בסיסי (100₪) – פתרון פשוט ומהיר לחסימת אתרים." }
-      },
-      {
-        "@type": "Question",
-        "name": "איפה נמצא FilterPhone באשדוד?",
-        "acceptedAnswer": { "@type": "Answer", "text": "אנחנו נמצאים ברחוב חטיבת גבעתי 2, כניסה ו׳, רובע ג׳, אשדוד. שירות בתיאום מראש בטלפון 052-718-6881 או WhatsApp." }
-      },
-      {
-        "@type": "Question",
-        "name": "האם אפשר להסיר את סינון הדרן?",
-        "acceptedAnswer": { "@type": "Answer", "text": "הדרן לא ניתן להסרה – גם איפוס יצרן לא מוריד את החסימה. זוהי ההגנה ההרמטית ביותר בשוק, מושלמת להורים שרוצים הגנה מוחלטת." }
-      },
-      {
-        "@type": "Question",
-        "name": "איזה חברות סינון אתם עובדים איתן?",
-        "acceptedAnswer": { "@type": "Answer", "text": "אנחנו משווקים מורשים של כל חברות הסינון המובילות בישראל: הדרן (Hadran), עסקן (Askan), כושר פליי (Kosher Play). בנוסף, אנו מספקים סינון בסיסי עצמאי וצריבת גרסאות כשרות למכשירי שיאומי Qin." }
-      },
-      {
-        "@type": "Question",
-        "name": "האם יש יוטיוב מסונן וכשר?",
-        "acceptedAnswer": { "@type": "Answer", "text": "כן – FilterTube היא אפליקציית יוטיוב מסונן וכשר שפיתחנו: 3 רמות סינון (מחמיר, רגיל, דתי-קל), מנעול הורים, מצב שמע בלבד, נגינה ברקע וללא פרסומות. ההורדה זמינה בעמוד FilterTube באתר: https://www.filterphone.com/filtertube" }
-      },
-      {
-        "@type": "Question",
-        "name": "האם אתם מסננים גם גלקסי וסמסונג?",
-        "acceptedAnswer": { "@type": "Answer", "text": "בהחלט! אנחנו מסננים את כל מכשירי סמסונג גלקסי (Galaxy S, Galaxy A, Galaxy Note) וכל מכשיר אנדרואיד אחר. כולל התקנת הדרן, עסקן, כושר פליי וסינון בסיסי." }
-      }
-    ]
+    "@type": "WebPage",
+    "@id": `${SITE.url}/#webpage`,
+    url: `${SITE.url}/`,
+    name: "FilterPhone – סינון טלפונים מקצועי באשדוד",
+    isPartOf: { "@id": `${SITE.url}/#website` },
+    about: { "@id": `${SITE.url}/#business` },
+    inLanguage: "he-IL",
+    primaryImageOfPage: { "@type": "ImageObject", url: `${SITE.url}/hero.jpg` },
+    description:
+      "מעבדה מקצועית לסינון טלפונים באשדוד. משווק מורשה של הדרן, עסקן וכושר פליי, וצריבת גרסאות כשרות למכשירי שיאומי Qin.",
   };
 
   const howToJsonLd = {
     "@context": "https://schema.org",
     "@type": "HowTo",
-    "name": "איך לסנן טלפון באשדוד – FilterPhone",
-    "description": "מדריך קצר להזמנת שירות סינון טלפון אצל FilterPhone באשדוד",
-    "totalTime": "PT1H",
-    "estimatedCost": { "@type": "MonetaryAmount", "currency": "ILS", "value": "100" },
-    "step": [
-      { "@type": "HowToStep", "name": "בחרו סוג סינון", "text": "בחרו את רמת הסינון המתאימה: סינון בסיסי (100₪), כושר פליי (70₪), עסקן (300₪) או הדרן (300₪)." },
-      { "@type": "HowToStep", "name": "צרו קשר", "text": "התקשרו ל-052-718-6881 או שלחו הודעת WhatsApp לתיאום." },
-      { "@type": "HowToStep", "name": "הגיעו אלינו", "text": "הגיעו לרחוב חטיבת גבעתי 2, כניסה ו׳, רובע ג׳, אשדוד." },
-      { "@type": "HowToStep", "name": "התקנה מקצועית", "text": "הצוות המקצועי שלנו יתקין את הסינון תוך 5 דקות עד שעה, תלוי בסוג." }
-    ]
+    name: "איך מזמינים סינון טלפון ב-FilterPhone אשדוד",
+    description: "שלושה שלבים מפנייה ראשונה ועד מכשיר מסונן ומוכן לשימוש.",
+    totalTime: "PT1H",
+    estimatedCost: { "@type": "MonetaryAmount", currency: "ILS", value: "100" },
+    step: processSteps.map((s, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: s.title,
+      text: s.body,
+    })),
   };
 
   const serviceListJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "name": "שירותי סינון טלפונים – FilterPhone אשדוד",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "item": { "@type": "Service", "name": "סינון בסיסי לאייפון ואנדרואיד", "areaServed": "אשדוד", "provider": { "@type": "LocalBusiness", "name": "FilterPhone" }, "offers": { "@type": "Offer", "price": "100", "priceCurrency": "ILS" }, "url": "https://www.filterphone.com/services" } },
-      { "@type": "ListItem", "position": 2, "item": { "@type": "Service", "name": "התקנת כושר פליי (Kosher Play)", "areaServed": "אשדוד", "offers": { "@type": "Offer", "price": "70", "priceCurrency": "ILS" }, "url": "https://www.filterphone.com/services" } },
-      { "@type": "ListItem", "position": 3, "item": { "@type": "Service", "name": "התקנת הדרן (Hadran)", "areaServed": "אשדוד", "offers": { "@type": "Offer", "price": "300", "priceCurrency": "ILS" }, "url": "https://www.filterphone.com/services" } },
-      { "@type": "ListItem", "position": 4, "item": { "@type": "Service", "name": "התקנת עסקן (Askan)", "areaServed": "אשדוד", "offers": { "@type": "Offer", "price": "300", "priceCurrency": "ILS" }, "url": "https://www.filterphone.com/services" } },
-      { "@type": "ListItem", "position": 5, "item": { "@type": "Service", "name": "צריבת גרסה כשרה Xiaomi Qin", "areaServed": "אשדוד", "offers": { "@type": "Offer", "price": "70", "priceCurrency": "ILS" }, "url": "https://www.filterphone.com/services" } }
-    ]
+    name: "שירותי סינון טלפונים וצריבת גרסאות – FilterPhone אשדוד",
+    itemListElement: allServices.map((s, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "Service",
+        name: s.name,
+        description: s.short_desc || undefined,
+        areaServed: { "@type": "City", name: "אשדוד" },
+        provider: { "@id": `${SITE.url}/#business` },
+        offers: {
+          "@type": "Offer",
+          price: s.price.replace(/[^\d]/g, ""),
+          priceCurrency: "ILS",
+          availability: "https://schema.org/InStock",
+        },
+        url: `${SITE.url}/services/${s.slug}`,
+      },
+    })),
   };
 
   return (
     <>
       <SEOHead
-        title="סינון טלפונים באשדוד מ-100₪ ⭐ 5.0 (47 חוות דעת) | FilterPhone פילטר פון"
-        description="✅ הכתובת #1 לסינון טלפונים בישראל! סינון אייפון, גלקסי, אנדרואיד, מחשב – כל מכשיר, כל פלטפורמה. הדרן 300₪ | עסקן 300₪ | כושר פליי 70₪ | סינון בסיסי 100₪. משווק מורשה ✓ 500+ לקוחות מרוצים ☎ 052-718-6881"
+        title="סינון טלפונים באשדוד מ-100₪ | הדרן, עסקן, כושר פליי – FilterPhone"
+        description="סינון טלפונים מקצועי באשדוד לכל מכשיר – אייפון, גלקסי, שיאומי, אנדרואיד, טאבלט ומחשב. משווק מורשה הדרן, עסקן וכושר פליי. סינון בסיסי 100₪, כושר פליי 70₪, הדרן ועסקן 300₪. התקנה ביום הפנייה."
         path="/"
-        keywords="סינון טלפון, סינון טלפון אשדוד, סינון אייפון, סינון אנדרואיד, סינון גלקסי, סינון סמסונג, סינון שיאומי, סינון מחשב, חסימת אינטרנט, הדרן, עסקן, כושר פליי, פילטר פון, FilterPhone, התקנת הדרן אשדוד, מחיר הדרן, מחיר סינון טלפון, סינון טלפון זול, סינון טלפון ילדים, סינון תוכן אינטרנט, צריבת גרסה שיאומי, סינון טלפון מחיר, חסימת אתרים בטלפון, סינון אייפון אשדוד, סינון גלקסי אשדוד, סינון טלפון לילדים, סינון נייד, חסימת אינטרנט באשדוד, נטפרי, רימון, סינון תוכן, יוטיוב מסונן, יוטיוב כשר, FilterTube, אפליקציית יוטיוב מסונן"
+        keywords="סינון טלפון, סינון טלפון אשדוד, סינון אייפון, סינון גלקסי, סינון אנדרואיד, התקנת הדרן, עסקן, כושר פליי, צריבת גרסה שיאומי Qin, פילטר פון"
       />
       <Helmet>
-        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(webPageJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(howToJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(serviceListJsonLd)}</script>
       </Helmet>
 
-      {/* Hero – 3D bento grid */}
-      <section className="relative overflow-hidden bg-background bg-mesh scene-3d" aria-label="FilterPhone – סינון טלפונים באשדוד">
-        <div className="absolute inset-0 bg-grid" />
-        <div className="glow-orb w-[26rem] h-[26rem] bg-primary/40 -top-32 right-[-6rem]" />
-        <div className="glow-orb w-[22rem] h-[22rem] bg-accent/30 top-40 left-[-5rem]" />
-        <div className="glow-orb w-[20rem] h-[20rem] bg-secondary/25 bottom-[-6rem] left-1/3" />
+      {/* ---------------------------------------------------------- Hero */}
+      <section className="relative overflow-hidden band-ink" aria-label="סינון טלפונים באשדוד">
+        <div className="pointer-events-none absolute inset-0 texture-traces opacity-70" aria-hidden="true" />
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/30 to-transparent"
+          aria-hidden="true"
+        />
 
-        <div className="relative container-custom py-12 md:py-20">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:auto-rows-[168px]">
-            {/* Main hero tile */}
-            <motion.div
-              initial={{ opacity: 0, y: 28 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              className="tile-3d md:col-span-8 md:row-span-3 p-7 md:p-10 flex flex-col justify-between overflow-hidden"
-            >
-              <div className="relative z-10">
-                <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/15 border border-primary/30 text-primary text-sm font-semibold mb-6">
-                  <Shield className="w-4 h-4" />
-                  משווק מורשה – הדרן, עסקן, כושר פליי
-                </span>
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold leading-[1.05] tracking-tight mb-5 text-balance">
-                  {heroTitle}
-                  <span className="block mt-2 gradient-text text-glow">{heroSubtitle}</span>
-                </h1>
-                <p className="text-base md:text-lg text-muted-foreground max-w-xl leading-relaxed">{heroDesc}</p>
-              </div>
+        <div className="container-custom relative grid gap-12 py-16 md:py-24 lg:grid-cols-12 lg:gap-10">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:col-span-7"
+          >
+            <span className="inline-flex items-center gap-2 rounded-sm border border-white/15 bg-white/[0.06] px-3 py-1.5 text-[0.8125rem] font-semibold text-white/80">
+              <ShieldCheck className="h-4 w-4 text-white/60" />
+              משווק מורשה · הדרן · עסקן · כושר פליי
+            </span>
 
-              <div className="relative z-10 flex flex-wrap items-center gap-3 mt-8">
-                <a href="tel:0527186881">
-                  <Button size="lg" className="gradient-primary text-white border-0 h-12 px-7 text-base gap-2 shadow-lg shadow-primary/30 hover:scale-[1.03] transition-transform">
-                    <Phone className="w-4 h-4" />
-                    052-718-6881
-                  </Button>
-                </a>
-                <a href={waLink} target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" variant="outline" className="h-12 px-7 text-base bg-white/5 border-white/15 hover:bg-white/10 backdrop-blur-md">
-                    WhatsApp – הזמן עכשיו
-                  </Button>
-                </a>
-              </div>
-            </motion.div>
+            <h1 className="mt-6 text-display-xl text-white">
+              {heroTitle}
+              <span className="mt-2 block text-white/55">{heroSubtitle}</span>
+            </h1>
 
-            {/* FilterTube tile */}
-            <motion.div
-              initial={{ opacity: 0, y: 28 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="tile-3d md:col-span-4 md:row-span-2 p-7 flex flex-col justify-center text-center card-shine"
-            >
-              <div className="relative z-10 flex flex-col items-center">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-accent to-highlight flex items-center justify-center mb-4 shadow-lg shadow-accent/30">
-                  <Youtube className="w-8 h-8 text-white" />
-                </div>
-                <span className="text-[0.7rem] font-bold text-highlight mb-2">חדש · אפליקציה</span>
-                <h2 className="text-2xl font-heading font-bold mb-2">FilterTube</h2>
-                <p className="text-sm text-muted-foreground mb-5 leading-relaxed">
-                  יוטיוב מסונן וכשר – ללא פרסומות וללא תכנים לא הולמים, עם 3 רמות סינון ומנעול הורים.
-                </p>
-                <Link to="/filtertube" className="w-full">
-                  <Button className="w-full h-11 bg-white text-background hover:bg-white/90 font-bold gap-2">
-                    לעמוד FilterTube
-                    <ArrowLeft className="w-4 h-4" />
-                  </Button>
-                </Link>
-              </div>
-            </motion.div>
+            <p className="mt-6 max-w-xl text-[1.0625rem] leading-relaxed text-white/65">{heroDesc}</p>
 
-            {/* Stats */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }} className="tile-3d md:col-span-2 p-6 flex flex-col justify-center">
-              <div className="text-3xl font-heading font-bold gradient-text leading-none mb-1">500+</div>
-              <div className="text-xs text-muted-foreground tracking-wider">לקוחות מרוצים</div>
-            </motion.div>
+            <div className="mt-9 flex flex-wrap items-center gap-3">
+              <a href={`tel:${SITE.phoneRaw}`}>
+                <Button size="lg" variant="inverse" className="gap-2">
+                  <Phone className="h-4 w-4" />
+                  <span className="num">{SITE.phone}</span>
+                </Button>
+              </a>
+              <a href={waLink("שלום פילטר פון, אשמח לקבל פרטים על סינון", wa)} target="_blank" rel="noopener noreferrer">
+                <Button size="lg" variant="outline-inverse" className="gap-2">
+                  <MessageCircle className="h-4 w-4" />
+                  שליחת הודעה בוואטסאפ
+                </Button>
+              </a>
+              <a href="#advisor" className="text-sm font-semibold text-white/60 underline-offset-4 transition-colors hover:text-white hover:underline">
+                או תנו ליועץ להתאים לכם ←
+              </a>
+            </div>
 
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.24 }} className="tile-3d md:col-span-2 p-6 flex flex-col justify-center">
-              <div className="flex gap-0.5 mb-2">
-                {[1, 2, 3, 4, 5].map((n) => (
-                  <Star key={n} className="w-4 h-4 fill-highlight text-highlight" />
-                ))}
-              </div>
-              <div className="text-xs text-muted-foreground tracking-wider">5 כוכבים בגוגל</div>
-            </motion.div>
-
-            {/* Price anchor */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="tile-3d md:col-span-3 p-6 flex flex-col items-center justify-center gradient-border">
-              <div className="text-xs font-bold text-secondary mb-1">סינון בסיסי החל מ-</div>
-              <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-heading font-bold">100</span>
-                <span className="text-xl font-bold text-muted-foreground">₪</span>
-              </div>
-              <div className="text-xs text-muted-foreground mt-1">התקנה תוך 5 דקות</div>
-            </motion.div>
-
-            {/* Authorized partners */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.36 }} className="tile-3d md:col-span-5 p-6 flex items-center justify-around gap-3">
-              {["הדרן", "עסקן", "כושר פליי"].map((brand, i) => (
-                <div key={brand} className="flex items-center gap-3">
-                  {i > 0 && <span className="h-6 w-px bg-white/10" />}
-                  <span className="text-sm font-heading font-bold text-muted-foreground">{brand}</span>
+            {/* Proof line */}
+            <dl className="mt-11 grid max-w-lg grid-cols-3 gap-6 border-t border-white/10 pt-7">
+              {[
+                { value: "500+", label: "מכשירים סוננו" },
+                { value: "5 דק׳", label: "סינון בסיסי מוכן" },
+                { value: "6", label: "פתרונות סינון" },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <dt className="sr-only">{stat.label}</dt>
+                  <dd>
+                    <span className="num block text-2xl font-extrabold text-white md:text-[1.75rem]">{stat.value}</span>
+                    <span className="mt-1 block text-[0.8125rem] leading-snug text-white/45">{stat.label}</span>
+                  </dd>
                 </div>
               ))}
-            </motion.div>
+            </dl>
+          </motion.div>
 
-            {/* WhatsApp helper */}
-            <motion.a
-              href={waLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.42 }}
-              className="tile-3d md:col-span-4 p-6 flex items-center gap-4 group"
-            >
-              <span className="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center shrink-0 shadow-lg shadow-[#25D366]/30">
-                <MessageCircle className="w-6 h-6 text-white" />
-              </span>
-              <span className="flex flex-col text-right">
-                <span className="font-bold text-foreground">צריכים עזרה בבחירה?</span>
-                <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">דברו איתנו בוואטסאפ</span>
-              </span>
-            </motion.a>
-          </div>
+          {/* Price card — the question everyone actually arrives with */}
+          <motion.aside
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:col-span-5"
+            aria-label="מחירון מקוצר"
+          >
+            <div className="overflow-hidden rounded-xl border border-border bg-surface shadow-float">
+              <div className="flex items-baseline justify-between border-b border-border px-6 py-4">
+                <h2 className="text-lg font-display font-bold text-ink">כמה זה עולה</h2>
+                <span className="text-xs font-medium text-muted-foreground">מחיר כולל התקנה</span>
+              </div>
+              <ul className="divide-y divide-border">
+                {allServices.slice(0, 5).map((s) => (
+                  <li key={s.slug}>
+                    <Link
+                      to={`/services/${s.slug}`}
+                      className="group flex items-center justify-between gap-4 px-6 py-3.5 transition-colors hover:bg-surface-sunken"
+                    >
+                      <span className="min-w-0">
+                        <span className="block truncate text-[0.9375rem] font-semibold text-ink group-hover:text-primary">
+                          {s.name}
+                        </span>
+                        {s.slug === "hadran" && (
+                          <span className="mt-0.5 flex items-center gap-1 text-[0.75rem] font-semibold text-accent">
+                            <Star className="h-3 w-3 fill-current" />
+                            הנבחר ביותר אצל הורים
+                          </span>
+                        )}
+                      </span>
+                      <span className="num shrink-0 text-lg font-extrabold text-primary">{s.price}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <div className="border-t border-border bg-surface-sunken px-6 py-4">
+                <Link
+                  to="/pricing"
+                  className="flex items-center justify-between text-sm font-semibold text-primary"
+                >
+                  למחירון המלא ולמה שכלול בכל פתרון
+                  <ArrowLeft className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </motion.aside>
         </div>
       </section>
 
       <TrustStrip />
 
-      {/* Features */}
-      <section className="section-padding bg-background bg-mesh scene-3d" aria-label="יתרונות FilterPhone">
+      {/* ------------------------------------------------- Why FilterPhone */}
+      <section className="section-padding" aria-label="למה לבחור ב-FilterPhone">
         <div className="container-custom">
-          <AnimatedSection>
-            <div className="text-center max-w-2xl mx-auto mb-14">
-              <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4 text-balance">
-                למה לבחור ב-<span className="gradient-text">FilterPhone</span>?
-              </h2>
-              <p className="text-muted-foreground text-lg">המומחים לסינון טלפונים והגנה דיגיטלית באשדוד</p>
-            </div>
-          </AnimatedSection>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[
-              { icon: Shield, title: "הגנה מקצועית", desc: "פתרונות סינון ברמה הגבוהה ביותר עם שכבות הגנה מרובות – הדרן, עסקן וכושר פליי", color: "from-primary to-accent" },
-              { icon: Smartphone, title: "כל מכשיר, כל פלטפורמה", desc: "אייפון, גלקסי, סמסונג, שיאומי, וואווי, אנדרואיד, טאבלט ומחשב – הכתובת לכל סוג מכשיר", color: "from-secondary to-primary" },
-              { icon: Zap, title: "שירות מהיר", desc: "התקנה מקצועית ומהירה. סינון בסיסי תוך 5 דקות, צריבה תוך 30-60 דקות", color: "from-highlight to-accent" },
-              { icon: HeartHandshake, title: "מחירים הוגנים", desc: "סינון בסיסי מ-100₪ בלבד. מחירים שקופים ללא עלויות נסתרות, עם אחריות מלאה", color: "from-accent to-primary" },
-            ].map((feature, i) => (
-              <AnimatedSection key={i} delay={i * 0.08}>
-                <div className="tile-3d p-7 h-full card-shine">
-                  <div className={`relative z-10 w-12 h-12 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-5 shadow-lg shadow-primary/20`}>
-                    <feature.icon className="w-5 h-5 text-white" />
-                  </div>
-                  <h3 className="relative z-10 text-base font-heading font-bold text-card-foreground mb-2">{feature.title}</h3>
-                  <p className="relative z-10 text-muted-foreground leading-relaxed text-sm">{feature.desc}</p>
+          <SectionHeading
+            eyebrow="למה אנחנו"
+            title="סינון זה לא רק להתקין אפליקציה"
+            lead="אנחנו עובדים מול כל חברות הסינון המובילות בישראל, ולכן אנחנו לא צריכים לדחוף לכם פתרון אחד. הפתרון שנציע הוא זה שמתאים למכשיר, לגיל ולשימוש שלכם."
+          />
+
+          <div className="mt-12 grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2">
+            {valueProps.map((v, i) => (
+              <AnimatedSection key={v.title} delay={i * 0.06}>
+                <div className="h-full bg-surface p-7">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-md bg-primary-tint text-primary">
+                    <v.icon className="h-5 w-5" />
+                  </span>
+                  <h3 className="mt-5 text-lg font-bold text-ink">{v.title}</h3>
+                  <p className="mt-2.5 text-[0.9375rem] leading-relaxed text-ink-soft">{v.body}</p>
                 </div>
               </AnimatedSection>
             ))}
@@ -293,169 +278,270 @@ const Index = () => {
         </div>
       </section>
 
-
-      {/* Filtering Services */}
-      <section className="section-padding bg-background bg-mesh scene-3d" aria-label="שירותי סינון טלפונים">
+      {/* ------------------------------------------------------- Services */}
+      <section className="section-padding bg-surface-sunken" aria-label="שירותי סינון טלפונים">
         <div className="container-custom">
-          <AnimatedSection>
-            <div className="text-center max-w-2xl mx-auto mb-14">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/8 text-primary text-sm font-semibold mb-4">
-                <Lock className="w-4 h-4" />
-                סינון טלפונים והגנה
-              </div>
-              <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4 text-balance">שירותי סינון טלפון והגנה דיגיטלית</h2>
-              <p className="text-muted-foreground text-lg">פתרונות סינון מקצועיים לאייפון ואנדרואיד – מ-100₪ בלבד</p>
-            </div>
-          </AnimatedSection>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <SectionHeading
+            eyebrow="סינון והגנה"
+            title="ארבע רמות סינון – מהקל ועד ההרמטי"
+            lead="כל פתרון עונה על צורך אחר. בעמוד של כל שירות תמצאו בדיוק מה הוא חוסם, מה נשאר פתוח, כמה זמן ההתקנה לוקחת ומה קורה לתוכן שבמכשיר."
+          />
+
+          <div className="mt-12 grid gap-4 md:grid-cols-2">
             {filteringServices.map((service, i) => (
-              <AnimatedSection key={service.slug} delay={i * 0.08}>
+              <AnimatedSection key={service.slug} delay={i * 0.05}>
                 <Link
                   to={`/services/${service.slug}`}
-                  className="tile-3d block p-6 group relative overflow-hidden card-shine"
+                  className="group relative flex h-full flex-col panel panel-hover p-6"
                 >
                   {service.slug === "hadran" && (
-                    <div className="absolute top-4 left-4 flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
-                      <Star className="w-3 h-3 fill-current" />
-                      הכי פופולרי
-                    </div>
+                    <span className="absolute left-6 top-6 rounded-sm bg-accent px-2.5 py-1 text-[0.6875rem] font-bold text-accent-foreground">
+                      הכי מבוקש
+                    </span>
                   )}
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      {service.logo_url && (
-                        <img src={service.logo_url} alt={`${service.name} לוגו`} className="w-11 h-11 rounded-xl object-contain bg-white/90 p-1.5" loading="lazy" />
-                      )}
-                      <div>
-                        <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">
-                          {service.name}
-                        </h3>
-                      </div>
-                    </div>
-                    <span className="text-xl font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
-                  </div>
-                  <p className="text-muted-foreground text-sm mb-5 leading-relaxed">{service.short_desc}</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center text-primary text-sm font-medium group-hover:gap-2 transition-all">
-                      <span>פרטים נוספים</span>
-                      <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
-                    </div>
-                    <div className="flex items-center gap-0.5">
-                      {[1,2,3,4,5].map(n => (
-                        <Star key={n} className="w-3 h-3 fill-amber-400 text-amber-400" />
-                      ))}
-                    </div>
-                  </div>
-                </Link>
-              </AnimatedSection>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Flashing Services */}
-      <section className="section-padding bg-background scene-3d" aria-label="שירותי צריבת גרסאות">
-        <div className="container-custom">
-          <AnimatedSection>
-            <div className="text-center max-w-2xl mx-auto mb-14">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary/8 text-secondary text-sm font-semibold mb-4">
-                <Cpu className="w-4 h-4" />
-                צריבת גרסאות
-              </div>
-              <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-4 text-balance">צריבת גרסאות כשרות למכשירי שיאומי Qin</h2>
-              <p className="text-muted-foreground text-lg">גרסה כשרה ומותאמת למכשירי Qin F21 Pro ו-Qin F25 – 70₪ בלבד</p>
-            </div>
-          </AnimatedSection>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl mx-auto">
-            {flashingServices.map((service, i) => (
-              <AnimatedSection key={service.slug} delay={i * 0.08}>
-                <Link
-                  to={`/services/${service.slug}`}
-                  className="tile-3d block p-6 group card-shine"
-                >
-                  <div className="flex items-start justify-between mb-4">
-                    <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">
+                  <div className="flex items-start gap-3.5">
+                    {service.logo_url ? (
+                      <img
+                        src={service.logo_url}
+                        alt=""
+                        width={44}
+                        height={44}
+                        loading="lazy"
+                        className="h-11 w-11 shrink-0 rounded-md border border-border object-contain p-1.5"
+                      />
+                    ) : (
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-primary-tint text-primary">
+                        <Lock className="h-5 w-5" />
+                      </span>
+                    )}
+                    <h3 className="mt-1 text-lg font-bold leading-snug text-ink transition-colors group-hover:text-primary">
                       {service.name}
                     </h3>
-                    <span className="text-xl font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
                   </div>
-                  <p className="text-muted-foreground text-sm mb-5 leading-relaxed">{service.short_desc}</p>
-                  <div className="flex items-center text-primary text-sm font-medium">
-                    <span>פרטים נוספים</span>
-                    <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
+
+                  <p className="mt-4 flex-1 text-[0.9375rem] leading-relaxed text-ink-soft">{service.short_desc}</p>
+
+                  <div className="mt-6 flex items-end justify-between border-t border-border pt-4">
+                    <span className="flex items-center gap-1.5 text-sm font-semibold text-primary">
+                      מה כלול בשירות
+                      <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+                    </span>
+                    <span className="num text-2xl font-extrabold text-ink">{service.price}</span>
                   </div>
                 </Link>
               </AnimatedSection>
             ))}
           </div>
+
+          {/* Flashing */}
+          <div className="mt-14">
+            <AnimatedSection>
+              <div className="rule-label mb-6">
+                <span className="flex items-center gap-2">
+                  <Cpu className="h-4 w-4 text-primary/70" />
+                  צריבת גרסאות למכשירי שיאומי Qin
+                </span>
+              </div>
+            </AnimatedSection>
+            <div className="grid gap-4 md:grid-cols-2">
+              {flashingServices.map((service, i) => (
+                <AnimatedSection key={service.slug} delay={i * 0.05}>
+                  <Link to={`/services/${service.slug}`} className="group flex h-full items-center justify-between gap-4 panel panel-hover p-6">
+                    <span className="min-w-0">
+                      <span className="block text-lg font-bold text-ink transition-colors group-hover:text-primary">
+                        {service.name}
+                      </span>
+                      <span className="mt-1.5 block text-[0.9375rem] leading-relaxed text-ink-soft">
+                        {service.short_desc}
+                      </span>
+                    </span>
+                    <span className="num shrink-0 text-2xl font-extrabold text-ink">{service.price}</span>
+                  </Link>
+                </AnimatedSection>
+              ))}
+            </div>
+          </div>
+
+          <AnimatedSection className="mt-10 text-center">
+            <Link to="/compare" className="inline-flex items-center gap-2 text-[0.9375rem] font-semibold text-primary link-underline">
+              לא בטוחים מה ההבדל? להשוואה מלאה בין המערכות
+              <ArrowLeft className="h-4 w-4" />
+            </Link>
+          </AnimatedSection>
         </div>
       </section>
 
-      {/* Filter Matcher Bot */}
-      <FilterMatcher />
+      {/* -------------------------------------------------------- Advisor */}
+      <FilterAdvisor />
+
+      {/* ------------------------------------------------------ FilterTube */}
+      <section className="section-padding" aria-label="FilterTube – יוטיוב מסונן">
+        <div className="container-custom">
+          <AnimatedSection>
+            <div className="overflow-hidden rounded-xl border border-border bg-surface shadow-card">
+              <div className="grid lg:grid-cols-12">
+                <div className="p-8 md:p-11 lg:col-span-7">
+                  <span className="inline-flex items-center gap-2 rounded-sm bg-accent-tint px-3 py-1.5 text-[0.8125rem] font-bold text-accent">
+                    <Youtube className="h-4 w-4" />
+                    אפליקציה משלנו · חינם
+                  </span>
+                  <h2 className="mt-5 text-display-sm">FilterTube – יוטיוב מסונן וכשר</h2>
+                  <p className="mt-4 max-w-xl text-[1.0625rem] leading-relaxed text-ink-soft">
+                    פיתחנו אפליקציית אנדרואיד שנותנת את התוכן של יוטיוב בלי מה שלא רוצים שייכנס הביתה:
+                    שלוש רמות סינון, מנעול הורים, מצב שמע בלבד, נגינה ברקע – וללא פרסומות.
+                  </p>
+                  <ul className="mt-6 grid gap-2.5 sm:grid-cols-2">
+                    {["3 רמות סינון לבחירה", "מנעול הורים עם קוד", "מצב שמע ונגינה ברקע", "ללא פרסומות כלל"].map((f) => (
+                      <li key={f} className="flex items-center gap-2 text-[0.9375rem] text-ink-soft">
+                        <BadgeCheck className="h-4 w-4 shrink-0 text-success" />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-8 flex flex-wrap gap-3">
+                    <Link to="/filtertube">
+                      <Button className="gap-2">
+                        <Play className="h-4 w-4" />
+                        לעמוד FilterTube
+                      </Button>
+                    </Link>
+                    <a href={SITE.filterTubeApk} rel="noopener noreferrer">
+                      <Button variant="outline">הורדת האפליקציה</Button>
+                    </a>
+                  </div>
+                </div>
+                <div className="relative hidden items-center justify-center bg-surface-sunken p-8 lg:col-span-5 lg:flex">
+                  <img
+                    src="/filtertube/142716.jpg"
+                    alt="מסך הפיד של אפליקציית FilterTube – יוטיוב מסונן"
+                    width={240}
+                    height={520}
+                    loading="lazy"
+                    className="h-[420px] w-auto rounded-xl border-4 border-ink object-cover shadow-float"
+                  />
+                </div>
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* -------------------------------------------------------- Process */}
+      <section className="section-padding bg-surface-sunken" aria-label="איך זה עובד">
+        <div className="container-custom">
+          <SectionHeading eyebrow="איך זה עובד" title="שלושה שלבים, בלי הפתעות" />
+          <ol className="mt-12 grid gap-px overflow-hidden rounded-lg border border-border bg-border md:grid-cols-3">
+            {processSteps.map((s, i) => (
+              <li key={s.title} className="bg-surface p-7">
+                <AnimatedSection delay={i * 0.07}>
+                  <span className="num block text-[0.8125rem] font-bold tracking-widest text-accent">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="mt-3 text-lg font-bold text-ink">{s.title}</h3>
+                  <p className="mt-2.5 text-[0.9375rem] leading-relaxed text-ink-soft">{s.body}</p>
+                </AnimatedSection>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
 
       <Reviews />
       <FAQ />
 
-      {/* CTA */}
-      <section className="relative overflow-hidden" aria-label="יצירת קשר">
-        <div className="absolute inset-0 gradient-primary" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,_rgba(255,255,255,0.08)_0%,_transparent_60%)]" />
-        <div className="relative container-custom py-16 md:py-24 text-center">
+      {/* ------------------------------------------------------------ CTA */}
+      <section className="band-ink relative overflow-hidden" aria-label="יצירת קשר">
+        <div className="pointer-events-none absolute inset-0 texture-traces opacity-60" aria-hidden="true" />
+        <div className="container-custom relative py-16 text-center md:py-24">
           <AnimatedSection>
-            <h2 className="text-2xl md:text-4xl font-heading font-bold text-white mb-4 text-balance">מוכנים להגן על הטלפון שלכם?</h2>
-            <p className="text-white/70 text-lg mb-10 max-w-xl mx-auto">צרו קשר עוד היום ונתאים לכם את פתרון הסינון המושלם – שירות מקצועי באשדוד</p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <a href={waLink} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="bg-white text-primary hover:bg-white/95 text-base px-8 h-12 shadow-lg hover:shadow-xl transition-all font-semibold">
-                  WhatsApp – 052-718-6881
+            <h2 className="mx-auto max-w-2xl text-display-md text-white">
+              נשמח לשמוע מה המצב, ולהגיד לכם בכנות מה מתאים
+            </h2>
+            <p className="mx-auto mt-5 max-w-xl text-[1.0625rem] leading-relaxed text-white/60">
+              שיחה קצרה מספיקה כדי להבין איזה סינון נכון למכשיר שלכם. אם פתרון זול יותר עושה את
+              העבודה – זה מה שנגיד לכם.
+            </p>
+            <div className="mt-9 flex flex-wrap justify-center gap-3">
+              <a href={waLink("שלום פילטר פון, אשמח לקבל ייעוץ על סינון", wa)} target="_blank" rel="noopener noreferrer">
+                <Button size="lg" variant="inverse" className="gap-2">
+                  <MessageCircle className="h-4 w-4" />
+                  דברו איתנו בוואטסאפ
+                </Button>
+              </a>
+              <a href={`tel:${SITE.phoneRaw}`}>
+                <Button size="lg" variant="outline-inverse" className="gap-2">
+                  <Phone className="h-4 w-4" />
+                  <span className="num">{SITE.phone}</span>
                 </Button>
               </a>
               <a href={bitLink} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="outline" className="bg-transparent text-white border-white/25 hover:bg-white/10 text-base px-8 h-12 backdrop-blur-sm">
-                  שלם ב-BIT
+                <Button size="lg" variant="outline-inverse">
+                  תשלום ב-BIT
                 </Button>
               </a>
             </div>
-            <div className="flex items-center justify-center gap-6 mt-8 text-white/50 text-sm">
-              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-green-300" /> אחריות מלאה</span>
-              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-green-300" /> שירות מהיר</span>
-              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-green-300" /> מחירים הוגנים</span>
-            </div>
+            <p className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/45">
+              <span className="flex items-center gap-1.5">
+                <CalendarCheck className="h-4 w-4" /> בדרך כלל ביום הפנייה
+              </span>
+              <span className="flex items-center gap-1.5">
+                <BadgeCheck className="h-4 w-4" /> אחריות על ההתקנה
+              </span>
+              <span className="flex items-center gap-1.5">
+                <ShieldCheck className="h-4 w-4" /> מחירים שקופים מראש
+              </span>
+            </p>
           </AnimatedSection>
         </div>
       </section>
 
-      {/* SEO Content */}
-      <section className="section-padding bg-muted/20" aria-label="מידע על סינון טלפונים באשדוד">
-        <div className="container-custom max-w-4xl">
-          <h2 className="text-xl md:text-2xl font-heading font-bold text-foreground mb-6 text-center">סינון טלפונים וצריבת גרסאות באשדוד – FilterPhone פילטר פון</h2>
-          <div className="prose prose-lg max-w-none text-muted-foreground leading-relaxed space-y-4">
+      {/* -------------------------------------------------------- SEO copy */}
+      <section className="section-padding" aria-label="מידע על סינון טלפונים באשדוד">
+        <div className="container-custom max-w-3xl">
+          <h2 className="text-display-sm">סינון טלפונים באשדוד – מה כדאי לדעת לפני שמחליטים</h2>
+          <div className="prose-fp mt-6">
             <p>
-              <strong className="text-foreground">FilterPhone (פילטר פון)</strong> הוא הכתובת המקצועית מספר 1 ל<strong className="text-foreground">סינון טלפונים באשדוד</strong>, <strong className="text-foreground">חסימת תוכן באינטרנט</strong> ו<strong className="text-foreground">צריבת גרסאות כשרות</strong>. אנו משווקים מורשים של מערכות הסינון המובילות בישראל – <strong className="text-foreground">הדרן (Hadran)</strong>, <strong className="text-foreground">עסקן (Askan)</strong> ו<strong className="text-foreground">כושר פליי (Kosher Play)</strong>.
+              <strong>FilterPhone (פילטר פון)</strong> היא מעבדה באשדוד שעוסקת ב<strong>סינון טלפונים</strong>,
+              חסימת תוכן ו<strong>צריבת גרסאות כשרות</strong>. אנחנו משווקים מורשים של מערכות הסינון
+              המובילות בישראל – <strong>הדרן (Hadran)</strong>, <strong>עסקן (Askan)</strong> ו<strong>כושר פליי
+              (Kosher Play)</strong> – ולצידן מספקים סינון בסיסי עצמאי וצריבת גרסאות למכשירי שיאומי Qin.
             </p>
 
-            <h3 className="text-lg font-heading font-semibold text-foreground !mb-2">סינון לכל סוגי המכשירים והפלטפורמות</h3>
+            <h3>איזה מכשירים אנחנו מסננים</h3>
             <p>
-              אנחנו מתמחים ב<strong className="text-foreground">סינון לכל מכשיר בשוק</strong>: <strong className="text-foreground">סינון אייפון (iPhone)</strong> – כל הדגמים כולל iPhone 15, 14, 13 ומטה. <strong className="text-foreground">סינון סמסונג גלקסי (Galaxy)</strong> – כולל Galaxy S24, Galaxy A, Galaxy Note. <strong className="text-foreground">סינון שיאומי (Xiaomi)</strong> – כולל מכשירי Qin F21 Pro ו-Qin F25 עם צריבת גרסה כשרה. <strong className="text-foreground">סינון וואווי (Huawei)</strong>, <strong className="text-foreground">סינון אופו (Oppo)</strong>, <strong className="text-foreground">סינון ואן פלוס (OnePlus)</strong> – כל מכשיר אנדרואיד.
-            </p>
-            <p>
-              לא רק טלפונים – אנחנו מספקים גם פתרונות <strong className="text-foreground">סינון למחשב</strong>, <strong className="text-foreground">סינון לטאבלט</strong> (כולל <strong className="text-foreground">אייפד iPad</strong> וטאבלטים אנדרואיד), ו<strong className="text-foreground">סינון אינטרנט ביתי</strong>. הכתובת האחת והיחידה לכל צרכי הסינון שלכם.
-            </p>
-
-            <h3 className="text-lg font-heading font-semibold text-foreground !mb-2">חברות הסינון המובילות בישראל</h3>
-            <p>
-              <strong className="text-foreground">התקנת הדרן באשדוד</strong> – ההגנה ההרמטית ביותר בשוק, גרסת מערכת שלמה שלא ניתנת להסרה. מחיר: <strong className="text-foreground">300₪</strong>. <strong className="text-foreground">התקנת עסקן באשדוד</strong> – סינון AI חכם עם צריבה עמוקה, מושלם לאנשי עסקים. מחיר: <strong className="text-foreground">300₪</strong>. <strong className="text-foreground">התקנת כושר פליי</strong> – חנות אפליקציות כשרה עם MDM ווואטסאפ מסונן. מחיר: <strong className="text-foreground">70₪</strong>. <strong className="text-foreground">סינון בסיסי</strong> לאייפון, גלקסי ואנדרואיד – מ-<strong className="text-foreground">100₪</strong> בלבד.
+              אנחנו עובדים על <strong>סינון אייפון (iPhone)</strong> בכל הדגמים, <strong>סינון סמסונג גלקסי
+              (Galaxy S, Galaxy A, Note)</strong>, <strong>סינון שיאומי (Xiaomi)</strong> כולל מכשירי Qin
+              F21 Pro ו-Qin F25, וכן וואווי, אופו, ואן פלוס וכל מכשיר אנדרואיד אחר. מעבר לטלפונים אנחנו
+              מסננים גם <strong>טאבלטים</strong> (אייפד וטאבלטים אנדרואיד) ו<strong>מחשבים</strong>.
             </p>
 
-            <h3 className="text-lg font-heading font-semibold text-foreground !mb-2">למה לבחור ב-FilterPhone?</h3>
+            <h3>כמה עולה סינון טלפון</h3>
             <p>
-              <strong className="text-foreground">500+ לקוחות מרוצים</strong> עם דירוג <strong className="text-foreground">5 כוכבים</strong>. שירות ביום הפנייה. מחירים הנמוכים ביותר בשוק. ניסיון רב בכל סוגי המכשירים. תמיכה טכנית גם אחרי ההתקנה. אנו ממוקמים ב<strong className="text-foreground">רחוב חטיבת גבעתי 2, רובע ג׳, אשדוד</strong>. לתיאום: <strong className="text-foreground">052-718-6881</strong>.
+              <strong>סינון בסיסי</strong> עולה 100₪ ומותקן תוך כחמש דקות, בלי למחוק שום דבר מהמכשיר.
+              <strong> כושר פליי</strong> עולה 70₪ וכולל חנות אפליקציות כשרה, וואטסאפ מסונן וצריבת MDM.
+              <strong> הדרן</strong> ו<strong>עסקן</strong> עולים 300₪ כל אחד וכוללים צריבה עמוקה של גרסת
+              מערכת – הפתרונות החזקים ביותר, שדורשים מכשיר מאופס וגיבוי מראש.
+              <strong> צריבת גרסה למכשירי Qin</strong> עולה 70₪. את הפירוט המלא אפשר לראות
+              ב<Link to="/pricing">מחירון</Link>, ואת ההבדלים בין המערכות ב<Link to="/compare">עמוד ההשוואה</Link>.
             </p>
+
+            <h3>איך בוחרים את רמת הסינון הנכונה</h3>
             <p>
-              בין אם אתם מחפשים <strong className="text-foreground">סינון טלפון לילדים</strong>, <strong className="text-foreground">סינון טלפון זול</strong>, <strong className="text-foreground">חסימת אינטרנט באשדוד</strong>, <strong className="text-foreground">סינון תוכן למבוגרים</strong>, או פתרון הרמטי ברמה הגבוהה ביותר כמו <strong className="text-foreground">הדרן</strong> – FilterPhone פילטר פון הוא הכתובת שלכם. <strong className="text-foreground">כל מכשיר, כל פלטפורמה, כל רמת סינון – מקום אחד.</strong>
+              לילדים ולנוער אנחנו ממליצים על פתרון שלא ניתן להסרה, כדי שהסינון לא ייעלם באיפוס יצרן.
+              לאנשי עסקים שצריכים שהמכשיר ימשיך לתפקד – עסקן נבנה בדיוק בשביל זה. מי שרוצה חסימה
+              ממוקדת בלי לשנות את אופן השימוש במכשיר, יסתדר מצוין עם סינון בסיסי. אם אתם מתלבטים,
+              <Link to="/#advisor"> יועץ הסינון שלנו</Link> ידרג את כל האפשרויות לפי התשובות שלכם.
             </p>
+
+            <h3>סינון יוטיוב</h3>
             <p>
-              בנוסף פיתחנו את <Link to="/filtertube" className="text-primary font-semibold underline underline-offset-4">FilterTube – יוטיוב מסונן וכשר</Link>: אפליקציית אנדרואיד עם שלוש רמות סינון, מנעול הורים, מצב שמע בלבד ונגינה ברקע – חלופה נקייה ובטוחה לצפייה ביוטיוב.
+              בנוסף לשירותי הסינון פיתחנו את <Link to="/filtertube">FilterTube – יוטיוב מסונן וכשר</Link>:
+              אפליקציית אנדרואיד עם שלוש רמות סינון, מנעול הורים, מצב שמע בלבד ונגינה ברקע, בלי פרסומות.
+            </p>
+
+            <p>
+              המעבדה שלנו נמצאת ב{SITE.street}, {SITE.neighbourhood}, ואנחנו משרתים גם את אשקלון, יבנה,
+              גדרה, קרית מלאכי והסביבה. לתיאום: <a href={`tel:${SITE.phoneRaw}`}>{SITE.phone}</a>.
             </p>
           </div>
         </div>

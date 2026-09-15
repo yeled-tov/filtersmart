@@ -57,7 +57,7 @@ const Admin = () => {
     <div className="flex flex-col h-full bg-card">
       {/* Header */}
       <div className="p-4 border-b border-border flex items-center gap-3">
-        <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center text-primary-foreground font-bold text-sm">FS</div>
+        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">FS</div>
         {!collapsed && <h1 className="font-heading font-bold text-foreground text-sm">ניהול האתר</h1>}
       </div>
 

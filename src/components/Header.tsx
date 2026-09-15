@@ -1,146 +1,167 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Phone, MessageCircle } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, Phone, MapPin, Clock, MessageCircle } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import Logo from "./Logo";
 import { Button } from "./ui/button";
-
-const WA_LINK = "https://wa.me/972527186881?text=שלום%20פילטר%20פון%2C%20אשמח%20לקבל%20פרטים";
+import { SITE, WA_DEFAULT } from "@/lib/site";
 
 const navLinks = [
-  { href: "/", label: "בית" },
-  { href: "/about", label: "אודות" },
   { href: "/services", label: "שירותים" },
+  { href: "/pricing", label: "מחירון" },
+  { href: "/compare", label: "השוואת מערכות" },
   { href: "/filtertube", label: "FilterTube" },
-  { href: "/blog", label: "בלוג" },
+  { href: "/blog", label: "מדריכים" },
+  { href: "/about", label: "אודות" },
   { href: "/contact", label: "צור קשר" },
-  { href: "/my-account", label: "אזור אישי" },
 ];
 
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const location = useLocation();
+  const { pathname } = useLocation();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  return (
-    <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-card/80 backdrop-blur-2xl border-b border-border/40 shadow-sm"
-          : "bg-card/50 backdrop-blur-xl border-b border-transparent"
-      }`}
-    >
-      <nav className="container-custom flex items-center justify-between h-16 md:h-[72px]" aria-label="ניווט ראשי">
-        <Logo />
+  // Close the drawer whenever the route changes.
+  useEffect(() => setMobileOpen(false), [pathname]);
 
-        <ul className="hidden md:flex items-center gap-0.5">
-          {navLinks.map((link) => {
-            const isActive = location.pathname === link.href ||
-              (link.href !== "/" && location.pathname.startsWith(link.href));
-            return (
+  const isActive = (href: string) =>
+    pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
+
+  return (
+    <>
+      {/* Utility bar — the details people scan for before they call */}
+      <div className="hidden band-ink border-b border-white/10 lg:block">
+        <div className="container-custom flex h-9 items-center justify-between text-[0.8125rem] text-white/60">
+          <div className="flex items-center gap-6">
+            <a
+              href={SITE.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 transition-colors hover:text-white"
+            >
+              <MapPin className="h-3.5 w-3.5" />
+              {SITE.street}, {SITE.neighbourhood}
+            </a>
+            <span className="flex items-center gap-1.5">
+              <Clock className="h-3.5 w-3.5" />
+              {SITE.hours}
+            </span>
+          </div>
+          <a href={`tel:${SITE.phoneRaw}`} className="flex items-center gap-1.5 font-semibold text-white/85 transition-colors hover:text-white">
+            <Phone className="h-3.5 w-3.5" />
+            <span className="num">{SITE.phone}</span>
+          </a>
+        </div>
+      </div>
+
+      <header
+        className={`sticky top-0 z-50 bg-surface/90 backdrop-blur-xl transition-shadow duration-300 ${
+          scrolled ? "border-b border-border shadow-soft" : "border-b border-transparent"
+        }`}
+      >
+        <nav className="container-custom flex h-[68px] items-center justify-between gap-6" aria-label="ניווט ראשי">
+          <Logo />
+
+          <ul className="hidden items-center gap-1 lg:flex">
+            {navLinks.map((link) => (
               <li key={link.href}>
                 <Link
                   to={link.href}
-                  className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    isActive
-                      ? "text-primary"
-                      : "text-muted-foreground hover:text-foreground"
+                  aria-current={isActive(link.href) ? "page" : undefined}
+                  className={`relative block px-3 py-2 text-[0.9375rem] font-medium transition-colors ${
+                    isActive(link.href) ? "text-primary" : "text-ink-soft hover:text-primary"
                   }`}
                 >
                   {link.label}
-                  {isActive && (
-                    <motion.div
-                      layoutId="nav-indicator"
-                      className="absolute inset-0 rounded-lg bg-primary/8"
-                      transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
+                  {isActive(link.href) && (
+                    <motion.span
+                      layoutId="nav-underline"
+                      className="absolute inset-x-3 -bottom-px h-0.5 rounded-full bg-primary"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
                     />
                   )}
                 </Link>
               </li>
-            );
-          })}
-        </ul>
+            ))}
+          </ul>
 
-        <div className="hidden md:flex items-center gap-2">
-          <a href="tel:0527186881">
-            <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground">
-              <Phone className="w-4 h-4" />
-              <span className="font-medium" dir="ltr">052-718-6881</span>
-            </Button>
-          </a>
-          <a href={WA_LINK} target="_blank" rel="noopener noreferrer">
-            <Button size="sm" className="gradient-primary text-primary-foreground border-0 gap-2 shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-shadow">
-              <MessageCircle className="w-4 h-4" />
-              WhatsApp
-            </Button>
-          </a>
-        </div>
+          <div className="hidden items-center gap-2 md:flex">
+            <a href={`tel:${SITE.phoneRaw}`} className="lg:hidden">
+              <Button variant="outline" size="sm" className="gap-2">
+                <Phone className="h-4 w-4" />
+                <span className="num">{SITE.phone}</span>
+              </Button>
+            </a>
+            <a href={WA_DEFAULT} target="_blank" rel="noopener noreferrer">
+              <Button size="sm" className="gap-2">
+                <MessageCircle className="h-4 w-4" />
+                דברו איתנו
+              </Button>
+            </a>
+          </div>
 
-        <button
-          className="md:hidden p-2 rounded-lg text-foreground hover:bg-muted transition-colors"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label={mobileOpen ? "סגור תפריט" : "פתח תפריט"}
-        >
-          {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
-      </nav>
-
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="md:hidden bg-card/95 backdrop-blur-2xl border-b border-border/40 overflow-hidden"
+          <button
+            type="button"
+            className="-ml-2 rounded-md p-2 text-ink transition-colors hover:bg-surface-sunken lg:hidden"
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-expanded={mobileOpen}
+            aria-label={mobileOpen ? "סגירת תפריט" : "פתיחת תפריט"}
           >
-            <ul className="container-custom py-3 space-y-0.5">
-              {navLinks.map((link, i) => {
-                const isActive = location.pathname === link.href;
-                return (
-                  <motion.li
-                    key={link.href}
-                    initial={{ opacity: 0, x: 16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.04 }}
-                  >
-                    <Link
-                      to={link.href}
-                      onClick={() => setMobileOpen(false)}
-                      className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                        isActive ? "text-primary bg-primary/8" : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                      }`}
-                    >
-                      {link.label}
-                    </Link>
-                  </motion.li>
-                );
-              })}
-              <li className="pt-3 flex gap-2">
-                <a href="tel:0527186881" className="flex-1">
-                  <Button variant="outline" className="w-full gap-2 h-11">
-                    <Phone className="w-4 h-4" />
-                    052-718-6881
-                  </Button>
-                </a>
-                <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="flex-1">
-                  <Button className="w-full gap-2 h-11 gradient-primary text-primary-foreground border-0 shadow-md shadow-primary/20">
-                    <MessageCircle className="w-4 h-4" />
-                    WhatsApp
-                  </Button>
-                </a>
-              </li>
-            </ul>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </header>
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </nav>
+
+        <AnimatePresence initial={false}>
+          {mobileOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+              className="overflow-hidden border-b border-border bg-surface lg:hidden"
+            >
+              <div className="container-custom py-3">
+                <ul className="divide-y divide-border">
+                  {navLinks.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        to={link.href}
+                        className={`flex items-center justify-between py-3.5 text-[0.9375rem] font-medium ${
+                          isActive(link.href) ? "text-primary" : "text-ink"
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-4 grid grid-cols-2 gap-2.5 pb-2">
+                  <a href={`tel:${SITE.phoneRaw}`}>
+                    <Button variant="outline" className="w-full gap-2">
+                      <Phone className="h-4 w-4" />
+                      <span className="num">{SITE.phone}</span>
+                    </Button>
+                  </a>
+                  <a href={WA_DEFAULT} target="_blank" rel="noopener noreferrer">
+                    <Button variant="whatsapp" className="w-full gap-2">
+                      <MessageCircle className="h-4 w-4" />
+                      WhatsApp
+                    </Button>
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </header>
+    </>
   );
 };
 

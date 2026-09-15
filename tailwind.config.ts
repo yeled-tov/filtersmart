@@ -7,32 +7,61 @@ export default {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
+      padding: "1.25rem",
+      screens: { "2xl": "1216px" },
     },
     extend: {
       fontFamily: {
-        heading: ["Space Grotesk", "Heebo", "sans-serif"],
-        display: ["Frank Ruhl Libre", "Heebo", "serif"],
-        body: ["Heebo", "sans-serif"],
+        // Editorial Hebrew serif for display type, Heebo for everything else.
+        display: ["Frank Ruhl Libre", "Heebo", "Georgia", "serif"],
+        heading: ["Heebo", "system-ui", "sans-serif"],
+        body: ["Heebo", "system-ui", "-apple-system", "sans-serif"],
+      },
+
+      fontSize: {
+        // Hebrew reads better with slightly looser leading than Latin defaults
+        "display-xl": ["clamp(2.5rem, 6vw, 4.25rem)", { lineHeight: "1.08", fontWeight: "700" }],
+        "display-lg": ["clamp(2rem, 4.5vw, 3.25rem)", { lineHeight: "1.12", fontWeight: "700" }],
+        "display-md": ["clamp(1.625rem, 3vw, 2.375rem)", { lineHeight: "1.18", fontWeight: "700" }],
+        "display-sm": ["clamp(1.375rem, 2.2vw, 1.75rem)", { lineHeight: "1.25", fontWeight: "700" }],
       },
 
       colors: {
         border: "hsl(var(--border))",
+        "border-strong": "hsl(var(--border-strong))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        surface: {
+          DEFAULT: "hsl(var(--surface))",
+          sunken: "hsl(var(--surface-sunken))",
+        },
+        ink: {
+          DEFAULT: "hsl(var(--ink))",
+          soft: "hsl(var(--ink-soft))",
+        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          hover: "hsl(var(--primary-hover))",
+          tint: "hsl(var(--primary-tint))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+          tint: "hsl(var(--accent-tint))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
         },
+        gold: "hsl(var(--gold))",
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
+        whatsapp: "hsl(var(--whatsapp))",
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
@@ -41,15 +70,6 @@ export default {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
         },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        highlight: {
-          DEFAULT: "hsl(var(--highlight))",
-          foreground: "hsl(var(--highlight-foreground))",
-        },
-
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
@@ -69,41 +89,55 @@ export default {
           ring: "hsl(var(--sidebar-ring))",
         },
       },
+
       borderRadius: {
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        md: "calc(var(--radius) - 4px)",
+        sm: "calc(var(--radius) - 7px)",
+        xl: "calc(var(--radius) + 6px)",
+        "2xl": "calc(var(--radius) + 12px)",
       },
+
       keyframes: {
         "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
+          from: { height: "0", opacity: "0" },
+          to: { height: "var(--radix-accordion-content-height)", opacity: "1" },
         },
         "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+          from: { height: "var(--radix-accordion-content-height)", opacity: "1" },
+          to: { height: "0", opacity: "0" },
         },
-        "fade-in": {
-          from: { opacity: "0", transform: "translateY(20px)" },
+        "rise-in": {
+          from: { opacity: "0", transform: "translateY(12px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
-        "slide-in-right": {
-          from: { opacity: "0", transform: "translateX(40px)" },
-          to: { opacity: "1", transform: "translateX(0)" },
+        "fade-in": {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
         },
-        "pulse-glow": {
-          "0%, 100%": { boxShadow: "0 0 20px hsl(155 55% 42% / 0.3)" },
-          "50%": { boxShadow: "0 0 40px hsl(155 55% 42% / 0.5)" },
+        "scale-in": {
+          from: { opacity: "0", transform: "scale(0.97)" },
+          to: { opacity: "1", transform: "scale(1)" },
+        },
+        marquee: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
         },
       },
+
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-in": "fade-in 0.6s ease-out forwards",
-        "slide-in-right": "slide-in-right 0.6s ease-out forwards",
-        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+        "accordion-down": "accordion-down 0.22s ease-out",
+        "accordion-up": "accordion-up 0.22s ease-out",
+        "rise-in": "rise-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards",
+        "fade-in": "fade-in 0.4s ease-out forwards",
+        "scale-in": "scale-in 0.25s cubic-bezier(0.22, 1, 0.36, 1) forwards",
+        marquee: "marquee 28s linear infinite",
+      },
+
+      transitionTimingFunction: {
+        "out-expo": "cubic-bezier(0.22, 1, 0.36, 1)",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 } satisfies Config;

@@ -1,116 +1,151 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft, Lock, Cpu, Star } from "lucide-react";
+import { ArrowLeft, Cpu, Lock, Clock3, HardDriveDownload } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import AnimatedSection from "@/components/AnimatedSection";
+import SectionHeading from "@/components/SectionHeading";
+import { Button } from "@/components/ui/button";
 import { useServices, fallbackServices } from "@/hooks/useServices";
+import { SOLUTIONS } from "@/lib/advisor";
+import { SITE } from "@/lib/site";
+
+const ServiceCard = ({
+  slug, name, price, desc, logo, popular,
+}: { slug: string; name: string; price: string; desc: string | null; logo?: string | null; popular?: boolean }) => {
+  const profile = SOLUTIONS[slug];
+  return (
+    <Link to={`/services/${slug}`} className="group relative flex h-full flex-col panel panel-hover p-6">
+      {popular && (
+        <span className="absolute left-6 top-6 rounded-sm bg-accent px-2.5 py-1 text-[0.6875rem] font-bold text-accent-foreground">
+          הכי מבוקש
+        </span>
+      )}
+      <div className="flex items-start gap-3.5">
+        {logo ? (
+          <img src={logo} alt="" width={44} height={44} loading="lazy" className="h-11 w-11 shrink-0 rounded-md border border-border object-contain p-1.5" />
+        ) : (
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-primary-tint text-primary">
+            <Lock className="h-5 w-5" />
+          </span>
+        )}
+        <h3 className="mt-1 text-lg font-bold leading-snug text-ink transition-colors group-hover:text-primary">{name}</h3>
+      </div>
+
+      <p className="mt-4 flex-1 text-[0.9375rem] leading-relaxed text-ink-soft">{desc}</p>
+
+      {profile && (
+        <ul className="mt-5 space-y-1.5 text-[0.8125rem] text-muted-foreground">
+          <li className="flex items-center gap-2">
+            <Clock3 className="h-3.5 w-3.5 shrink-0" />
+            זמן התקנה: {profile.installTime}
+          </li>
+          <li className="flex items-center gap-2">
+            <HardDriveDownload className="h-3.5 w-3.5 shrink-0" />
+            {profile.wipesDevice ? "דורש מכשיר מאופס וגיבוי מראש" : "לא מוחק נתונים מהמכשיר"}
+          </li>
+        </ul>
+      )}
+
+      <div className="mt-6 flex items-end justify-between border-t border-border pt-4">
+        <span className="flex items-center gap-1.5 text-sm font-semibold text-primary">
+          מה כלול בשירות
+          <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+        </span>
+        <span className="num text-2xl font-extrabold text-ink">{price}</span>
+      </div>
+    </Link>
+  );
+};
 
 const Services = () => {
   const { data: services } = useServices();
-
   const allServices = services && services.length > 0 ? services : fallbackServices;
-  const filteringServices = allServices.filter((s) => s.category === "filtering");
-  const flashingServices = allServices.filter((s) => s.category === "flashing");
+  const filtering = allServices.filter((s) => s.category === "filtering");
+  const flashing = allServices.filter((s) => s.category === "flashing");
 
   return (
     <>
       <SEOHead
-        title="שירותי סינון טלפון באשדוד מ-100₪ | אייפון, גלקסי, אנדרואיד – FilterPhone"
-        description="✅ כל שירותי הסינון במקום אחד: סינון בסיסי 100₪, כושר פליי 70₪, הדרן 300₪, עסקן 300₪. אייפון, גלקסי, סמסונג, שיאומי – כל מכשיר. צריבת גרסה Qin 70₪ ☎ 052-718-6881"
+        title="שירותי סינון טלפון באשדוד | אייפון, גלקסי, אנדרואיד – FilterPhone"
+        description="כל שירותי הסינון של FilterPhone במקום אחד: סינון בסיסי 100₪, כושר פליי 70₪, הדרן 300₪, עסקן 300₪ וצריבת גרסה למכשירי Qin 70₪. לכל מכשיר – אייפון, גלקסי, שיאומי ואנדרואיד."
         path="/services"
-        keywords="סינון טלפון אשדוד, סינון אייפון, סינון גלקסי, סינון סמסונג, התקנת הדרן, כושר פליי התקנה, עסקן התקנה, צריבת גרסה שיאומי, מחיר סינון טלפון, סינון בסיסי, סינון אנדרואיד, סינון טלפון לילדים"
+        keywords="סינון טלפון אשדוד, סינון אייפון, סינון גלקסי, התקנת הדרן, כושר פליי התקנה, עסקן התקנה, צריבת גרסה שיאומי"
       />
       <Breadcrumbs items={[{ label: "שירותים" }]} />
 
-      <section className="section-padding bg-background bg-mesh">
+      <section className="section-padding" aria-label="שירותי סינון וצריבה">
         <div className="container-custom">
-          <AnimatedSection>
-            <div className="max-w-2xl mx-auto text-center mb-14">
-              <h1 className="text-3xl md:text-5xl font-heading font-bold text-foreground mb-4 text-balance">
-                השירותים <span className="gradient-text">שלנו</span>
-              </h1>
-              <p className="text-lg text-muted-foreground">
-                פתרונות סינון וצריבת גרסאות מקצועיים לכל סוגי המכשירים – שירות מהיר ואמין באשדוד
+          <SectionHeading
+            eyebrow="השירותים שלנו"
+            title="כל רמות הסינון, בשקיפות מלאה"
+            lead="בכל כרטיס כתוב כמה זה עולה, כמה זמן ההתקנה לוקחת ומה קורה לתוכן שבמכשיר. בעמוד של כל שירות תמצאו את הפירוט המלא."
+          />
+
+          <div className="mt-12">
+            <AnimatedSection>
+              <div className="rule-label mb-6">
+                <span className="flex items-center gap-2">
+                  <Lock className="h-4 w-4 text-primary/70" />
+                  סינון טלפונים והגנה דיגיטלית
+                </span>
+              </div>
+            </AnimatedSection>
+            <div className="grid gap-4 md:grid-cols-2">
+              {filtering.map((s, i) => (
+                <AnimatedSection key={s.slug} delay={i * 0.05}>
+                  <ServiceCard
+                    slug={s.slug}
+                    name={s.name}
+                    price={s.price}
+                    desc={s.short_desc}
+                    logo={s.logo_url}
+                    popular={s.slug === "hadran"}
+                  />
+                </AnimatedSection>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-14">
+            <AnimatedSection>
+              <div className="rule-label mb-6">
+                <span className="flex items-center gap-2">
+                  <Cpu className="h-4 w-4 text-primary/70" />
+                  צריבת גרסאות כשרות למכשירי שיאומי Qin
+                </span>
+              </div>
+            </AnimatedSection>
+            <div className="grid gap-4 md:grid-cols-2">
+              {flashing.map((s, i) => (
+                <AnimatedSection key={s.slug} delay={i * 0.05}>
+                  <ServiceCard slug={s.slug} name={s.name} price={s.price} desc={s.short_desc} />
+                </AnimatedSection>
+              ))}
+            </div>
+          </div>
+
+          <AnimatedSection className="mt-14">
+            <div className="flex flex-col items-center gap-5 rounded-lg border border-border bg-surface-sunken p-8 text-center">
+              <h2 className="text-display-sm">עדיין מתלבטים?</h2>
+              <p className="max-w-lg text-[0.9375rem] leading-relaxed text-ink-soft">
+                יועץ הסינון שלנו ידרג את כל הפתרונות לפי הגיל, המכשיר והשימוש שלכם – ויסביר למה כל אחד
+                מהם מתאים או לא. אפשר גם פשוט להשוות בין המערכות.
               </p>
+              <div className="flex flex-wrap justify-center gap-3">
+                <Link to="/#advisor">
+                  <Button>ליועץ הסינון</Button>
+                </Link>
+                <Link to="/compare">
+                  <Button variant="outline">להשוואה בין המערכות</Button>
+                </Link>
+                <a href={`tel:${SITE.phoneRaw}`}>
+                  <Button variant="outline">
+                    <span className="num">{SITE.phone}</span>
+                  </Button>
+                </a>
+              </div>
             </div>
           </AnimatedSection>
-
-          <div className="mb-16">
-            <AnimatedSection>
-              <div className="flex items-center gap-2.5 mb-8">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
-                  <Lock className="w-4 h-4 text-white" />
-                </div>
-                <h2 className="text-xl font-heading font-semibold text-foreground">סינון טלפונים והגנה דיגיטלית</h2>
-              </div>
-            </AnimatedSection>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {filteringServices.map((service, i) => (
-                <AnimatedSection key={service.slug} delay={i * 0.08}>
-                  <Link
-                    to={`/services/${service.slug}`}
-                    className="bg-card rounded-2xl p-6 card-shadow hover:card-shadow-hover transition-all hover:-translate-y-1 duration-300 group flex flex-col relative overflow-hidden border border-border/50 h-full"
-                  >
-                    {service.slug === "hadran" && (
-                      <div className="absolute top-4 left-4 flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
-                        <Star className="w-3 h-3 fill-current" />
-                        הכי פופולרי
-                      </div>
-                    )}
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-center gap-3">
-                        {service.logo_url && (
-                          <img src={service.logo_url} alt={`${service.name} לוגו`} className="w-11 h-11 rounded-xl object-contain bg-muted p-1.5" loading="lazy" />
-                        )}
-                        <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">
-                          {service.name}
-                        </h3>
-                      </div>
-                      <span className="text-xl font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
-                    </div>
-                    <p className="text-muted-foreground text-sm leading-relaxed flex-1 mb-5">{service.short_desc}</p>
-                    <div className="flex items-center text-primary text-sm font-medium">
-                      <span>פרטים נוספים</span>
-                      <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
-                    </div>
-                  </Link>
-                </AnimatedSection>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <AnimatedSection>
-              <div className="flex items-center gap-2.5 mb-8">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center">
-                  <Cpu className="w-4 h-4 text-white" />
-                </div>
-                <h2 className="text-xl font-heading font-semibold text-foreground">צריבת גרסאות למכשירי שיאומי Qin</h2>
-              </div>
-            </AnimatedSection>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl">
-              {flashingServices.map((service, i) => (
-                <AnimatedSection key={service.slug} delay={i * 0.08}>
-                  <Link
-                    to={`/services/${service.slug}`}
-                    className="bg-card rounded-2xl p-6 card-shadow hover:card-shadow-hover transition-all hover:-translate-y-1 duration-300 group flex flex-col border border-border/50 h-full"
-                  >
-                    <div className="flex items-start justify-between mb-3">
-                      <h3 className="text-lg font-heading font-semibold text-card-foreground group-hover:text-primary transition-colors">
-                        {service.name}
-                      </h3>
-                      <span className="text-xl font-bold gradient-text whitespace-nowrap mr-3">{service.price}</span>
-                    </div>
-                    <p className="text-muted-foreground text-sm leading-relaxed flex-1 mb-5">{service.short_desc}</p>
-                    <div className="flex items-center text-primary text-sm font-medium">
-                      <span>פרטים נוספים</span>
-                      <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
-                    </div>
-                  </Link>
-                </AnimatedSection>
-              ))}
-            </div>
-          </div>
         </div>
       </section>
     </>

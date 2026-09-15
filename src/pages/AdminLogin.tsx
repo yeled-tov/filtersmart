@@ -83,13 +83,13 @@ const AdminLogin = () => {
       <div className="min-h-screen flex items-center justify-center bg-background p-4" dir="rtl">
         <div className="w-full max-w-sm">
           <div className="text-center mb-8">
-            <div className="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center mx-auto mb-4">
               <Mail className="w-8 h-8 text-primary-foreground" />
             </div>
             <h1 className="text-2xl font-heading font-bold text-foreground">שכחתי סיסמה</h1>
             <p className="text-muted-foreground text-sm mt-1">נשלח לך קישור לאיפוס סיסמה במייל</p>
           </div>
-          <form onSubmit={handleForgotPassword} className="bg-card rounded-xl p-6 card-shadow space-y-4">
+          <form onSubmit={handleForgotPassword} className="bg-card rounded-xl p-6 shadow-card space-y-4">
             <Input
               type="email"
               placeholder="כתובת מייל"
@@ -98,7 +98,7 @@ const AdminLogin = () => {
               required
               dir="ltr"
             />
-            <Button type="submit" className="w-full gradient-primary text-primary-foreground border-0" disabled={forgotLoading}>
+            <Button type="submit" className="w-full bg-primary text-primary-foreground border-0" disabled={forgotLoading}>
               {forgotLoading ? "שולח..." : "שלח קישור איפוס"}
             </Button>
             <Button type="button" variant="ghost" className="w-full text-muted-foreground" onClick={() => setShowForgot(false)}>
@@ -114,13 +114,13 @@ const AdminLogin = () => {
     <div className="min-h-screen flex items-center justify-center bg-background p-4" dir="rtl">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center mx-auto mb-4">
             <Shield className="w-8 h-8 text-primary-foreground" />
           </div>
           <h1 className="text-2xl font-heading font-bold text-foreground">פאנל ניהול</h1>
           <p className="text-muted-foreground text-sm mt-1">התחבר כמנהל</p>
         </div>
-        <div className="bg-card rounded-xl p-6 card-shadow space-y-4">
+        <div className="bg-card rounded-xl p-6 shadow-card space-y-4">
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               type="email"
@@ -138,7 +138,7 @@ const AdminLogin = () => {
               required
               dir="ltr"
             />
-            <Button type="submit" className="w-full gradient-primary text-primary-foreground border-0" disabled={loading}>
+            <Button type="submit" className="w-full bg-primary text-primary-foreground border-0" disabled={loading}>
               {loading ? "מתחבר..." : "התחבר"}
             </Button>
           </form>
