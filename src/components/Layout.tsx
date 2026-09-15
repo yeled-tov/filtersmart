@@ -4,7 +4,6 @@ import Footer from "./Footer";
 import UrgencyBanner from "./UrgencyBanner";
 import AccessibilityButton from "./AccessibilityButton";
 import WhatsAppButton from "./WhatsAppButton";
-import ChatbotLoader from "./ChatbotLoader";
 import ExitIntentPopup from "./ExitIntentPopup";
 import BackToTop from "./BackToTop";
 
@@ -26,10 +25,13 @@ const Layout = () => (
 
     <Footer />
 
-    {/* Floating layer: WhatsApp + back-to-top on the right, chat assistant on the left */}
+    {/*
+      Floating layer. Everything of ours lives on the right; the bottom-left
+      corner is deliberately left empty for the Chatbase bubble, which injects
+      its own button (#chatbase-bubble-button) there from index.html.
+    */}
     <WhatsAppButton />
     <BackToTop />
-    <ChatbotLoader />
     <AccessibilityButton />
     <ExitIntentPopup />
   </div>
