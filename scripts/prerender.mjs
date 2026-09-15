@@ -525,14 +525,19 @@ function injectRoute(template, route) {
     html = html.replace("</head>", `  ${blocks}\n  </head>`);
   }
 
-  // Replace the SEO fallback inside #root with the route-specific one
+  // Replace the crawler fallback inside #root with the route-specific one.
+  // The attributes may be spread over several lines, so match the opening tag
+  // by its id rather than by exact spacing; the block itself contains no nested
+  // <div>, so the first `</div></div>` pair closes it and then #root.
   const fallback = buildFallback(route);
-  // Replace from "<div id="seo-fallback"" up to the matching "</div>" that closes it.
-  // Our template uses a single fallback block wrapped as `<div id="seo-fallback" ...> ... </div>` immediately before the closing `</div>` of #root.
-  html = html.replace(
-    /<div id="seo-fallback"[\s\S]*?<\/div>\s*<\/div>/,
-    `${fallback}\n    </div>`,
-  );
+  const fallbackPattern = /<div\s[^>]*id="seo-fallback"[\s\S]*?<\/div>\s*<\/div>/;
+  if (!fallbackPattern.test(html)) {
+    throw new Error(
+      `[prerender] Could not find the #seo-fallback block for ${route.path}. ` +
+        "index.html changed shape — every route would otherwise ship the home page's fallback content.",
+    );
+  }
+  html = html.replace(fallbackPattern, `${fallback}\n    </div>`);
 
   return html;
 }
