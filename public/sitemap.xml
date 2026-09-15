@@ -69,7 +69,11 @@
     <loc>https://www.filterphone.com/filtertube</loc>
     <lastmod>2026-09-15</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://www.filterphone.com/filtertube-og.jpg</image:loc>
+      <image:title>FilterTube – יוטיוב מסונן וכשר לאנדרואיד</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.filterphone.com/blog</loc>

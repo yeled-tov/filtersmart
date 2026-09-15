@@ -202,7 +202,9 @@ const routes = [
   },
   {
     path: "/filtertube",
-    title: "FilterTube – יוטיוב מסונן וכשר להורדה (APK) | FilterPhone",
+    title: "FilterTube (פילטר טיוב) – יוטיוב מסונן וכשר להורדה APK",
+    image: "/filtertube-og.jpg",
+    imageAlt: "FilterTube – יוטיוב מסונן וכשר, אפליקציה לאנדרואיד",
     description:
       "FilterTube – אפליקציית יוטיוב מסוננת וכשרה בעברית לאנדרואיד, להורדה חינם. שלוש רמות סינון, מצב שמע, נגן ברקע, הורדות אופליין, קוד הורים וללא פרסומות. חלופה חוקית לאפליקציות יוטיוב פרוצות.",
     keywords:
@@ -213,8 +215,10 @@ const routes = [
       {
         h2: "התכונות המרכזיות של FilterTube",
         items: [
-          "שלוש רמות סינון: מחמיר (שמע בלבד), רגיל (וידאו מסונן), קל־דתי (תכני קודש כשמע)",
-          "מצב שמע בלבד – חיסכון בסוללה ובנתונים",
+          "רמת מחמיר: המוזיקה נשמעת כאודיו בלבד, כל שאר התוכן בווידאו, וערוצי ״דתי לייט״ מוסתרים",
+          "רמת רגיל: אותו תוכן, אבל גם המוזיקה מוצגת כווידאו",
+          "רמת דתי לייט: מוסיפה שירים חילוניים בביצוע זמרים גברים בלבד, שמתנגנים כאודיו",
+          "מצב אודיו לכל האפליקציה – בכל רמת סינון, חיסכון בסוללה ובנתונים",
           "נגן ברקע וחלון צף – גם כשהמסך נעול",
           "הורדות לצפייה אופליין – גם ללא אינטרנט",
           "קוד הורים בן 4 ספרות לנעילת ההגדרות ורמת הסינון",
@@ -459,6 +463,43 @@ function injectRoute(template, route) {
     /<meta\s+name=["']twitter:description["']\s+content=["'][^"']*["']\s*\/?>/i,
     `<meta name="twitter:description" content="${escDesc}" />`,
   );
+
+  // Social preview image. Link-preview bots (WhatsApp, Telegram, Facebook) never
+  // run JavaScript, so react-helmet's og:image never reaches them — only this does.
+  if (route.image) {
+    const img = escapeHtml(`${SITE_URL}${route.image}`);
+    const imgAlt = escapeHtml(route.imageAlt || route.title);
+    const w = String(route.imageWidth || 1200);
+    const h = String(route.imageHeight || 630);
+    html = html.replace(
+      /<meta\s+property=["']og:image["']\s+content=["'][^"']*["']\s*\/?>/i,
+      `<meta property="og:image" content="${img}" />`,
+    );
+    html = html.replace(
+      /<meta\s+property=["']og:image:secure_url["']\s+content=["'][^"']*["']\s*\/?>/i,
+      `<meta property="og:image:secure_url" content="${img}" />`,
+    );
+    html = html.replace(
+      /<meta\s+property=["']og:image:width["']\s+content=["'][^"']*["']\s*\/?>/i,
+      `<meta property="og:image:width" content="${w}" />`,
+    );
+    html = html.replace(
+      /<meta\s+property=["']og:image:height["']\s+content=["'][^"']*["']\s*\/?>/i,
+      `<meta property="og:image:height" content="${h}" />`,
+    );
+    html = html.replace(
+      /<meta\s+property=["']og:image:alt["']\s+content=["'][^"']*["']\s*\/?>/i,
+      `<meta property="og:image:alt" content="${imgAlt}" />`,
+    );
+    html = html.replace(
+      /<meta\s+name=["']twitter:image["']\s+content=["'][^"']*["']\s*\/?>/i,
+      `<meta name="twitter:image" content="${img}" />`,
+    );
+    html = html.replace(
+      /<meta\s+name=["']twitter:image:alt["']\s+content=["'][^"']*["']\s*\/?>/i,
+      `<meta name="twitter:image:alt" content="${imgAlt}" />`,
+    );
+  }
   // keywords (only for routes that specify)
   if (escKw) {
     html = html.replace(
