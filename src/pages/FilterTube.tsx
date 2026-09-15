@@ -1,511 +1,553 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import ApkDownloadButton from "@/components/ApkDownloadButton";
+import { motion } from "framer-motion";
 import {
-  Shield, Music, Lock, Download, Play, Sparkles, Users, ChevronDown,
-  Radio, Video, Headphones, Settings2, Layers, Zap, Star, Check
+  ArrowLeft, Check, ChevronDown, Download, Headphones, Layers, Lock,
+  MessageCircle, Minus, Music, Radio, Settings2, Shield, ShieldCheck,
+  Smartphone, Sparkles, Video,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import SEOHead from "@/components/SEOHead";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import AnimatedSection from "@/components/AnimatedSection";
+import ApkDownloadButton from "@/components/ApkDownloadButton";
+import { SITE, waLink } from "@/lib/site";
 
-// App screenshots (bundled in /public/filtertube – works on any host)
+/* App screenshots, bundled in /public/filtertube so they work on any host. */
 const SHOTS = {
-  login:    "/filtertube/142557.jpg",
+  login: "/filtertube/142557.jpg",
   password: "/filtertube/142641.jpg",
-  levels:   "/filtertube/142652.jpg",
-  music:    "/filtertube/142658.jpg",
-  success:  "/filtertube/142705.jpg",
-  feed:     "/filtertube/142716.jpg",
-  player:   "/filtertube/142911.jpg",
-  overlay:  "/filtertube/143005.jpg",
-  quality:  "/filtertube/143022.jpg",
-  shorts:   "/filtertube/143258.jpg",
+  levels: "/filtertube/142652.jpg",
+  music: "/filtertube/142658.jpg",
+  success: "/filtertube/142705.jpg",
+  feed: "/filtertube/142716.jpg",
+  player: "/filtertube/142911.jpg",
+  overlay: "/filtertube/143005.jpg",
+  quality: "/filtertube/143022.jpg",
+  shorts: "/filtertube/143258.jpg",
 };
 
-const APK_URL = "https://github.com/yeled-tov/filtertube-android/releases/latest/download/FilterTube.apk";
+const APK_URL = SITE.filterTubeApk;
+const WA_FILTERTUBE = waLink("שלום, אשמח לפרטים על FilterTube – יוטיוב מסונן");
 
-/* ---------- 3D Phone frame ---------- */
-const PhoneFrame = ({
-  src, alt, className = "", tilt = "left",
-}: { src: string; alt: string; className?: string; tilt?: "left" | "right" | "flat" }) => {
-  const rotation =
-    tilt === "left" ? "rotateY(18deg) rotateX(6deg) rotateZ(-3deg)"
-    : tilt === "right" ? "rotateY(-18deg) rotateX(6deg) rotateZ(3deg)"
-    : "rotateY(0) rotateX(2deg)";
-  return (
-    <div
-      className={`relative mx-auto ${className}`}
-      style={{ perspective: "1600px", transformStyle: "preserve-3d" }}
-    >
-      <div
-        className="relative aspect-[9/19.5] w-full rounded-[2.6rem] bg-neutral-900 p-[6px] shadow-[0_60px_120px_-30px_rgba(220,38,38,0.35),0_30px_60px_-30px_rgba(0,0,0,0.7)] ring-1 ring-white/10"
-        style={{
-          transform: rotation,
-          transformStyle: "preserve-3d",
-        }}
-      >
-        {/* Metallic side gleam */}
-        <div className="pointer-events-none absolute inset-0 rounded-[2.6rem] bg-gradient-to-br from-white/15 via-transparent to-white/5" />
-        {/* Screen */}
-        <div className="relative h-full w-full overflow-hidden rounded-[2.2rem] bg-black">
-          <img
-            src={src}
-            alt={alt}
-            loading="lazy"
-            className="h-full w-full object-cover"
-          />
-          {/* Screen glare */}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/15 mix-blend-overlay" />
-          {/* Notch */}
-          <div className="pointer-events-none absolute left-1/2 top-2 h-5 w-24 -translate-x-1/2 rounded-full bg-black" />
-        </div>
-        {/* Buttons */}
-        <div className="absolute -left-[3px] top-24 h-14 w-[3px] rounded-l bg-neutral-700" />
-        <div className="absolute -left-[3px] top-44 h-20 w-[3px] rounded-l bg-neutral-700" />
-        <div className="absolute -right-[3px] top-32 h-16 w-[3px] rounded-r bg-neutral-700" />
-      </div>
-      {/* Glow */}
-      <div className="pointer-events-none absolute inset-0 -z-10 blur-3xl opacity-70"
-           style={{ background: "radial-gradient(closest-side, rgba(239,68,68,0.35), transparent 70%)" }} />
-    </div>
-  );
-};
+/* ------------------------------------------------------------------ */
 
-/* ---------- Scroll-tilt phone ---------- */
-const ScrollPhone = ({ src, alt }: { src: string; alt: string }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const rotate = useSpring(useTransform(scrollYProgress, [0, 1], [25, -25]), { stiffness: 60, damping: 20 });
-  const y = useSpring(useTransform(scrollYProgress, [0, 1], [40, -40]), { stiffness: 60, damping: 20 });
-  return (
-    <motion.div ref={ref} style={{ perspective: 1600 }}>
-      <motion.div style={{ rotateY: rotate, y, transformStyle: "preserve-3d" }}>
-        <PhoneFrame src={src} alt={alt} tilt="flat" className="max-w-[280px]" />
-      </motion.div>
-    </motion.div>
-  );
-};
-
-/* ---------- Feature card ---------- */
-const FeatureCard = ({
-  icon: Icon, title, desc, delay = 0,
-}: { icon: any; title: string; desc: string; delay?: number }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 30 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: "-80px" }}
-    transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
-    className="group relative rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-xl hover:border-red-500/40 transition-all duration-500 hover:-translate-y-1"
-  >
-    <div className="absolute inset-0 -z-10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-         style={{ background: "radial-gradient(400px circle at var(--x,50%) var(--y,50%), rgba(239,68,68,0.15), transparent 40%)" }} />
-    <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-red-500/20 to-red-500/5 ring-1 ring-red-500/30">
-      <Icon className="h-5 w-5 text-red-400" />
-    </div>
-    <h3 className="mb-2 text-lg font-bold text-white">{title}</h3>
-    <p className="text-sm leading-relaxed text-white/60">{desc}</p>
-  </motion.div>
+/**
+ * A device frame that stands straight. No perspective, no tilt, no glare —
+ * the screenshot is the point, the frame just holds it.
+ */
+const Phone = ({
+  src, alt, className = "", priority = false,
+}: { src: string; alt: string; className?: string; priority?: boolean }) => (
+  <div className={`relative aspect-[9/19.5] w-full max-w-[15rem] overflow-hidden rounded-[1.75rem] border-[6px] border-[hsl(208_30%_7%)] bg-black shadow-float ${className}`}>
+    <img
+      src={src}
+      alt={alt}
+      width={240}
+      height={520}
+      loading={priority ? "eager" : "lazy"}
+      decoding="async"
+      className="h-full w-full object-cover"
+    />
+    {/* Notch */}
+    <span className="pointer-events-none absolute left-1/2 top-1.5 h-4 w-20 -translate-x-1/2 rounded-full bg-black" aria-hidden="true" />
+  </div>
 );
 
-/* ---------- Main Page ---------- */
-const FilterTube = () => {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: heroProg } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const heroY = useTransform(heroProg, [0, 1], [0, 200]);
-  const heroOpacity = useTransform(heroProg, [0, 1], [1, 0]);
+const filterLevels = [
+  {
+    name: "מחמיר",
+    icon: Headphones,
+    summary: "שמע בלבד, בלי וידאו",
+    detail: "האפליקציה מנגנת את הפסקול בלבד. מתאים למי שרוצה את התוכן בלי מסך כלל.",
+  },
+  {
+    name: "רגיל",
+    icon: Video,
+    summary: "וידאו מסונן",
+    detail: "צפייה רגילה, אבל רק בתוכן שעבר סינון. זו הרמה שרוב המשתמשים בוחרים.",
+  },
+  {
+    name: "קל־דתי",
+    icon: ShieldCheck,
+    summary: "וידאו, ותכני קודש כשמע",
+    detail: "רוב התוכן מוצג כווידאו, ותכני קודש עוברים אוטומטית למצב שמע מתוך כבוד.",
+  },
+];
 
+const features = [
+  { icon: Shield, title: "שלוש רמות סינון", desc: "מחמיר, רגיל וקל־דתי – התאמה מדויקת לכל בית." },
+  { icon: Radio, title: "מצב שמע", desc: "להאזין לסרטון כמו לפודקאסט, וגם לחסוך בנתונים ובסוללה." },
+  { icon: Layers, title: "חלון צף ונגן ברקע", desc: "הניגון ממשיך תוך כדי גלישה, כתיבה או מסך נעול." },
+  { icon: Download, title: "הורדות לצפייה אופליין", desc: "להוריד מראש ולצפות גם בלי אינטרנט – נוח לנסיעות." },
+  { icon: Lock, title: "קוד הורים בן 4 ספרות", desc: "נועל את ההגדרות ואת רמת הסינון. רק ההורה משנה." },
+  { icon: Music, title: "מוזיקה יהודית מובנית", desc: "בוחרים אמנים, ומקבלים פיד אישי של תוכן שמע." },
+  { icon: Settings2, title: "שליטה באיכות ובמהירות", desc: "מ-144p ועד 1080p, מהירות ניגון וטעינה חסכונית." },
+  { icon: Sparkles, title: "בלי פרסומות ובלי תגובות", desc: "אין פרסומות, אין תגובות, ואין אלגוריתם שמושך הלאה." },
+];
+
+const comparison: { label: string; ours: boolean; theirs: boolean }[] = [
+  { label: "ללא פרסומות", ours: true, theirs: true },
+  { label: "נגן ברקע", ours: true, theirs: true },
+  { label: "הורדות לצפייה אופליין", ours: true, theirs: true },
+  { label: "חלון צף", ours: true, theirs: true },
+  { label: "אפליקציה חוקית, לא APK פרוץ", ours: true, theirs: false },
+  { label: "סינון תוכן לפני הצגה", ours: true, theirs: false },
+  { label: "שלוש רמות סינון להורים", ours: true, theirs: false },
+  { label: "קוד הורים לנעילת הגדרות", ours: true, theirs: false },
+  { label: "ממשק מלא בעברית", ours: true, theirs: false },
+  { label: "מוזיקה יהודית מובנית", ours: true, theirs: false },
+];
+
+const faqs = [
+  {
+    q: "מה זה FilterTube ובמה זה שונה מיוטיוב רגיל?",
+    a: "FilterTube היא אפליקציית וידאו כשרה לאנדרואיד שמציגה תוכן יוטיוב אחרי סינון. יש בה שלוש רמות סינון, קוד הורים, ותכונות שביוטיוב שמורות למנוי בתשלום – נגן ברקע, חלון צף והורדות – בלי פרסומות ובלי תגובות.",
+  },
+  {
+    q: "זו חלופה חוקית ליוטיוב פרוץ?",
+    a: "כן. FilterTube נותנת את מה שאנשים מחפשים באפליקציות פרוצות – הורדות, ניגון ברקע וללא פרסומות – בסביבה חוקית, בטוחה ומסוננת, בלי להתקין APK ממקור לא מוכר.",
+  },
+  {
+    q: "מה ההבדל בין שלוש רמות הסינון?",
+    a: "מחמיר – שמע בלבד, בלי וידאו כלל. רגיל – צפייה בווידאו מסונן, וזו הרמה שרוב המשתמשים בוחרים. קל־דתי – רוב התוכן מוצג כווידאו, ותכני קודש עוברים אוטומטית למצב שמע.",
+  },
+  {
+    q: "איך מורידים ומתקינים?",
+    a: "לוחצים על כפתור ההורדה בעמוד ומקבלים את קובץ ה-APK הרשמי. ההתקנה חינמית, לא דורשת חשבון גוגל ולא דורשת רוט. מתאים לאנדרואיד 7.0 ומעלה.",
+  },
+  {
+    q: "הפרימיום באמת חינם ל-30 יום?",
+    a: "כן, שלושים ימי ניסיון מלאים – כולל הורדות, נגן ברקע וחלון צף. לא נדרש אמצעי תשלום כדי להתחיל.",
+  },
+  {
+    q: "ילדים יכולים להשתמש בזה?",
+    a: "כן. קוד הורים בן ארבע ספרות נועל את ההגדרות, כך שרק ההורה יכול לשנות רמת סינון או להוסיף אמנים.",
+  },
+  {
+    q: "יש גרסה לאייפון?",
+    a: "בשלב זה האפליקציה זמינה לאנדרואיד בלבד. אפשר לשלוח לנו הודעה בוואטסאפ ונעדכן כשתהיה גרסה לאייפון.",
+  },
+];
+
+/* ------------------------------------------------------------------ */
+
+const Eyebrow = ({ children }: { children: React.ReactNode }) => (
+  <span className="eyebrow">{children}</span>
+);
+
+const ShowcaseRow = ({
+  eyebrow, title, body, points, shots, reverse = false,
+}: {
+  eyebrow: string;
+  title: string;
+  body: string;
+  points?: string[];
+  shots: { src: string; alt: string }[];
+  reverse?: boolean;
+}) => (
+  <AnimatedSection>
+    <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <div className={reverse ? "lg:order-2" : ""}>
+        <Eyebrow>{eyebrow}</Eyebrow>
+        <h3 className="mt-4 text-display-sm text-white">{title}</h3>
+        <p className="mt-4 text-[1.0625rem] leading-relaxed text-ink-soft">{body}</p>
+        {points && (
+          <ul className="mt-6 space-y-2.5">
+            {points.map((t) => (
+              <li key={t} className="flex items-center gap-2.5 text-[0.9375rem] text-ink-soft">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/15 ring-1 ring-primary/40">
+                  <Check className="h-3 w-3 text-primary" />
+                </span>
+                {t}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <div className={`flex justify-center gap-4 ${reverse ? "lg:order-1" : ""}`}>
+        {shots.map((s, i) => (
+          <Phone
+            key={s.src}
+            src={s.src}
+            alt={s.alt}
+            className={i > 0 ? "hidden max-w-[13rem] translate-y-8 md:block" : ""}
+          />
+        ))}
+      </div>
+    </div>
+  </AnimatedSection>
+);
+
+/* ------------------------------------------------------------------ */
+
+const FilterTube = () => {
   const softwareLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    name: "FilterTube – יוטיוב מסונן כשר",
+    name: "FilterTube – יוטיוב מסונן וכשר",
     alternateName: ["פילטר טיוב", "FilterTube APK", "יוטיוב כשר", "יוטיוב מסונן"],
     operatingSystem: "Android 7.0+",
     applicationCategory: "MultimediaApplication",
     applicationSubCategory: "VideoApplication",
     inLanguage: "he",
+    url: `${SITE.url}/filtertube`,
     downloadUrl: APK_URL,
     installUrl: APK_URL,
-    softwareVersion: "latest",
     fileSize: "25MB",
-    offers: { "@type": "Offer", price: "0", priceCurrency: "ILS", availability: "https://schema.org/InStock" },
-    aggregateRating: { "@type": "AggregateRating", ratingValue: "5", ratingCount: "47", bestRating: "5" },
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "ILS",
+      availability: "https://schema.org/InStock",
+    },
     description:
-      "FilterTube – אפליקציית יוטיוב מסונן וכשרה לחלוטין בעברית. חלופה חוקית ליוטיוב פרוץ / YouTube Vanced / NewPipe. סינון תוכן AI, 3 רמות סינון, מצב אודיו, נגן ברקע, חלון צף, הורדות לצפייה אופליין, אפס פרסומות, מוזיקה יהודית.",
-    publisher: { "@type": "Organization", name: "FilterPhone", url: "https://www.filterphone.com" },
+      "FilterTube – אפליקציית יוטיוב מסוננת וכשרה בעברית לאנדרואיד. שלוש רמות סינון, מצב שמע, נגן ברקע, חלון צף, הורדות לצפייה אופליין, קוד הורים וללא פרסומות. חלופה חוקית לאפליקציות יוטיוב פרוצות.",
+    featureList: features.map((f) => f.title),
+    publisher: { "@id": `${SITE.url}/#business` },
     screenshot: [
-      "https://www.filterphone.com/filtertube/142716.jpg",
-      "https://www.filterphone.com/filtertube/142911.jpg",
-      "https://www.filterphone.com/filtertube/143258.jpg",
+      `${SITE.url}${SHOTS.feed}`,
+      `${SITE.url}${SHOTS.player}`,
+      `${SITE.url}${SHOTS.levels}`,
     ],
-    keywords: "יוטיוב מסונן, יוטיוב כשר, יוטיוב פרוץ, YouTube Vanced חלופה, NewPipe עברית, יוטיוב ללא פרסומות, יוטיוב לילדים, יוטיוב לחרדים",
   };
 
   const faqLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: [
-      { "@type": "Question", name: "מה זה FilterTube?", acceptedAnswer: { "@type": "Answer", text: "FilterTube היא אפליקציית יוטיוב מסוננת וכשרה עם שלוש רמות סינון, מצב אודיו, נגן ברקע והורדות." } },
-      { "@type": "Question", name: "האם FilterTube חלופה ליוטיוב פרוץ?", acceptedAnswer: { "@type": "Answer", text: "כן. FilterTube מספקת את כל התכונות של יוטיוב פרוץ, YouTube Vanced ו-NewPipe – הורדות, נגן ברקע, ללא פרסומות – אך בסביבה מסוננת, כשרה וחוקית." } },
-      { "@type": "Question", name: "איפה להוריד את FilterTube APK?", acceptedAnswer: { "@type": "Answer", text: "אפשר להוריד את קובץ ה-APK ישירות מהאתר בכפתור \"הורד APK\", או מ-GitHub של הפרויקט. ההתקנה חינמית ולא דורשת חשבון." } },
-      { "@type": "Question", name: "האם יש רמות סינון?", acceptedAnswer: { "@type": "Answer", text: "כן, שלוש רמות: מחמיר (אודיו בלבד), רגיל (וידאו מלא), וקל דתי (תכני קודש כאודיו)." } },
-      { "@type": "Question", name: "האם יש נגן ברקע?", acceptedAnswer: { "@type": "Answer", text: "כן, נגן ברקע וחלון צף (Floating window) זמינים במנוי הפרימיום, כולל 30 יום ניסיון חינם." } },
-    ],
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
   };
 
   return (
-    <div className="relative overflow-hidden bg-[#0a0508] text-white [background-image:radial-gradient(1200px_600px_at_80%_-10%,rgba(239,68,68,0.18),transparent_60%),radial-gradient(900px_500px_at_0%_30%,rgba(249,115,22,0.10),transparent_60%),radial-gradient(1000px_600px_at_50%_110%,rgba(236,72,153,0.10),transparent_60%)]" dir="rtl">
+    <div className="theme-filtertube bg-background text-foreground">
+      <SEOHead
+        title="FilterTube – יוטיוב מסונן וכשר להורדה (APK) | FilterPhone"
+        description="FilterTube – אפליקציית יוטיוב מסוננת וכשרה בעברית לאנדרואיד, להורדה חינם. שלוש רמות סינון, מצב שמע, נגן ברקע, הורדות אופליין, קוד הורים וללא פרסומות. חלופה חוקית לאפליקציות יוטיוב פרוצות."
+        path="/filtertube"
+        keywords="יוטיוב מסונן, יוטיוב כשר, FilterTube, פילטר טיוב, יוטיוב מסונן להורדה, אפליקציית יוטיוב כשרה, יוטיוב ללא פרסומות, יוטיוב לילדים, סינון יוטיוב"
+        image={`${SITE.url}${SHOTS.feed}`}
+        imageAlt="מסך הפיד של FilterTube – יוטיוב מסונן וכשר"
+      />
       <Helmet>
-        <title>FilterTube – יוטיוב מסונן וכשר להורדה APK | חלופה ליוטיוב פרוץ</title>
-        <meta name="description" content="FilterTube – יוטיוב מסונן וכשר בעברית להורדה חינם (APK). 3 רמות סינון, מצב אודיו, נגן ברקע, הורדות אופליין ואפס פרסומות. החלופה החוקית והבטוחה ליוטיוב פרוץ / YouTube Vanced / NewPipe. 30 יום פרימיום חינם." />
-        <meta name="keywords" content="יוטיוב מסונן, יוטיוב כשר, יוטיוב פרוץ, יוטיוב פרוץ להורדה, יוטיוב APK, YouTube כשר, YouTube Vanced חלופה, YouTube ReVanced עברית, NewPipe עברית, FilterTube, FilterTube APK, פילטר טיוב, סינון יוטיוב, יוטיוב לילדים, יוטיוב לחרדים, יוטיוב דתי, יוטיוב ללא פרסומות, הורדת סרטוני יוטיוב, נגן יוטיוב ברקע, יוטיוב אופליין, יוטיוב חלון צף, יוטיוב פרימיום חינם, אפליקציית וידאו כשרה, יוטיוב מסונן אנדרואיד" />
-        <link rel="canonical" href="https://www.filterphone.com/filtertube" />
-        <meta property="og:title" content="FilterTube – יוטיוב מסונן וכשר להורדה חינם | חלופה ליוטיוב פרוץ" />
-        <meta property="og:description" content="החלופה הכשרה והחוקית ליוטיוב פרוץ – 3 רמות סינון, מצב אודיו, נגן ברקע, הורדות ואפס פרסומות. הורד APK חינם." />
-        <meta property="og:url" content="https://www.filterphone.com/filtertube" />
-        <meta property="og:type" content="website" />
-        <meta property="og:locale" content="he_IL" />
-        <meta property="og:image" content="https://www.filterphone.com/filtertube/142716.jpg" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="FilterTube – יוטיוב מסונן וכשר להורדה" />
-        <meta name="twitter:description" content="החלופה החוקית והכשרה ליוטיוב פרוץ. הורד APK חינם." />
-        <meta name="twitter:image" content="https://www.filterphone.com/filtertube/142716.jpg" />
         <script type="application/ld+json">{JSON.stringify(softwareLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
       </Helmet>
 
-      {/* ================= HERO ================= */}
-      <section ref={heroRef} className="relative isolate min-h-[100vh] pt-24 pb-16">
-        {/* Background */}
-        <div className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(239,68,68,0.16),transparent_58%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,rgba(0,0,0,0.55)_60%,#000_100%)]" />
-          <div className="absolute inset-0 texture-weave opacity-70" />
-        </div>
+      <Breadcrumbs items={[{ label: "FilterTube – יוטיוב מסונן" }]} />
 
-        <motion.div style={{ y: heroY, opacity: heroOpacity }} className="container-custom">
-          <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-            {/* Copy */}
-            <div>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="mb-7 inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/[0.07] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-red-400"
-              >
-                <span className="h-1 w-1 animate-pulse rounded-full bg-red-500" />
-                30 יום ניסיון חינם
-              </motion.div>
+      {/* ------------------------------------------------------------ Hero */}
+      <section className="relative overflow-hidden" aria-label="FilterTube – יוטיוב מסונן וכשר">
+        <div className="pointer-events-none absolute inset-0 texture-traces opacity-40" aria-hidden="true" />
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0 h-[32rem] bg-[radial-gradient(ellipse_70%_60%_at_50%_0%,hsl(358_76%_50%/0.18),transparent_70%)]"
+          aria-hidden="true"
+        />
 
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.1 }}
-                className="font-display text-[2.85rem] md:text-[4.6rem] font-black leading-[0.95] tracking-tight"
-              >
-                <span className="block">הדרך הנקייה</span>
-                <span className="block text-red-500">לצפות ביוטיוב.</span>
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.25 }}
-                className="mt-6 max-w-md text-base md:text-lg font-light text-white/60 leading-relaxed"
-              >
-                FilterTube – החלופה הכשרה, המסוננת והחוקית ליוטיוב פרוץ.
-                שלוש רמות סינון, מצב אודיו, נגן ברקע, הורדות ואפס פרסומות – הכל בעברית.
-              </motion.p>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="mt-9 max-w-sm space-y-3"
-              >
-                <ApkDownloadButton href={APK_URL} label="הורדה ישירה APK" block />
-                <a
-                  href="https://wa.me/972527186881?text=שלום%20אשמח%20לפרטים%20על%20FilterTube"
-                  target="_blank" rel="noopener noreferrer"
-                  className="group flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-transparent py-3 text-sm font-semibold text-white/80 transition-colors hover:bg-white/5"
-                >
-                  מענה אנושי בוואטסאפ
-                  <Zap className="h-4 w-4 text-emerald-400 transition-transform group-hover:rotate-12" />
-                </a>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
-                className="mt-9 flex max-w-sm items-center justify-between hairline-t pt-7"
-              >
-                <div className="text-center">
-                  <div className="font-display text-lg font-bold">5.0</div>
-                  <div className="text-[9px] uppercase tracking-widest text-white/40">דירוג</div>
-                </div>
-                <div className="h-8 w-px bg-white/[0.08]" />
-                <div className="text-center">
-                  <div className="font-display text-lg font-bold">500+</div>
-                  <div className="text-[9px] uppercase tracking-widest text-white/40">משתמשים</div>
-                </div>
-                <div className="h-8 w-px bg-white/[0.08]" />
-                <div className="text-center">
-                  <Shield className="mx-auto h-5 w-5 text-red-500" />
-                  <div className="text-[9px] uppercase tracking-widest text-white/40">כשר ומוגן</div>
-                </div>
-              </motion.div>
-            </div>
-
-
-            {/* 3 Floating phones */}
-            <div className="relative h-[560px] md:h-[640px]">
-              <motion.div
-                initial={{ opacity: 0, x: 60, rotate: 8 }}
-                animate={{ opacity: 1, x: 0, rotate: 0 }}
-                transition={{ duration: 0.9, delay: 0.2 }}
-                className="absolute right-0 top-4 z-10 w-[62%]"
-              >
-                <PhoneFrame src={SHOTS.feed} alt="פיד וידאו מאושר ב-FilterTube" tilt="right" />
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, x: -60, rotate: -8 }}
-                animate={{ opacity: 1, x: 0, rotate: 0 }}
-                transition={{ duration: 0.9, delay: 0.35 }}
-                className="absolute left-2 top-32 z-20 w-[58%]"
-              >
-                <PhoneFrame src={SHOTS.player} alt="נגן וידאו של FilterTube" tilt="left" />
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 60 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.5 }}
-                className="absolute bottom-0 left-1/2 z-30 w-[46%] -translate-x-1/2"
-              >
-                <PhoneFrame src={SHOTS.shorts} alt="פיד שורטס ב-FilterTube" tilt="flat" />
-              </motion.div>
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div
-          animate={{ y: [0, 8, 0] }} transition={{ duration: 2, repeat: Infinity }}
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/40"
-          aria-hidden
-        >
-          <ChevronDown className="h-6 w-6" />
-        </motion.div>
-      </section>
-
-      {/* ================= FEATURES ================= */}
-      <section className="relative py-24">
-        <div className="container-custom">
+        <div className="container-custom relative grid gap-12 py-14 md:py-20 lg:grid-cols-12 lg:items-center lg:gap-10">
           <motion.div
-            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            className="mx-auto mb-16 max-w-2xl text-center"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:col-span-6"
           >
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-red-400">כל מה שרציתם ביוטיוב פרוץ</p>
-            <h2 className="text-4xl md:text-5xl font-black tracking-tight">
-              רק שהפעם, זה כשר.
-            </h2>
-          </motion.div>
+            <span className="inline-flex items-center gap-2 rounded-sm border border-primary/35 bg-primary/10 px-3 py-1.5 text-[0.8125rem] font-bold text-primary">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-primary opacity-70 motion-safe:animate-ping" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+              </span>
+              אפליקציה משלנו · 30 יום פרימיום חינם
+            </span>
 
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <FeatureCard icon={Shield} title="3 רמות סינון" desc="מחמיר (אודיו בלבד), רגיל (וידאו מלא) וקל דתי – התאמה מדויקת לכל משפחה." />
-            <FeatureCard icon={Radio} title="מצב אודיו" desc="נגן את הסרטון כפודקאסט – חסוך נתונים, שמור על הריכוז." delay={0.05} />
-            <FeatureCard icon={Layers} title="חלון צף ורקע" desc="השאר את הווידאו פועל תוך כדי גלישה, כתיבה או נעילת מסך." delay={0.1} />
-            <FeatureCard icon={Download} title="הורדות אופליין" desc="הורד סרטונים מראש – צפייה גם ללא אינטרנט, אידאלי לנסיעות." delay={0.15} />
-            <FeatureCard icon={Lock} title="קוד הורים 4 ספרות" desc="הגנה על ההגדרות ורמת הסינון – רק המבוגר האחראי יכול לשנות." delay={0.2} />
-            <FeatureCard icon={Music} title="מוזיקה כשרה" desc="בחר את האמנים שלך – אברהם פריד, 8thDay, שוואקי ועוד – פיד אישי." delay={0.25} />
-            <FeatureCard icon={Settings2} title="איכות ומהירות" desc="שליטה מלאה: 144p עד 1080p, מהירות ניגון, וטעינה חכמה חוסכת סוללה." delay={0.3} />
-            <FeatureCard icon={Sparkles} title="בית אישי חכם" desc="פיד מותאם למגדר, לגיל, לאמנים ולערוצים שאתם עוקבים אחריהם." delay={0.35} />
-          </div>
-        </div>
-      </section>
+            <h1 className="mt-6 text-display-xl text-white">
+              יוטיוב מסונן,
+              <span className="mt-1 block text-primary">בלי הפתעות.</span>
+            </h1>
 
-      {/* ================= SHOWCASE (scroll phones) ================= */}
-      <section className="relative py-24">
-        <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(239,68,68,0.12),transparent_60%)]" />
-        <div className="container-custom">
-
-          {/* Row 1 */}
-          <div className="grid items-center gap-14 lg:grid-cols-2 mb-32">
-            <div>
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-red-400">התאמה אישית</p>
-              <h2 className="mb-5 text-4xl md:text-5xl font-black tracking-tight">
-                הרשמה בשלוש דקות.<br/>מותאם בול אליך.
-              </h2>
-              <p className="text-lg text-white/70 leading-relaxed mb-6">
-                בחר מגדר, קבע קוד הורים, ובחר את רמת הסינון המתאימה למשפחה שלך.
-                האפליקציה תדע איזה תוכן להראות – ובעיקר – איזה להסתיר.
-              </p>
-              <ul className="space-y-3">
-                {["התאמה לפי מגדר וגיל", "קוד הורים לנעילת הגדרות", "3 רמות סינון בלחיצה אחת", "30 יום פרימיום חינם"].map((t) => (
-                  <li key={t} className="flex items-center gap-3 text-white/80">
-                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500/20 ring-1 ring-red-500/40">
-                      <Check className="h-3 w-3 text-red-400" />
-                    </div>
-                    {t}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="flex justify-center gap-4">
-              <ScrollPhone src={SHOTS.login} alt="מסך התחברות FilterTube" />
-              <div className="hidden md:block pt-12">
-                <ScrollPhone src={SHOTS.levels} alt="בחירת רמת סינון" />
-              </div>
-            </div>
-          </div>
-
-          {/* Row 2 (reversed) */}
-          <div className="grid items-center gap-14 lg:grid-cols-2 mb-32">
-            <div className="lg:order-2">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-red-400">חוויית ניגון</p>
-              <h2 className="mb-5 text-4xl md:text-5xl font-black tracking-tight">
-                נגן חזק כמו יוטיוב פרימיום.<br/>רק בלי הזבל.
-              </h2>
-              <p className="text-lg text-white/70 leading-relaxed mb-6">
-                שליטה מלאה: מהירות, איכות, אודיו בלבד, רקע, חלון צף. כל מה שהייתם צריכים אפליקציה חיצונית בשביל – עכשיו במקום אחד, כשר.
-              </p>
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  { i: Play, t: "ללא פרסומות" },
-                  { i: Headphones, t: "נגן ברקע" },
-                  { i: Video, t: "עד איכות 1080p" },
-                  { i: Download, t: "הורדות אופליין" },
-                ].map(({ i: Icon, t }) => (
-                  <div key={t} className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 backdrop-blur">
-                    <Icon className="h-4 w-4 text-red-400" />
-                    <span className="text-sm text-white/85">{t}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="lg:order-1 flex justify-center gap-4">
-              <ScrollPhone src={SHOTS.overlay} alt="שכבת ניגון של FilterTube" />
-              <div className="hidden md:block pt-12">
-                <ScrollPhone src={SHOTS.quality} alt="הגדרות איכות ומהירות" />
-              </div>
-            </div>
-          </div>
-
-          {/* Row 3 */}
-          <div className="grid items-center gap-14 lg:grid-cols-2">
-            <div>
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-red-400">תוכן וגילוי</p>
-              <h2 className="mb-5 text-4xl md:text-5xl font-black tracking-tight">
-                פיד ושורטס מסוננים.<br/>גילוי בלי הפתעות.
-              </h2>
-              <p className="text-lg text-white/70 leading-relaxed">
-                כל סרטון עובר סינון AI + סינון אנושי לפני שהוא מופיע בפיד שלך.
-                אין תגובות פרובוקטיביות, אין המלצות אלגוריתם רעילות – רק תוכן שאתם רוצים לראות.
-              </p>
-            </div>
-            <div className="flex justify-center gap-4">
-              <ScrollPhone src={SHOTS.shorts} alt="שורטס כשרים" />
-              <div className="hidden md:block pt-12">
-                <ScrollPhone src={SHOTS.music} alt="בחירת אמנים למוזיקה" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ================= COMPARISON ================= */}
-      <section className="relative py-24">
-        <div className="container-custom max-w-4xl">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            className="mb-4 text-center text-4xl md:text-5xl font-black"
-          >
-            FilterTube <span className="text-white/40">vs</span> יוטיוב פרוץ
-          </motion.h2>
-          <p className="mb-12 text-center text-white/60">כל הפיצ'רים – אפס הסיכון המשפטי והרוחני.</p>
-
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl">
-            {[
-              ["ללא פרסומות", true, true],
-              ["נגן ברקע", true, true],
-              ["הורדות אופליין", true, true],
-              ["חלון צף", true, true],
-              ["חוקי ובטוח (ללא APK פרוץ)", true, false],
-              ["סינון תוכן ברמת AI", true, false],
-              ["3 רמות סינון להורים", true, false],
-              ["תמיכה בעברית מלאה", true, false],
-              ["ללא ריגול / פרסומות מוסתרות", true, false],
-              ["מוזיקה יהודית מובנית", true, false],
-            ].map(([label, mine, theirs], i) => (
-              <div key={i} className={`grid grid-cols-[1fr_auto_auto] items-center gap-6 px-6 py-4 ${i % 2 ? "bg-white/[0.02]" : ""}`}>
-                <span className="text-sm md:text-base text-white/85">{label as string}</span>
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-red-500/15 ring-1 ring-red-500/40">
-                  {mine ? <Check className="h-4 w-4 text-red-400" /> : <span className="text-white/30">–</span>}
-                </span>
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/10">
-                  {theirs ? <Check className="h-4 w-4 text-white/40" /> : <span className="text-white/30">✕</span>}
-                </span>
-              </div>
-            ))}
-            <div className="grid grid-cols-[1fr_auto_auto] gap-6 border-t border-white/10 bg-black/40 px-6 py-3 text-xs font-bold uppercase tracking-wider">
-              <span />
-              <span className="text-red-400">FilterTube</span>
-              <span className="text-white/40">YouTube פרוץ</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ================= FAQ ================= */}
-      <section className="relative py-24">
-        <div className="container-custom max-w-3xl">
-          <h2 className="mb-12 text-center text-4xl md:text-5xl font-black">שאלות נפוצות</h2>
-          <div className="space-y-3">
-            {[
-              { q: "מה זה FilterTube ואיך זה שונה מיוטיוב רגיל?", a: "FilterTube היא אפליקציית וידאו כשרה שמבוססת על תוכן יוטיוב אבל עם סינון AI קפדני, שלוש רמות סינון להורים ותכונות פרימיום כמו נגן ברקע והורדות – בלי פרסומות ובלי סיכון תוכן לא ראוי." },
-              { q: "האם זו חלופה חוקית ליוטיוב פרוץ?", a: "בהחלט. FilterTube נותנת את כל התכונות של יוטיוב פרימיום ואפליקציות פרוצות (הורדות, רקע, ללא פרסומות) – אבל בסביבה חוקית, בטוחה וכשרה." },
-              { q: "יש רמות סינון שונות?", a: "כן. מחמיר – אודיו בלבד, ללא וידאו. רגיל – וידאו מסונן. קל דתי – רוב התוכן וידאו, אך תכני קודש עוברים לאודיו כדי לשמור על כבוד." },
-              { q: "האם הפרימיום באמת חינם ל-30 יום?", a: "כן, 30 ימי ניסיון מלאים – כולל הורדות, נגן ברקע, חלון צף וכל שאר התכונות. לא נדרש אמצעי תשלום להתחלה." },
-              { q: "האם ילדים יכולים להשתמש?", a: "כן. יש קוד הורים בן 4 ספרות שנועל את ההגדרות, כך שרק ההורה יכול לשנות רמת סינון או להסיר אמנים." },
-              { q: "האם FilterTube זמין לאייפון?", a: "בשלב זה האפליקציה זמינה לאנדרואיד. גרסת iOS בפיתוח – השאירו פרטים ונעדכן אתכם." },
-            ].map((item, i) => (
-              <motion.details
-                key={i}
-                initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
-                className="group rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur overflow-hidden"
-              >
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-right font-bold text-white/90 hover:text-white transition">
-                  {item.q}
-                  <ChevronDown className="h-5 w-5 shrink-0 text-red-400 transition-transform group-open:rotate-180" />
-                </summary>
-                <div className="px-6 pb-5 text-white/65 leading-relaxed">{item.a}</div>
-              </motion.details>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ================= CTA ================= */}
-      <section className="relative py-24">
-        <div className="container-custom">
-          <div className="relative overflow-hidden rounded-3xl border border-red-500/20 bg-gradient-to-br from-red-950/50 via-black to-black p-10 md:p-16 text-center">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(239,68,68,0.25),transparent_60%)]" />
-            <h2 className="relative text-4xl md:text-6xl font-black tracking-tight">
-              יוטיוב אחר.<br/>
-              <span className="bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">רגוע יותר.</span>
-            </h2>
-            <p className="relative mt-5 text-lg text-white/70 max-w-xl mx-auto">
-              30 יום פרימיום חינם. ללא כרטיס אשראי. ללא סיכון.
+            <p className="mt-6 max-w-lg text-[1.0625rem] leading-relaxed text-ink-soft">
+              FilterTube היא אפליקציית אנדרואיד שמציגה תוכן יוטיוב אחרי סינון: שלוש רמות סינון
+              לבחירתכם, קוד הורים שנועל אותן, מצב שמע ונגן ברקע – וללא פרסומות ותגובות.
             </p>
-            <div className="relative mt-8 flex flex-wrap justify-center gap-3">
-              <ApkDownloadButton href={APK_URL} label="הורד APK עכשיו" size="lg" className="items-center" />
-              <a
-                href="https://wa.me/972527186881?text=שלום%20אשמח%20לפרטים%20על%20FilterTube"
-                target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-4 text-sm font-bold text-white backdrop-blur transition hover:bg-white/10"
-              >
-                דבר איתנו
-                <Zap className="h-4 w-4" />
+
+            <div className="mt-9 max-w-sm space-y-3">
+              <ApkDownloadButton href={APK_URL} label="הורדת האפליקציה (APK)" block />
+              <a href={WA_FILTERTUBE} target="_blank" rel="noopener noreferrer" className="block">
+                <Button variant="outline" className="w-full gap-2">
+                  <MessageCircle className="h-4 w-4" />
+                  שאלה לפני שמורידים? דברו איתנו
+                </Button>
               </a>
             </div>
+
+            {/* The facts people actually need before installing an APK */}
+            <dl className="mt-10 grid max-w-md grid-cols-3 gap-6 border-t border-border pt-7">
+              {[
+                { term: "מערכת", value: "אנדרואיד 7+" },
+                { term: "גודל", value: "כ-25MB" },
+                { term: "חשבון גוגל", value: "לא נדרש" },
+              ].map((f) => (
+                <div key={f.term}>
+                  <dt className="text-[0.75rem] text-muted-foreground">{f.term}</dt>
+                  <dd className="mt-1 text-[0.9375rem] font-bold text-white">{f.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+            className="flex items-end justify-center gap-4 lg:col-span-6 lg:gap-6"
+          >
+            <Phone src={SHOTS.player} alt="נגן הווידאו של FilterTube" className="hidden max-w-[12.5rem] translate-y-10 sm:block" />
+            <Phone src={SHOTS.feed} alt="מסך הפיד של FilterTube – יוטיוב מסונן" priority />
+            <Phone src={SHOTS.levels} alt="בחירת רמת סינון ב-FilterTube" className="hidden max-w-[12.5rem] translate-y-10 md:block" />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* -------------------------------------------------- Filter levels */}
+      <section className="section-padding border-t border-border bg-surface-sunken" aria-label="רמות הסינון">
+        <div className="container-custom">
+          <AnimatedSection className="max-w-2xl">
+            <Eyebrow>הלב של האפליקציה</Eyebrow>
+            <h2 className="mt-4 text-display-md text-white">בוחרים רמת סינון – ונועלים אותה</h2>
+            <p className="mt-4 text-[1.0625rem] leading-relaxed text-ink-soft">
+              לא כל בית צריך את אותו דבר. FilterTube נותנת שלוש רמות, וקוד הורים בן ארבע ספרות
+              שמונע שינוי שלהן.
+            </p>
+          </AnimatedSection>
+
+          <div className="mt-12 grid gap-px overflow-hidden rounded-lg border border-border bg-border md:grid-cols-3">
+            {filterLevels.map((lvl, i) => (
+              <AnimatedSection key={lvl.name} delay={i * 0.06}>
+                <div className="h-full bg-surface p-7">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-md bg-primary/15 text-primary ring-1 ring-primary/30">
+                    <lvl.icon className="h-5 w-5" />
+                  </span>
+                  <h3 className="mt-5 text-lg font-bold text-white">{lvl.name}</h3>
+                  <p className="mt-1 text-[0.875rem] font-semibold text-primary">{lvl.summary}</p>
+                  <p className="mt-3 text-[0.9375rem] leading-relaxed text-ink-soft">{lvl.detail}</p>
+                </div>
+              </AnimatedSection>
+            ))}
           </div>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------- Features */}
+      <section className="section-padding" aria-label="תכונות האפליקציה">
+        <div className="container-custom">
+          <AnimatedSection className="max-w-2xl">
+            <Eyebrow>מה יש באפליקציה</Eyebrow>
+            <h2 className="mt-4 text-display-md text-white">כל מה שמחפשים באפליקציה פרוצה, בלי הסיכון</h2>
+          </AnimatedSection>
+
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {features.map((f, i) => (
+              <AnimatedSection key={f.title} delay={(i % 4) * 0.05}>
+                <div className="h-full panel panel-hover p-6">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/12 text-primary ring-1 ring-primary/25">
+                    <f.icon className="h-[1.125rem] w-[1.125rem]" />
+                  </span>
+                  <h3 className="mt-4 text-[0.9375rem] font-bold text-white">{f.title}</h3>
+                  <p className="mt-2 text-[0.875rem] leading-relaxed text-ink-soft">{f.desc}</p>
+                </div>
+              </AnimatedSection>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------- Showcase */}
+      <section className="section-padding border-t border-border bg-surface-sunken" aria-label="מסכים מתוך האפליקציה">
+        <div className="container-custom space-y-24 md:space-y-32">
+          <ShowcaseRow
+            eyebrow="הגדרה ראשונה"
+            title="שלוש דקות, ומותאם לבית שלכם"
+            body="בוחרים רמת סינון, קובעים קוד הורים, ומסמנים את סוג התוכן שמעניין. מכאן האפליקציה יודעת מה להראות – ובעיקר מה להסתיר."
+            points={["התאמה לפי גיל וסוג תוכן", "קוד הורים לנעילת ההגדרות", "החלפת רמת סינון בלחיצה", "30 יום פרימיום חינם"]}
+            shots={[
+              { src: SHOTS.login, alt: "מסך ההתחברות של FilterTube" },
+              { src: SHOTS.levels, alt: "בחירת רמת הסינון ב-FilterTube" },
+            ]}
+          />
+
+          <ShowcaseRow
+            reverse
+            eyebrow="חוויית הניגון"
+            title="נגן מלא, בלי מה שמסביב"
+            body="שליטה במהירות ובאיכות, מצב שמע בלבד, ניגון ברקע וחלון צף. כל מה שהיה דורש אפליקציה חיצונית – נמצא כאן, בתוך סביבה מסוננת."
+            points={["ללא פרסומות", "נגן ברקע וחלון צף", "איכות עד 1080p", "הורדות לצפייה אופליין"]}
+            shots={[
+              { src: SHOTS.overlay, alt: "שכבת הניגון של FilterTube" },
+              { src: SHOTS.quality, alt: "הגדרות איכות ומהירות ב-FilterTube" },
+            ]}
+          />
+
+          <ShowcaseRow
+            eyebrow="תוכן וגילוי"
+            title="פיד שאפשר לתת לילד ביד"
+            body="כל סרטון עובר סינון לפני שהוא מגיע לפיד. אין תגובות, אין תכנים מוצעים שמושכים הלאה, ואין פרסומות. גם מוזיקה יהודית מובנית, לפי האמנים שבוחרים."
+            shots={[
+              { src: SHOTS.shorts, alt: "פיד השורטס המסונן של FilterTube" },
+              { src: SHOTS.music, alt: "בחירת אמנים למוזיקה ב-FilterTube" },
+            ]}
+          />
+        </div>
+      </section>
+
+      {/* ----------------------------------------------------- Comparison */}
+      <section className="section-padding" aria-label="השוואה לאפליקציות יוטיוב פרוצות">
+        <div className="container-custom max-w-3xl">
+          <AnimatedSection className="text-center">
+            <h2 className="text-display-md text-white">FilterTube מול אפליקציה פרוצה</h2>
+            <p className="mx-auto mt-4 max-w-xl text-[1.0625rem] leading-relaxed text-ink-soft">
+              אותן תכונות שאנשים מחפשים – בלי להתקין APK ממקור לא מוכר, ועם סינון.
+            </p>
+          </AnimatedSection>
+
+          <AnimatedSection delay={0.08} className="mt-10">
+            <div className="overflow-hidden rounded-lg border border-border bg-surface">
+              <table className="w-full text-right">
+                <caption className="sr-only">
+                  השוואת תכונות בין FilterTube לבין אפליקציות יוטיוב פרוצות
+                </caption>
+                <thead>
+                  <tr className="border-b border-border bg-surface-sunken">
+                    <th scope="col" className="px-5 py-3.5 text-[0.8125rem] font-semibold text-muted-foreground md:px-6">
+                      תכונה
+                    </th>
+                    <th scope="col" className="w-28 px-3 py-3.5 text-center text-[0.8125rem] font-bold text-primary">
+                      FilterTube
+                    </th>
+                    <th scope="col" className="w-28 px-3 py-3.5 text-center text-[0.8125rem] font-semibold text-muted-foreground">
+                      אפליקציה פרוצה
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {comparison.map((row) => (
+                    <tr key={row.label}>
+                      <th scope="row" className="px-5 py-3.5 text-right text-[0.9375rem] font-medium text-ink-soft md:px-6">
+                        {row.label}
+                      </th>
+                      <td className="px-3 py-3.5">
+                        <span className="mx-auto flex h-7 w-7 items-center justify-center rounded-full bg-primary/15 ring-1 ring-primary/40">
+                          <Check className="h-3.5 w-3.5 text-primary" aria-label="יש" />
+                        </span>
+                      </td>
+                      <td className="px-3 py-3.5">
+                        <span className="mx-auto flex h-7 w-7 items-center justify-center rounded-full bg-white/5 ring-1 ring-border-strong">
+                          {row.theirs ? (
+                            <Check className="h-3.5 w-3.5 text-muted-foreground" aria-label="יש" />
+                          ) : (
+                            <Minus className="h-3.5 w-3.5 text-muted-foreground" aria-label="אין" />
+                          )}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------------ FAQ */}
+      <section className="section-padding border-t border-border bg-surface-sunken" aria-label="שאלות נפוצות על FilterTube">
+        <div className="container-custom grid gap-10 lg:grid-cols-12 lg:gap-12">
+          <AnimatedSection className="lg:col-span-4">
+            <Eyebrow>שאלות נפוצות</Eyebrow>
+            <h2 className="mt-4 text-display-md text-white">מה שואלים אותנו על FilterTube</h2>
+            <a
+              href={WA_FILTERTUBE}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-flex items-center gap-1.5 text-[0.9375rem] font-semibold text-primary link-underline"
+            >
+              לשאלה שלא מופיעה כאן
+              <ArrowLeft className="h-4 w-4" />
+            </a>
+          </AnimatedSection>
+
+          <AnimatedSection delay={0.08} className="lg:col-span-8">
+            <Accordion type="single" collapsible className="divide-y divide-border overflow-hidden rounded-lg border border-border bg-surface">
+              {faqs.map((faq, i) => (
+                <AccordionItem key={faq.q} value={`ft-faq-${i}`} className="border-0 px-5 md:px-6">
+                  <AccordionTrigger className="py-[1.125rem] text-right text-[0.9375rem] font-bold text-white hover:no-underline md:text-base">
+                    {faq.q}
+                  </AccordionTrigger>
+                  <AccordionContent className="pb-5 text-[0.9375rem] leading-relaxed text-ink-soft">
+                    {faq.a}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------------ CTA */}
+      <section className="relative overflow-hidden section-padding" aria-label="הורדת FilterTube">
+        <div
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_70%_at_50%_100%,hsl(358_76%_50%/0.20),transparent_70%)]"
+          aria-hidden="true"
+        />
+        <div className="container-custom relative max-w-3xl text-center">
+          <AnimatedSection>
+            <h2 className="text-display-lg text-white">יוטיוב אחר. רגוע יותר.</h2>
+            <p className="mx-auto mt-5 max-w-lg text-[1.0625rem] leading-relaxed text-ink-soft">
+              שלושים יום פרימיום חינם, בלי כרטיס אשראי ובלי חשבון גוגל. אם לא מתאים – פשוט מוחקים.
+            </p>
+            <div className="mt-9 flex flex-col items-center gap-4">
+              <div className="w-full max-w-sm">
+                <ApkDownloadButton href={APK_URL} label="הורדת FilterTube (APK)" size="lg" block />
+              </div>
+              <a href={WA_FILTERTUBE} target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" className="gap-2">
+                  <MessageCircle className="h-4 w-4" />
+                  דברו איתנו בוואטסאפ
+                </Button>
+              </a>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ------------------------------------------- Back to the main business */}
+      <section className="border-t border-border bg-surface-sunken py-12" aria-label="שירותי הסינון שלנו">
+        <div className="container-custom">
+          <AnimatedSection>
+            <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
+              <div className="flex items-start gap-4">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-accent/15 text-accent ring-1 ring-accent/30">
+                  <Smartphone className="h-5 w-5" />
+                </span>
+                <div>
+                  <h2 className="text-lg font-bold text-white">רוצים לסנן גם את הטלפון עצמו?</h2>
+                  <p className="mt-1.5 max-w-xl text-[0.9375rem] leading-relaxed text-ink-soft">
+                    FilterPhone היא מעבדה באשדוד לסינון טלפונים – משווק מורשה של הדרן, עסקן וכושר פליי,
+                    וצריבת גרסאות כשרות למכשירי שיאומי Qin.
+                  </p>
+                </div>
+              </div>
+              <div className="flex shrink-0 flex-wrap gap-2.5">
+                <Link to="/services">
+                  <Button variant="outline">לשירותי הסינון</Button>
+                </Link>
+                <Link to="/compare">
+                  <Button variant="outline">להשוואת מערכות</Button>
+                </Link>
+              </div>
+            </div>
+          </AnimatedSection>
         </div>
       </section>
     </div>

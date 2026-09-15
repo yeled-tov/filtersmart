@@ -309,6 +309,52 @@
   }
 }
 
+/*
+  FilterTube is a product page with its own identity, but it is still our page:
+  the site's ink navy as the base, with the app's red as the single accent.
+  Re-mapping the tokens inside this scope means panels, buttons, the accordion
+  and the prose styles all work here unchanged.
+*/
+.theme-filtertube {
+  --background: 208 46% 8%;
+  --surface: 208 36% 12%;
+  --surface-sunken: 208 42% 10%;
+
+  --card: 208 36% 12%;
+  --card-foreground: 40 25% 96%;
+  --popover: 208 36% 12%;
+  --popover-foreground: 40 25% 96%;
+
+  --foreground: 40 25% 96%;
+  --ink: 0 0% 100%;
+  --ink-soft: 205 16% 76%;
+
+  --primary: 358 76% 55%;
+  --primary-foreground: 0 0% 100%;
+  --primary-hover: 358 76% 47%;
+  --primary-tint: 358 38% 18%;
+
+  --accent: 24 74% 56%;
+  --accent-foreground: 0 0% 100%;
+  --accent-tint: 22 38% 18%;
+
+  --secondary: 208 28% 18%;
+  --secondary-foreground: 40 25% 96%;
+
+  --muted: 208 28% 16%;
+  --muted-foreground: 205 12% 62%;
+
+  --border: 208 22% 21%;
+  --border-strong: 208 18% 30%;
+  --input: 208 22% 21%;
+  --ring: 358 76% 55%;
+
+  --shadow-xs: 0 1px 2px hsl(0 0% 0% / 0.3);
+  --shadow-sm: 0 1px 2px hsl(0 0% 0% / 0.3), 0 2px 8px -2px hsl(0 0% 0% / 0.4);
+  --shadow-md: 0 1px 2px hsl(0 0% 0% / 0.3), 0 12px 28px -14px hsl(0 0% 0% / 0.7);
+  --shadow-lg: 0 2px 4px hsl(0 0% 0% / 0.3), 0 30px 60px -28px hsl(0 0% 0% / 0.85);
+}
+
 /* High-contrast accessibility mode (toggled from the a11y menu) */
 .high-contrast {
   --background: 0 0% 100%;
