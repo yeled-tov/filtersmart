@@ -11,6 +11,8 @@ import Index from "./pages/Index";
 
 const About = lazy(() => import("./pages/About"));
 const Services = lazy(() => import("./pages/Services"));
+const Pricing = lazy(() => import("./pages/Pricing"));
+const Compare = lazy(() => import("./pages/Compare"));
 const ServiceDetail = lazy(() => import("./pages/ServiceDetail"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
@@ -29,8 +31,8 @@ const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
 const queryClient = new QueryClient();
 
 const PageLoader = () => (
-  <div className="flex items-center justify-center min-h-[60vh]">
-    <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin" />
+  <div className="flex min-h-[60vh] items-center justify-center" role="status" aria-label="טוען">
+    <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
   </div>
 );
 
@@ -49,6 +51,8 @@ const App = () => (
                 <Route path="/about" element={<About />} />
                 <Route path="/services" element={<Services />} />
                 <Route path="/services/:slug" element={<ServiceDetail />} />
+                <Route path="/pricing" element={<Pricing />} />
+                <Route path="/compare" element={<Compare />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
                 <Route path="/contact" element={<Contact />} />

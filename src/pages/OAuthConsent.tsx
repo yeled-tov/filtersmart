@@ -88,7 +88,7 @@ const OAuthConsent = () => {
   return (
     <main className="min-h-screen flex items-center justify-center bg-background p-4" dir="rtl">
       <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 text-center">
-        <div className="w-14 h-14 rounded-2xl gradient-primary flex items-center justify-center mx-auto mb-5">
+        <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center mx-auto mb-5">
           <ShieldCheck className="w-7 h-7 text-primary-foreground" />
         </div>
         {error ? (

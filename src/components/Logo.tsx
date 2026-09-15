@@ -1,24 +1,42 @@
 import { Link } from "react-router-dom";
 
-const Logo = () => (
-  <Link to="/" className="flex items-center gap-2.5 group" aria-label="FilterPhone – דף הבית">
-    <div className="relative">
-      <img
-        src="/logo.png"
-        alt="FilterPhone לוגו"
-        className="w-9 h-9 rounded-xl object-contain transition-transform duration-300 group-hover:scale-105"
-        width={36}
-        height={36}
-        loading="eager"
-      />
-      <div className="absolute inset-0 rounded-xl bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-    </div>
-    <div className="flex flex-col">
-      <span className="text-lg font-heading font-bold text-foreground leading-tight group-hover:text-primary transition-colors">
+interface LogoProps {
+  /** Renders the wordmark in white, for use on the ink-coloured bands. */
+  inverse?: boolean;
+  className?: string;
+}
+
+const Logo = ({ inverse = false, className = "" }: LogoProps) => (
+  <Link
+    to="/"
+    className={`group flex items-center gap-3 ${className}`}
+    aria-label="FilterPhone – לדף הבית"
+  >
+    <img
+      src="/logo.png"
+      alt=""
+      width={40}
+      height={40}
+      loading="eager"
+      decoding="async"
+      className="h-10 w-10 rounded-lg object-contain"
+    />
+    <span className="flex flex-col leading-none">
+      <span
+        className={`text-[1.0625rem] font-extrabold tracking-tight ${
+          inverse ? "text-white" : "text-ink group-hover:text-primary"
+        } transition-colors`}
+      >
         FilterPhone
       </span>
-      <span className="text-[10px] text-muted-foreground leading-tight hidden sm:block">סינון טלפונים מקצועי</span>
-    </div>
+      <span
+        className={`mt-1 text-[0.6875rem] font-medium ${
+          inverse ? "text-white/55" : "text-muted-foreground"
+        }`}
+      >
+        פילטר פון · סינון טלפונים
+      </span>
+    </span>
   </Link>
 );
 

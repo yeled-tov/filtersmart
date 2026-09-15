@@ -3,6 +3,9 @@ Allow: /
 Disallow: /admin
 Disallow: /admin/login
 Disallow: /reset-password
+Disallow: /crm-dashboard
+Disallow: /my-account
+Disallow: /.lovable/
 
 # Sitemaps
 Sitemap: https://www.filterphone.com/sitemap.xml
