@@ -243,7 +243,7 @@ export function recommend(answers: AdvisorAnswers): Recommendation[] {
       } else {
         b.cautions.push("המשתמש יכול להסיר את הסינון בעצמו – שווה לשקול פתרון נעול");
       }
-      if (slug === "hadran") add(b, 14, "parents", "הפתרון שאנחנו ממליצים עליו הכי הרבה להורים");
+      if (slug === "askan") add(b, 16, "flagship", "הפתרון שאנחנו ממליצים עליו הכי הרבה כיום");
     }
     if (answers.whoFor === "business") {
       if (slug === "askan") add(b, 26, "fit", "נבנה בדיוק לשימוש עסקי – סינון תמונות חכם בלי לחסום את העבודה");
@@ -253,6 +253,7 @@ export function recommend(answers: AdvisorAnswers): Recommendation[] {
     if (answers.whoFor === "adult") {
       if (slug === "basic-filtering") add(b, 10, "fit", "שליטה מלאה ברמת הסינון, בלי לשנות את אופן השימוש במכשיר");
       if (slug === "kosher-play") add(b, 8, "fit", "מאזן בין סינון אמיתי לבין מכשיר שנשאר שמיש");
+      if (slug === "askan") add(b, 12, "flagship", "הפתרון שאנחנו ממליצים עליו הכי הרבה כיום");
     }
 
     // --- How strict ----------------------------------------------------

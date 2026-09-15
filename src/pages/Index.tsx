@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft, BadgeCheck, CalendarCheck, Clock3, Cpu, Lock, MessageCircle,
+  ArrowLeft, BadgeCheck, CalendarCheck, Clock3, Cpu, Download, Lock, MessageCircle,
   Phone, Play, ShieldCheck, Smartphone, Star, Wrench, Youtube,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -225,10 +225,10 @@ const Index = () => {
                         <span className="block truncate text-[0.9375rem] font-semibold text-ink group-hover:text-primary">
                           {s.name}
                         </span>
-                        {s.slug === "hadran" && (
+                        {s.slug === "askan" && (
                           <span className="mt-0.5 flex items-center gap-1 text-[0.75rem] font-semibold text-accent">
                             <Star className="h-3 w-3 fill-current" />
-                            הנבחר ביותר אצל הורים
+                            ההמלצה שלנו כיום
                           </span>
                         )}
                       </span>
@@ -247,6 +247,25 @@ const Index = () => {
                 </Link>
               </div>
             </div>
+
+            {/* Second product, surfaced without asking anyone to scroll for it */}
+            <Link
+              to="/filtertube"
+              className="group mt-3 flex items-center gap-3.5 rounded-xl border border-white/15 bg-white/[0.06] p-4 transition-colors hover:border-white/30 hover:bg-white/[0.1]"
+            >
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-accent text-white">
+                <Youtube className="h-5 w-5" />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-[0.9375rem] font-bold text-white">
+                  ויש לנו גם יוטיוב מסונן – FilterTube
+                </span>
+                <span className="block text-[0.8125rem] leading-snug text-white/55">
+                  אפליקציה חינמית לאנדרואיד · 3 רמות סינון ומנעול הורים
+                </span>
+              </span>
+              <ArrowLeft className="h-4 w-4 shrink-0 text-white/50 transition-transform group-hover:-translate-x-1 group-hover:text-white" />
+            </Link>
           </motion.aside>
         </div>
       </section>
@@ -294,9 +313,9 @@ const Index = () => {
                   to={`/services/${service.slug}`}
                   className="group relative flex h-full flex-col panel panel-hover p-6"
                 >
-                  {service.slug === "hadran" && (
+                  {service.slug === "askan" && (
                     <span className="absolute left-6 top-6 rounded-sm bg-accent px-2.5 py-1 text-[0.6875rem] font-bold text-accent-foreground">
-                      הכי מבוקש
+                      ההמלצה שלנו
                     </span>
                   )}
                   <div className="flex items-start gap-3.5">
@@ -371,53 +390,81 @@ const Index = () => {
         </div>
       </section>
 
-      {/* -------------------------------------------------------- Advisor */}
-      <FilterAdvisor />
-
       {/* ------------------------------------------------------ FilterTube */}
-      <section className="section-padding" aria-label="FilterTube – יוטיוב מסונן">
+      <section id="filtertube" className="section-padding" aria-label="FilterTube – יוטיוב מסונן וכשר">
         <div className="container-custom">
-          <AnimatedSection>
+          <SectionHeading
+            eyebrow="המוצר שלנו"
+            title="ויש לנו גם יוטיוב מסונן – FilterTube"
+            lead="הרבה לקוחות מסננים את הטלפון ואז נתקעים עם אותה שאלה: מה עושים עם יוטיוב. אז פיתחנו אפליקציה משלנו שפותרת את זה."
+          />
+
+          <AnimatedSection delay={0.08} className="mt-10">
             <div className="overflow-hidden rounded-xl border border-border bg-surface shadow-card">
               <div className="grid lg:grid-cols-12">
                 <div className="p-8 md:p-11 lg:col-span-7">
                   <span className="inline-flex items-center gap-2 rounded-sm bg-accent-tint px-3 py-1.5 text-[0.8125rem] font-bold text-accent">
                     <Youtube className="h-4 w-4" />
-                    אפליקציה משלנו · חינם
+                    אפליקציה לאנדרואיד · הורדה חינם
                   </span>
-                  <h2 className="mt-5 text-display-sm">FilterTube – יוטיוב מסונן וכשר</h2>
+
+                  <h3 className="mt-5 text-display-sm">יוטיוב בלי מה שלא רוצים שייכנס הביתה</h3>
+
                   <p className="mt-4 max-w-xl text-[1.0625rem] leading-relaxed text-ink-soft">
-                    פיתחנו אפליקציית אנדרואיד שנותנת את התוכן של יוטיוב בלי מה שלא רוצים שייכנס הביתה:
-                    שלוש רמות סינון, מנעול הורים, מצב שמע בלבד, נגינה ברקע – וללא פרסומות.
+                    FilterTube היא אפליקציית יוטיוב מסוננת וכשרה בעברית. כל סרטון עובר סינון לפני
+                    שהוא מוצג, אין תגובות, אין פרסומות ואין אלגוריתם שמושך לאן שלא רוצים. בוחרים רמת
+                    סינון, נועלים אותה בקוד הורים – ומשאירים את התוכן שכן מתאים.
                   </p>
-                  <ul className="mt-6 grid gap-2.5 sm:grid-cols-2">
-                    {["3 רמות סינון לבחירה", "מנעול הורים עם קוד", "מצב שמע ונגינה ברקע", "ללא פרסומות כלל"].map((f) => (
-                      <li key={f} className="flex items-center gap-2 text-[0.9375rem] text-ink-soft">
-                        <BadgeCheck className="h-4 w-4 shrink-0 text-success" />
-                        {f}
+
+                  <ul className="mt-7 grid gap-3 sm:grid-cols-2">
+                    {[
+                      ["שלוש רמות סינון", "מחמיר (שמע בלבד), רגיל, וקל־דתי"],
+                      ["מנעול הורים", "קוד בן 4 ספרות שנועל את ההגדרות"],
+                      ["מצב שמע ונגן ברקע", "גם כשהמסך נעול, וחוסך בסוללה"],
+                      ["ללא פרסומות כלל", "וללא תגובות ותכנים מוצעים"],
+                    ].map(([title, desc]) => (
+                      <li key={title} className="flex gap-2.5">
+                        <BadgeCheck className="mt-0.5 h-[1.125rem] w-[1.125rem] shrink-0 text-success" />
+                        <span>
+                          <span className="block text-[0.9375rem] font-semibold text-ink">{title}</span>
+                          <span className="block text-[0.8125rem] leading-snug text-muted-foreground">{desc}</span>
+                        </span>
                       </li>
                     ))}
                   </ul>
+
                   <div className="mt-8 flex flex-wrap gap-3">
                     <Link to="/filtertube">
                       <Button className="gap-2">
                         <Play className="h-4 w-4" />
-                        לעמוד FilterTube
+                        לעמוד FilterTube ולצילומי מסך
                       </Button>
                     </Link>
                     <a href={SITE.filterTubeApk} rel="noopener noreferrer">
-                      <Button variant="outline">הורדת האפליקציה</Button>
+                      <Button variant="outline" className="gap-2">
+                        <Download className="h-4 w-4" />
+                        הורדת האפליקציה
+                      </Button>
                     </a>
                   </div>
                 </div>
-                <div className="relative hidden items-center justify-center bg-surface-sunken p-8 lg:col-span-5 lg:flex">
+
+                <div className="relative flex items-center justify-center gap-4 bg-surface-sunken p-8 lg:col-span-5">
+                  <img
+                    src="/filtertube/142652.jpg"
+                    alt="מסך בחירת רמת הסינון באפליקציית FilterTube"
+                    width={200}
+                    height={430}
+                    loading="lazy"
+                    className="hidden h-[300px] w-auto rotate-[-4deg] rounded-xl border-4 border-ink object-cover shadow-card sm:block"
+                  />
                   <img
                     src="/filtertube/142716.jpg"
                     alt="מסך הפיד של אפליקציית FilterTube – יוטיוב מסונן"
                     width={240}
                     height={520}
                     loading="lazy"
-                    className="h-[420px] w-auto rounded-xl border-4 border-ink object-cover shadow-float"
+                    className="h-[340px] w-auto rounded-xl border-4 border-ink object-cover shadow-float sm:h-[380px]"
                   />
                 </div>
               </div>
@@ -425,6 +472,9 @@ const Index = () => {
           </AnimatedSection>
         </div>
       </section>
+
+      {/* -------------------------------------------------------- Advisor */}
+      <FilterAdvisor />
 
       {/* -------------------------------------------------------- Process */}
       <section className="section-padding bg-surface-sunken" aria-label="איך זה עובד">

@@ -10,6 +10,9 @@ import { waLink } from "@/lib/site";
 
 const COMPARED = ["basic-filtering", "kosher-play", "askan", "hadran"];
 
+/** The system we point most customers to today. */
+const RECOMMENDED = "askan";
+
 type Cell = boolean | string;
 
 const criteria: { label: string; values: Record<string, Cell> }[] = [
@@ -55,8 +58,8 @@ const criteria: { label: string; values: Record<string, Cell> }[] = [
 const bestFor: Record<string, string> = {
   "basic-filtering": "מי שרוצה חסימה ממוקדת ומהירה בלי לשנות את אופן השימוש במכשיר.",
   "kosher-play": "מי שרוצה מכשיר שנשאר שמיש, עם חנות אפליקציות כשרה ווואטסאפ מסונן.",
-  askan: "אנשי עסקים שצריכים סינון חזק אבל גם מכשיר שממשיך לתפקד לעבודה.",
-  hadran: "הורים שרוצים הגנה שלא ניתן יהיה לעקוף או להסיר, בשום דרך.",
+  askan: "רוב הלקוחות שלנו: הגנה חזקה יחד עם מכשיר שממשיך לתפקד ביום-יום.",
+  hadran: "מי שרוצה את האטימות המרבית — הגנה שלא ניתן לעקוף או להסיר בשום דרך.",
 };
 
 const CellValue = ({ value }: { value: Cell }) => {
@@ -98,6 +101,11 @@ const Compare = () => {
                     </th>
                     {cols.map((c) => (
                       <th key={c.slug} scope="col" className="px-5 py-4">
+                        {c.slug === RECOMMENDED && (
+                          <span className="mb-1.5 inline-block rounded-sm bg-accent px-2 py-0.5 text-[0.6875rem] font-bold text-accent-foreground">
+                            ההמלצה שלנו
+                          </span>
+                        )}
                         <span className="block text-[0.9375rem] font-bold text-ink">{c.shortName}</span>
                         <span className="num mt-1 block text-lg font-extrabold text-primary">{c.priceLabel}</span>
                       </th>
@@ -148,7 +156,14 @@ const Compare = () => {
               <AnimatedSection key={c.slug} delay={i * 0.05}>
                 <div className="panel p-6">
                   <div className="flex items-baseline justify-between gap-3">
-                    <h2 className="text-lg font-bold text-ink">{c.shortName}</h2>
+                    <h2 className="text-lg font-bold text-ink">
+                      {c.shortName}
+                      {c.slug === RECOMMENDED && (
+                        <span className="mr-2 inline-block rounded-sm bg-accent px-2 py-0.5 align-middle text-[0.6875rem] font-bold text-accent-foreground">
+                          ההמלצה שלנו
+                        </span>
+                      )}
+                    </h2>
                     <span className="num text-xl font-extrabold text-primary">{c.priceLabel}</span>
                   </div>
                   <p className="mt-2 text-[0.9375rem] leading-relaxed text-ink-soft">{bestFor[c.slug]}</p>
@@ -175,19 +190,20 @@ const Compare = () => {
           <div className="mt-16 max-w-3xl">
             <h2 className="text-display-sm">איך לבחור, בפועל</h2>
             <div className="prose-fp mt-5">
-              <h3>מתי בוחרים הדרן</h3>
+              <h3>מתי בוחרים עסקן — ההמלצה שלנו כיום</h3>
               <p>
-                <strong>הדרן</strong> הוא הפתרון שלוקחים כשההגנה חייבת להיות מוחלטת. זו לא אפליקציה
-                שמותקנת מעל המערכת אלא <strong>גרסת מערכת שלמה</strong>, ולכן איפוס להגדרות יצרן לא
-                מוריד אותו. זו הסיבה שהוא הבחירה הנפוצה ביותר אצל הורים לילדים ולנוער. בתמורה,
-                ההתקנה דורשת מכשיר מאופס וגיבוי מלא מראש, והמכשיר נשאר בסביבה סגורה יחסית.
+                <strong>עסקן</strong> הוא הפתרון שאנחנו מפנים אליו את רוב הלקוחות היום. הוא צריבה
+                עמוקה ברמת הגנה גבוהה, עם סינון תמונות מבוסס AI, אבל נבנה מזווית של מכשיר שממשיך
+                לתפקד — ולא סביבה סגורה שמקשה על היום-יום. במחיר 300₪ הוא נותן את האיזון הטוב ביותר
+                בין הגנה לבין מכשיר שאפשר לחיות איתו. נדרש מכשיר מאופס או חדש.
               </p>
 
-              <h3>מתי בוחרים עסקן</h3>
+              <h3>מתי בוחרים הדרן</h3>
               <p>
-                <strong>עסקן</strong> נמצא באותה רמת מחיר ובאותה רמת צריבה, אבל נבנה מזווית אחרת:
-                שהמכשיר ימשיך לתפקד. סינון התמונות שלו מבוסס AI, והוא מיועד למי שצריך שהטלפון יישאר
-                כלי עבודה. גם כאן נדרש מכשיר מאופס או חדש.
+                <strong>הדרן</strong> הוא הפתרון שלוקחים כשההגנה חייבת להיות מוחלטת, בלי שום פשרה.
+                זו לא אפליקציה שמותקנת מעל המערכת אלא <strong>גרסת מערכת שלמה</strong>, ולכן איפוס
+                להגדרות יצרן לא מוריד אותו — זו רמת האטימות הגבוהה ביותר שאנחנו מתקינים. בתמורה,
+                ההתקנה דורשת מכשיר מאופס וגיבוי מלא מראש, והמכשיר נשאר בסביבה סגורה יחסית.
               </p>
 
               <h3>מתי בוחרים כושר פליי</h3>

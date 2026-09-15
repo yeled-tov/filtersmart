@@ -25,12 +25,19 @@ describe("recommend", () => {
     expect([...scores].sort((a, b) => b - a)).toEqual(scores);
   });
 
-  it("puts Hadran first for a child who needs a strict, unremovable filter", () => {
-    const [top] = recommend(
+  it("leads with Askan, the house recommendation, for a child who needs a locked filter", () => {
+    const [top, second] = recommend(
       answers({ whoFor: "child", strictness: "strict", removability: "locked" }),
     );
-    expect(top.slug).toBe("hadran");
+    expect(top.slug).toBe("askan");
     expect(top.reasons.length).toBeGreaterThan(0);
+    // Hadran stays the runner-up: it is still the most hermetic option we sell.
+    expect(second.slug).toBe("hadran");
+  });
+
+  it("keeps Hadran ahead of Kosher Play when the ask is maximum strictness", () => {
+    const ranked = recommend(answers({ strictness: "strict", removability: "locked" })).map((r) => r.slug);
+    expect(ranked.indexOf("hadran")).toBeLessThan(ranked.indexOf("kosher-play"));
   });
 
   it("puts Askan first for a business user who must keep work apps", () => {

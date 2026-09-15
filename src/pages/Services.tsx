@@ -17,7 +17,7 @@ const ServiceCard = ({
     <Link to={`/services/${slug}`} className="group relative flex h-full flex-col panel panel-hover p-6">
       {popular && (
         <span className="absolute left-6 top-6 rounded-sm bg-accent px-2.5 py-1 text-[0.6875rem] font-bold text-accent-foreground">
-          הכי מבוקש
+          ההמלצה שלנו
         </span>
       )}
       <div className="flex items-start gap-3.5">
@@ -99,7 +99,7 @@ const Services = () => {
                     price={s.price}
                     desc={s.short_desc}
                     logo={s.logo_url}
-                    popular={s.slug === "hadran"}
+                    popular={s.slug === "askan"}
                   />
                 </AnimatedSection>
               ))}

@@ -35,7 +35,7 @@ export const fallbackServices: ServiceRow[] = staticServices.map((s, i) => ({
   features: s.features,
   visible: true,
   sort_order: i + 1,
-  is_popular: s.slug === "hadran",
+  is_popular: s.slug === "askan",
   emoji_icon: null,
 }));
 

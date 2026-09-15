@@ -11,6 +11,9 @@ import { SITE, waLink } from "@/lib/site";
 
 const ORDER = ["kosher-play", "basic-filtering", "hadran", "askan", "qin-f21-pro", "qin-f25"];
 
+/** The system we point most customers to today. */
+const RECOMMENDED = "askan";
+
 const includes: Record<string, string[]> = {
   "basic-filtering": [
     "חסימת אתרים ותכנים פוגעניים",
@@ -28,7 +31,7 @@ const includes: Record<string, string[]> = {
     "גרסת מערכת שלמה עם סינון מוסמך",
     "לא ניתן להסרה – גם לא באיפוס יצרן",
     "רמת ההגנה הגבוהה ביותר שיש לנו",
-    "הבחירה הנפוצה ביותר אצל הורים",
+    "רמת האטימות הגבוהה ביותר שאנחנו מתקינים",
   ],
   askan: [
     "סינון תמונות חכם מבוסס AI",
@@ -108,7 +111,14 @@ const Pricing = () => {
                   {rows.map((s) => (
                     <tr key={s.slug} className="transition-colors hover:bg-surface-sunken">
                       <th scope="row" className="px-6 py-4 text-right">
-                        <span className="block font-bold text-ink">{s.name}</span>
+                        <span className="flex flex-wrap items-center gap-2">
+                          <span className="font-bold text-ink">{s.name}</span>
+                          {s.slug === RECOMMENDED && (
+                            <span className="rounded-sm bg-accent px-2 py-0.5 text-[0.6875rem] font-bold text-accent-foreground">
+                              ההמלצה שלנו
+                            </span>
+                          )}
+                        </span>
                         <span className="mt-0.5 block text-[0.8125rem] font-normal text-muted-foreground">{s.summary}</span>
                       </th>
                       <td className="num px-6 py-4 text-lg font-extrabold text-primary">{s.priceLabel}</td>
@@ -142,7 +152,14 @@ const Pricing = () => {
               <AnimatedSection key={s.slug} delay={i * 0.05}>
                 <div className="flex h-full flex-col panel p-6">
                   <div className="flex items-start justify-between gap-4">
-                    <h2 className="text-lg font-bold text-ink">{s.name}</h2>
+                    <h2 className="text-lg font-bold text-ink">
+                      {s.name}
+                      {s.slug === RECOMMENDED && (
+                        <span className="mr-2 inline-block rounded-sm bg-accent px-2 py-0.5 align-middle text-[0.6875rem] font-bold text-accent-foreground">
+                          ההמלצה שלנו
+                        </span>
+                      )}
+                    </h2>
                     <span className="num shrink-0 text-2xl font-extrabold text-primary">{s.priceLabel}</span>
                   </div>
                   <p className="mt-2 text-[0.9375rem] leading-relaxed text-ink-soft">{s.summary}</p>
@@ -170,7 +187,12 @@ const Pricing = () => {
                 <AnimatedSection key={s.slug} delay={i * 0.04}>
                   <div className="h-full bg-surface p-6">
                     <div className="flex items-baseline justify-between gap-3">
-                      <h3 className="text-base font-bold text-ink">{s.shortName}</h3>
+                      <h3 className="text-base font-bold text-ink">
+                        {s.shortName}
+                        {s.slug === RECOMMENDED && (
+                          <span className="mr-2 align-middle text-[0.6875rem] font-bold text-accent">★ ההמלצה שלנו</span>
+                        )}
+                      </h3>
                       <span className="num font-extrabold text-primary">{s.priceLabel}</span>
                     </div>
                     <ul className="mt-4 space-y-2">
