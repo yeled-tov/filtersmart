@@ -12,6 +12,8 @@ import SEOHead from "@/components/SEOHead";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import AnimatedSection from "@/components/AnimatedSection";
 import ApkDownloadButton from "@/components/ApkDownloadButton";
+import ReleaseStatus from "@/components/filtertube/ReleaseStatus";
+import { useFilterTubeRelease } from "@/hooks/useFilterTubeRelease";
 import { SITE, waLink } from "@/lib/site";
 
 /* App screenshots, bundled in /public/filtertube so they work on any host. */
@@ -196,6 +198,9 @@ const ShowcaseRow = ({
 /* ------------------------------------------------------------------ */
 
 const FilterTube = () => {
+  const { summary, isLive } = useFilterTubeRelease();
+  const stable = summary?.stable ?? null;
+
   const softwareLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -208,7 +213,9 @@ const FilterTube = () => {
     url: `${SITE.url}/filtertube`,
     downloadUrl: APK_URL,
     installUrl: APK_URL,
-    fileSize: "25MB",
+    softwareVersion: stable?.version ?? undefined,
+    datePublished: stable?.publishedAt ?? undefined,
+    fileSize: stable?.sizeBytes ? `${Math.round(stable.sizeBytes / 1024 / 1024)}MB` : undefined,
     offers: {
       "@type": "Offer",
       price: "0",
@@ -288,7 +295,13 @@ const FilterTube = () => {
             </p>
 
             <div className="mt-9 max-w-sm space-y-3">
-              <ApkDownloadButton href={APK_URL} label="הורדת האפליקציה (APK)" block />
+              <ApkDownloadButton
+                href={APK_URL}
+                label="הורדת האפליקציה (APK)"
+                block
+                downloads={summary?.totalDownloads ?? null}
+                version={stable?.version ?? null}
+              />
               <a href={WA_FILTERTUBE} target="_blank" rel="noopener noreferrer" className="block">
                 <Button variant="outline" className="w-full gap-2">
                   <MessageCircle className="h-4 w-4" />
@@ -301,7 +314,7 @@ const FilterTube = () => {
             <dl className="mt-10 grid max-w-md grid-cols-3 gap-6 border-t border-border pt-7">
               {[
                 { term: "מערכת", value: "אנדרואיד 7+" },
-                { term: "גודל", value: "כ-25MB" },
+                { term: "גודל", value: stable?.sizeBytes ? `כ-${(stable.sizeBytes / 1024 / 1024).toFixed(0)}MB` : "כ-25MB" },
                 { term: "חשבון גוגל", value: "לא נדרש" },
               ].map((f) => (
                 <div key={f.term}>
@@ -324,6 +337,8 @@ const FilterTube = () => {
           </motion.div>
         </div>
       </section>
+
+      <ReleaseStatus summary={summary} isLive={isLive} />
 
       {/* -------------------------------------------------- Filter levels */}
       <section className="section-padding border-t border-border bg-surface-sunken" aria-label="רמות הסינון">
@@ -534,7 +549,14 @@ const FilterTube = () => {
             </p>
             <div className="mt-9 flex flex-col items-center gap-4">
               <div className="w-full max-w-sm">
-                <ApkDownloadButton href={APK_URL} label="הורדת FilterTube (APK)" size="lg" block />
+                <ApkDownloadButton
+                  href={APK_URL}
+                  label="הורדת FilterTube (APK)"
+                  size="lg"
+                  block
+                  downloads={summary?.totalDownloads ?? null}
+                  version={stable?.version ?? null}
+                />
               </div>
               <a href={WA_FILTERTUBE} target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" className="gap-2">
