@@ -15,7 +15,7 @@ const indexPath = path.join(distDir, "index.html");
 const SITE_URL = "https://www.filterphone.com";
 const OG_IMAGE = "https://www.filterphone.com/hero.jpg";
 const APK_URL =
-  "https://github.com/yeled-tov/filtertube-android/releases/latest/download/FilterTube.apk";
+  "https://filter-tube-52d8e.web.app/download/FilterTube.apk";
 
 // Per-route SEO metadata + fallback body content
 // Every route here will get its own prerendered HTML shell.
@@ -234,7 +234,7 @@ const routes = [
       },
       {
         h2: "איך מורידים את יוטיוב המסונן?",
-        text: "לוחצים על כפתור ההורדה בעמוד ומקבלים את קובץ ה-APK הרשמי של FilterTube. ההתקנה חינמית, לא דורשת חשבון גוגל ולא דורשת רוט. מתאים לאנדרואיד 7.0 ומעלה. קישור הורדה ישיר: https://github.com/yeled-tov/filtertube-android/releases/latest/download/FilterTube.apk",
+        text: "לוחצים על כפתור ההורדה בעמוד ומקבלים את קובץ ה-APK הרשמי של FilterTube. ההתקנה חינמית, לא דורשת חשבון גוגל ולא דורשת רוט. מתאים לאנדרואיד 7.0 ומעלה. קישור הורדה ישיר: https://filter-tube-52d8e.web.app/download/FilterTube.apk",
       },
       {
         h2: "למי זה מתאים?",
@@ -310,7 +310,7 @@ const routes = [
       { href: "/services/hadran", text: "סינון הדרן" },
       { href: "/services/kosher-play", text: "כושר פליי" },
       {
-        href: "https://github.com/yeled-tov/filtertube-android/releases/latest/download/FilterTube.apk",
+        href: "https://filter-tube-52d8e.web.app/download/FilterTube.apk",
         text: "הורדת FilterTube APK – יוטיוב מסונן",
       },
     ],

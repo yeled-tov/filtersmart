@@ -20,8 +20,9 @@ export const SITE = {
     "https://www.google.com/maps/dir/?api=1&destination=%D7%97%D7%98%D7%99%D7%91%D7%AA+%D7%92%D7%91%D7%A2%D7%AA%D7%99+2+%D7%90%D7%A9%D7%93%D7%95%D7%93",
   whatsapp: "https://wa.me/972527186881",
   bit: "https://bitpay.co.il/app/me/0527186881",
-  filterTubeApk:
-    "https://github.com/yeled-tov/filtertube-android/releases/latest/download/FilterTube.apk",
+  // Served from the app's hosting mirror, not from GitHub: the app repository is
+  // going private, which takes its public release assets down with it.
+  filterTubeApk: "https://filter-tube-52d8e.web.app/download/FilterTube.apk",
 } as const;
 
 /** Builds a WhatsApp deep link with a pre-filled Hebrew message. */

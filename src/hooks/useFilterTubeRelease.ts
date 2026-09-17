@@ -1,53 +1,43 @@
 import { useEffect, useState } from "react";
-import bakedReleases from "@/data/filtertube-releases.json";
-import {
-  RELEASES_API,
-  shapeReleases,
-  type RawRelease,
-  type ReleaseSummary,
-} from "@/lib/filtertubeRelease";
+import baked from "@/data/filtertube-release.json";
+import { parsePayload, RELEASES_URL, type ReleasePayload } from "@/lib/filtertubeRelease";
 
-const CACHE_KEY = "fp_filtertube_releases_v1";
-/** Downloads tick up slowly; a few minutes of staleness is invisible and saves a request. */
-const CACHE_TTL_MS = 5 * 60 * 1000;
+const CACHE_KEY = "fp_filtertube_release_v2";
+/** Downloads tick up slowly; a couple of minutes of staleness is invisible. */
+const CACHE_TTL_MS = 2 * 60 * 1000;
 
-interface Cached {
-  at: number;
-  releases: RawRelease[];
-}
-
-function readCache(): RawRelease[] | null {
+function readCache(): ReleasePayload | null {
   try {
     const raw = localStorage.getItem(CACHE_KEY);
     if (!raw) return null;
-    const cached = JSON.parse(raw) as Cached;
-    if (!Array.isArray(cached.releases) || Date.now() - cached.at > CACHE_TTL_MS) return null;
-    return cached.releases;
+    const { at, payload } = JSON.parse(raw) as { at: number; payload: unknown };
+    if (Date.now() - at > CACHE_TTL_MS) return null;
+    return parsePayload(payload);
   } catch {
     return null;
   }
 }
 
-function writeCache(releases: RawRelease[]) {
+function writeCache(payload: ReleasePayload) {
   try {
-    localStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), releases } satisfies Cached));
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), payload }));
   } catch {
     /* private mode — we simply refetch next time */
   }
 }
 
 /**
- * Live release data for FilterTube, straight from GitHub.
+ * Live release data for FilterTube.
  *
  * Renders immediately from the snapshot baked in at build time (or a fresh
- * localStorage cache), then replaces it with live numbers once GitHub answers —
- * so the download count is on screen at first paint rather than after a spinner.
+ * cache), then replaces it with the mirror's current numbers — so the download
+ * count is on screen at first paint rather than after a spinner.
  *
- * `isLive` says whether the numbers on screen came from this visit's fetch.
+ * `isLive` says whether what is on screen came from this visit's fetch.
  */
 export const useFilterTubeRelease = () => {
-  const [releases, setReleases] = useState<RawRelease[]>(
-    () => readCache() ?? (bakedReleases as RawRelease[]),
+  const [payload, setPayload] = useState<ReleasePayload | null>(
+    () => readCache() ?? parsePayload(baked),
   );
   const [isLive, setIsLive] = useState(false);
 
@@ -57,20 +47,15 @@ export const useFilterTubeRelease = () => {
 
     (async () => {
       try {
-        const res = await fetch(RELEASES_API, {
-          headers: { Accept: "application/vnd.github+json" },
-          signal: controller.signal,
-        });
-        // Unauthenticated GitHub allows 60 requests an hour per IP. If this visitor
-        // is over it, the baked snapshot stays on screen rather than an error.
+        const res = await fetch(RELEASES_URL, { signal: controller.signal });
         if (!res.ok) return;
-        const data = (await res.json()) as RawRelease[];
-        if (!active || !Array.isArray(data) || data.length === 0) return;
-        writeCache(data);
-        setReleases(data);
+        const fresh = parsePayload(await res.json());
+        if (!active || !fresh) return;
+        writeCache(fresh);
+        setPayload(fresh);
         setIsLive(true);
       } catch {
-        /* offline or blocked — keep whatever is already rendered */
+        /* offline, or the mirror is mid-deploy — keep what is already rendered */
       }
     })();
 
@@ -80,6 +65,5 @@ export const useFilterTubeRelease = () => {
     };
   }, []);
 
-  const summary: ReleaseSummary | null = releases.length > 0 ? shapeReleases(releases) : null;
-  return { summary, isLive };
+  return { payload, isLive };
 };

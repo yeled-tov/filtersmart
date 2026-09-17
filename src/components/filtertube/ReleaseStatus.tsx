@@ -1,8 +1,11 @@
 import { CheckCircle2, Clock3, Download, FlaskConical, HardDrive, Tag } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
-import type { ReleaseSummary, ReleaseView } from "@/lib/filtertubeRelease";
+import type { ChannelRelease, ReleasePayload } from "@/lib/filtertubeRelease";
 
 const nf = new Intl.NumberFormat("he-IL");
+
+/** How many changes to show before folding the rest away. */
+const VISIBLE_CHANGES = 8;
 
 const formatSize = (bytes: number | null) =>
   bytes ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : "—";
@@ -10,7 +13,7 @@ const formatSize = (bytes: number | null) =>
 const formatDate = (iso: string) =>
   new Date(iso).toLocaleDateString("he-IL", { day: "numeric", month: "long", year: "numeric" });
 
-/** "היום" / "לפני 3 ימים" / "לפני חודשיים" — a build nobody has touched in a year should look like one. */
+/** "היום" / "לפני 3 ימים" — a build nobody has touched in a year should look like one. */
 function relativeDate(iso: string): string {
   const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000);
   if (days <= 0) return "היום";
@@ -52,126 +55,51 @@ const Stat = ({
   </div>
 );
 
+const Change = ({ text }: { text: string }) => (
+  <li className="flex gap-2.5 text-[0.9375rem] leading-relaxed text-ink-soft">
+    <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-primary" />
+    <span>{text}</span>
+  </li>
+);
+
 /**
- * Renders the Hebrew release notes that GitHub Actions writes: `### חדש` /
- * `### תוקן` headings over `- **בולט** הסבר` bullets.
- *
- * Two things the source shape forces on us: a bullet's text wraps onto indented
- * continuation lines, which belong to the bullet above rather than being dropped;
- * and the notes end with an install section whose body is plain prose we skip, so
- * any heading left without content is removed rather than dangling.
+ * The changes are written for the customer — the app's CI takes them from its
+ * CHANGELOG rather than from commit subjects — so they are shown as-is. Nothing
+ * developer-facing reaches this component to be filtered out.
  */
-const inline = (text: string) =>
-  text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold text-white">$1</strong>')
-    .replace(/`([^`]+)`/g, '<code class="rounded bg-surface-sunken px-1 py-0.5 text-[0.85em]">$1</code>');
-
-type Node =
-  | { kind: "heading"; text: string }
-  | { kind: "bullets"; items: string[] }
-  | { kind: "quote"; text: string };
-
-function parseNotes(markdown: string): Node[] {
-  const nodes: Node[] = [];
-  let bullets: string[] | null = null;
-
-  const closeBullets = () => {
-    if (bullets && bullets.length > 0) nodes.push({ kind: "bullets", items: bullets });
-    bullets = null;
-  };
-
-  for (const raw of markdown.split("\n")) {
-    const line = raw.trim();
-    const indented = /^\s+\S/.test(raw);
-
-    if (!line || line.startsWith("---")) {
-      closeBullets();
-      continue;
-    }
-    if (line.startsWith("### ")) {
-      closeBullets();
-      nodes.push({ kind: "heading", text: line.slice(4) });
-      continue;
-    }
-    if (line.startsWith("## ") || /^\*\*בנייה/.test(line)) {
-      // The release title and build line are already shown around this block.
-      closeBullets();
-      continue;
-    }
-    if (line.startsWith(">")) {
-      closeBullets();
-      nodes.push({ kind: "quote", text: line.replace(/^>\s*/, "") });
-      continue;
-    }
-    if (line.startsWith("- ")) {
-      if (!bullets) bullets = [];
-      bullets.push(line.slice(2));
-      continue;
-    }
-    if (indented && bullets && bullets.length > 0) {
-      // Continuation of the bullet above.
-      bullets[bullets.length - 1] += ` ${line}`;
-      continue;
-    }
-    closeBullets();
-  }
-  closeBullets();
-
-  // Drop a heading that ended up with nothing under it.
-  return nodes.filter(
-    (node, i) => node.kind !== "heading" || (nodes[i + 1] && nodes[i + 1].kind !== "heading"),
-  );
-}
-
-const Notes = ({ markdown }: { markdown: string }) => {
-  const nodes = parseNotes(markdown);
-
-  if (nodes.length === 0) {
-    return <p className="mt-2 text-[0.9375rem] text-ink-soft">שיפורים ותיקונים כלליים.</p>;
-  }
+const Changes = ({ items }: { items: string[] }) => {
+  const shown = items.slice(0, VISIBLE_CHANGES);
+  const rest = items.slice(VISIBLE_CHANGES);
 
   return (
-    <div>
-      {nodes.map((node, i) => {
-        if (node.kind === "heading") {
-          return (
-            <h4 key={i} className="mt-6 text-[0.8125rem] font-bold text-primary first:mt-0">
-              {node.text}
-            </h4>
-          );
-        }
-        if (node.kind === "quote") {
-          return (
-            <p key={i} className="mt-3 border-r-2 border-primary/40 pr-3 text-[0.875rem] text-muted-foreground">
-              {node.text}
-            </p>
-          );
-        }
-        return (
-          <ul key={i} className="mt-2.5 space-y-2">
-            {node.items.map((item, j) => (
-              <li key={j} className="flex gap-2.5 text-[0.9375rem] leading-relaxed text-ink-soft">
-                <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-primary" />
-                <span dangerouslySetInnerHTML={{ __html: inline(item) }} />
-              </li>
-            ))}
+    <>
+      <ul className="mt-4 space-y-2.5">
+        {shown.map((c) => <Change key={c} text={c} />)}
+      </ul>
+
+      {rest.length > 0 && (
+        <details className="group mt-3">
+          <summary className="cursor-pointer list-none text-[0.875rem] font-semibold text-primary marker:hidden">
+            <span className="group-open:hidden">
+              ועוד {nf.format(rest.length)} שינויים בגרסה הזו ←
+            </span>
+            <span className="hidden group-open:inline">הצגה מקוצרת ←</span>
+          </summary>
+          <ul className="mt-2.5 space-y-2.5">
+            {rest.map((c) => <Change key={c} text={c} />)}
           </ul>
-        );
-      })}
-    </div>
+        </details>
+      )}
+    </>
   );
 };
 
-/* ------------------------------------------------------------------ */
-
-const BetaStrip = ({ beta }: { beta: ReleaseView }) => (
+const BetaStrip = ({ beta }: { beta: ChannelRelease }) => (
   <div className="mt-4 rounded-lg border border-accent/30 bg-accent/[0.07] p-5 md:p-6">
     <div className="flex flex-wrap items-center justify-between gap-3">
       <span className="flex items-center gap-2 text-[0.9375rem] font-bold text-accent">
         <FlaskConical className="h-[1.125rem] w-[1.125rem]" />
-        ערוץ בדיקות · גרסה <span className="num">{beta.version}</span>
+        ערוץ בדיקות · גרסה <span className="num">{beta.versionName}</span>
       </span>
       <span className="text-[0.8125rem] text-muted-foreground">
         יצאה {relativeDate(beta.publishedAt)}
@@ -186,9 +114,9 @@ const BetaStrip = ({ beta }: { beta: ReleaseView }) => (
 
 /* ------------------------------------------------------------------ */
 
-const ReleaseStatus = ({ summary, isLive }: { summary: ReleaseSummary | null; isLive: boolean }) => {
-  const stable = summary?.stable ?? null;
-  const pending = !summary;
+const ReleaseStatus = ({ payload, isLive }: { payload: ReleasePayload | null; isLive: boolean }) => {
+  const stable = payload?.stable ?? null;
+  const pending = !payload;
 
   return (
     <section className="section-padding border-t border-border bg-surface-sunken" aria-label="מצב האפליקציה">
@@ -197,8 +125,8 @@ const ReleaseStatus = ({ summary, isLive }: { summary: ReleaseSummary | null; is
           <span className="eyebrow">נתונים חיים</span>
           <h2 className="mt-4 text-display-md text-white">האפליקציה עכשיו</h2>
           <p className="mt-4 text-[1.0625rem] leading-relaxed text-ink-soft">
-            המספרים כאן נמשכים ישירות מדף השחרורים של האפליקציה ב-GitHub, ומתעדכנים מעצמם עם כל
-            גרסה חדשה. מספר ההורדות הוא הספירה האמיתית של הקובץ — לא לחיצות על הכפתור באתר.
+            המספרים כאן מתעדכנים מעצמם עם כל גרסה שיוצאת. מספר ההורדות הוא הספירה האמיתית של
+            קובץ ההתקנה — לא לחיצות על הכפתור באתר.
           </p>
         </AnimatedSection>
 
@@ -207,14 +135,14 @@ const ReleaseStatus = ({ summary, isLive }: { summary: ReleaseSummary | null; is
             <Stat
               icon={Download}
               label="הורדות סך הכול"
-              value={summary ? nf.format(summary.totalDownloads) : ""}
-              sub={summary ? `לאורך ${nf.format(summary.releaseCount)} גרסאות` : undefined}
+              value={payload ? nf.format(payload.totalDownloads) : ""}
+              sub={payload?.releaseCount ? `לאורך ${nf.format(payload.releaseCount)} גרסאות` : undefined}
               pending={pending}
             />
             <Stat
               icon={Tag}
-              label="גרסה יציבה"
-              value={stable?.version ?? ""}
+              label="גרסה נוכחית"
+              value={stable?.versionName ?? ""}
               sub={stable?.build ? `בנייה ${stable.build}` : undefined}
               pending={pending}
             />
@@ -236,30 +164,20 @@ const ReleaseStatus = ({ summary, isLive }: { summary: ReleaseSummary | null; is
           </div>
         </AnimatedSection>
 
-        {stable && stable.notes && (
+        {stable && stable.changes.length > 0 && (
           <AnimatedSection delay={0.12} className="mt-4">
             <div className="rounded-lg border border-border bg-surface p-6 md:p-7">
-              <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <h3 className="text-lg font-bold text-white">
-                  מה חדש בגרסה <span className="num">{stable.version}</span>
-                </h3>
-                <a
-                  href={stable.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[0.8125rem] font-semibold text-primary link-underline"
-                >
-                  כל הגרסאות הקודמות ←
-                </a>
-              </div>
-              <Notes markdown={stable.notes} />
+              <h3 className="text-lg font-bold text-white">
+                מה חדש בגרסה <span className="num">{stable.versionName}</span>
+              </h3>
+              <Changes items={stable.changes} />
             </div>
           </AnimatedSection>
         )}
 
-        {summary?.beta && (
+        {payload?.test && payload.test.build > (stable?.build ?? 0) && (
           <AnimatedSection delay={0.16}>
-            <BetaStrip beta={summary.beta} />
+            <BetaStrip beta={payload.test} />
           </AnimatedSection>
         )}
 
@@ -270,7 +188,7 @@ const ReleaseStatus = ({ summary, isLive }: { summary: ReleaseSummary | null; is
             )}
             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
           </span>
-          {isLive ? "מסונכרן עכשיו מ-GitHub" : "מוצג מנתוני הבנייה האחרונה, מתעדכן ברקע"}
+          {isLive ? "מסונכרן עכשיו" : "מוצג מנתוני הבנייה האחרונה, מתעדכן ברקע"}
         </p>
       </div>
     </section>
