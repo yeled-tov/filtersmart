@@ -14,8 +14,10 @@ const indexPath = path.join(distDir, "index.html");
 
 const SITE_URL = "https://www.filterphone.com";
 const OG_IMAGE = "https://www.filterphone.com/hero.jpg";
-const APK_URL =
-  "https://filter-tube-52d8e.web.app/download/FilterTube.apk";
+// Served from FilterTube's own site, not from GitHub: a GitHub release link
+// stops working the moment that repository is made private, and this URL is
+// baked into prerendered HTML and structured data that search engines keep.
+const APK_URL = "https://filter-tube-52d8e.web.app/download/FilterTube.apk";
 
 // Per-route SEO metadata + fallback body content
 // Every route here will get its own prerendered HTML shell.
@@ -310,7 +312,7 @@ const routes = [
       { href: "/services/hadran", text: "סינון הדרן" },
       { href: "/services/kosher-play", text: "כושר פליי" },
       {
-        href: "https://filter-tube-52d8e.web.app/download/FilterTube.apk",
+        href: APK_URL,
         text: "הורדת FilterTube APK – יוטיוב מסונן",
       },
     ],
