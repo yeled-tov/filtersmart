@@ -6,7 +6,20 @@
  */
 
 export const FILTERTUBE_REPO = "yeled-tov/filtertube-android";
-export const RELEASES_API = `https://api.github.com/repos/${FILTERTUBE_REPO}/releases?per_page=100`;
+
+/**
+ * Release data comes from FilterTube's own site, not from GitHub.
+ *
+ * The browser used to call api.github.com directly, which only works while the
+ * repository is public — the moment it is made private every visitor gets a 404
+ * and the download button loses its version and its counter. This file is a
+ * mirror published by the app's release workflow on every build, and it keeps
+ * GitHub's exact payload shape so nothing downstream had to change.
+ *
+ * It also removes the 60-requests-per-hour unauthenticated GitHub limit, which
+ * every visitor behind the same carrier NAT was sharing.
+ */
+export const RELEASES_API = "https://filter-tube-52d8e.web.app/releases.json";
 
 /** The fields we keep from GitHub. Anything else is dropped before it reaches the bundle. */
 export interface RawAsset {

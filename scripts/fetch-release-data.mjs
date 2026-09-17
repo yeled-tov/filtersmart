@@ -14,7 +14,10 @@ import path from "node:path";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.resolve(__dirname, "..", "src", "data", "filtertube-releases.json");
-const API = "https://api.github.com/repos/yeled-tov/filtertube-android/releases?per_page=100";
+// FilterTube's own mirror, not api.github.com. The Vercel build has no GitHub
+// credentials, so once that repository is private this fetch would fail on every
+// build and the site would ship whatever snapshot happened to be committed.
+const API = "https://filter-tube-52d8e.web.app/releases.json";
 
 const isApk = (name) => Boolean(name && name.toLowerCase().endsWith(".apk"));
 
@@ -42,11 +45,13 @@ async function main() {
   let trimmed;
   try {
     const res = await fetch(API, {
-      headers: { Accept: "application/vnd.github+json", "User-Agent": "filterphone-site-build" },
+      headers: { Accept: "application/json", "User-Agent": "filterphone-site-build" },
       signal: AbortSignal.timeout(15000),
     });
-    if (!res.ok) throw new Error(`GitHub API responded ${res.status}`);
-    const releases = await res.json();
+    if (!res.ok) throw new Error(`release mirror responded ${res.status}`);
+    const payload = await res.json();
+    // The mirror wraps the GitHub-shaped list; a bare array is still accepted.
+    const releases = Array.isArray(payload) ? payload : (payload.releases ?? []);
     if (!Array.isArray(releases) || releases.length === 0) throw new Error("no releases returned");
     trimmed = trim(releases);
   } catch (err) {

@@ -37,7 +37,7 @@ function writeCache(releases: RawRelease[]) {
 }
 
 /**
- * Live release data for FilterTube, straight from GitHub.
+ * Live release data for FilterTube, from the app's own site.
  *
  * Renders immediately from the snapshot baked in at build time (or a fresh
  * localStorage cache), then replaces it with live numbers once GitHub answers —
@@ -58,13 +58,16 @@ export const useFilterTubeRelease = () => {
     (async () => {
       try {
         const res = await fetch(RELEASES_API, {
-          headers: { Accept: "application/vnd.github+json" },
+          headers: { Accept: "application/json" },
           signal: controller.signal,
         });
-        // Unauthenticated GitHub allows 60 requests an hour per IP. If this visitor
-        // is over it, the baked snapshot stays on screen rather than an error.
+        // Any failure leaves the baked snapshot on screen rather than an error.
         if (!res.ok) return;
-        const data = (await res.json()) as RawRelease[];
+        // The mirror wraps the GitHub-shaped list next to the fields the Android
+        // app reads; a bare array is still accepted so an older cache or a
+        // hand-made file keeps working.
+        const payload = (await res.json()) as RawRelease[] | { releases?: RawRelease[] };
+        const data = Array.isArray(payload) ? payload : (payload.releases ?? []);
         if (!active || !Array.isArray(data) || data.length === 0) return;
         writeCache(data);
         setReleases(data);
