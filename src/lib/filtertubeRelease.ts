@@ -7,10 +7,14 @@
  * public either way. That mirror is the source of truth here.
  *
  * We read it through `/api/filtertube-releases.json` on our own domain rather
- * than from the mirror directly. Two reasons, both real: Firebase Hosting sends
- * no `Access-Control-Allow-Origin`, so a browser fetch straight to it is blocked;
- * and visitors on filtered networks — this site's whole audience — reach
- * filterphone.com but not necessarily an unfamiliar third-party host.
+ * than from the mirror directly. Three reasons, all real:
+ *
+ * - Firebase Hosting sends no `Access-Control-Allow-Origin`, so a browser fetch
+ *   straight to it is blocked. Verified in a browser, not assumed.
+ * - Visitors on filtered networks — this site's whole audience — reach
+ *   filterphone.com but not necessarily an unfamiliar third-party host.
+ * - It replaces the old call to api.github.com, whose 60-requests-per-hour
+ *   unauthenticated limit was shared by every visitor behind the same carrier NAT.
  */
 
 /** Where the app's CI publishes the mirror. */
