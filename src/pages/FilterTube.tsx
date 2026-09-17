@@ -15,6 +15,7 @@ import ApkDownloadButton from "@/components/ApkDownloadButton";
 import ReleaseStatus from "@/components/filtertube/ReleaseStatus";
 import { useFilterTubeRelease } from "@/hooks/useFilterTubeRelease";
 import { SITE, waLink } from "@/lib/site";
+import { apkUrlFor } from "@/lib/filtertubeRelease";
 
 /* App screenshots, bundled in /public/filtertube so they work on any host. */
 const SHOTS = {
@@ -30,7 +31,6 @@ const SHOTS = {
   shorts: "/filtertube/143258.jpg",
 };
 
-const APK_URL = SITE.filterTubeApk;
 const WA_FILTERTUBE = waLink("שלום, אשמח לפרטים על FilterTube – יוטיוב מסונן");
 
 /* ------------------------------------------------------------------ */
@@ -198,8 +198,11 @@ const ShowcaseRow = ({
 /* ------------------------------------------------------------------ */
 
 const FilterTube = () => {
-  const { summary, isLive } = useFilterTubeRelease();
-  const stable = summary?.stable ?? null;
+  const { payload, isLive } = useFilterTubeRelease();
+  const stable = payload?.stable ?? null;
+  // The APK now comes from the app's hosting mirror, which stays reachable once
+  // its repository goes private.
+  const apkUrl = apkUrlFor(stable);
 
   const softwareLd = {
     "@context": "https://schema.org",
@@ -211,9 +214,9 @@ const FilterTube = () => {
     applicationSubCategory: "VideoApplication",
     inLanguage: "he",
     url: `${SITE.url}/filtertube`,
-    downloadUrl: APK_URL,
-    installUrl: APK_URL,
-    softwareVersion: stable?.version ?? undefined,
+    downloadUrl: apkUrl,
+    installUrl: apkUrl,
+    softwareVersion: stable?.versionName ?? undefined,
     datePublished: stable?.publishedAt ?? undefined,
     fileSize: stable?.sizeBytes ? `${Math.round(stable.sizeBytes / 1024 / 1024)}MB` : undefined,
     offers: {
@@ -296,11 +299,11 @@ const FilterTube = () => {
 
             <div className="mt-9 max-w-sm space-y-3">
               <ApkDownloadButton
-                href={APK_URL}
+                href={apkUrl}
                 label="הורדת האפליקציה (APK)"
                 block
-                downloads={summary?.totalDownloads ?? null}
-                version={stable?.version ?? null}
+                downloads={payload?.totalDownloads ?? null}
+                version={stable?.versionName ?? null}
               />
               <a href={WA_FILTERTUBE} target="_blank" rel="noopener noreferrer" className="block">
                 <Button variant="outline" className="w-full gap-2">
@@ -338,7 +341,7 @@ const FilterTube = () => {
         </div>
       </section>
 
-      <ReleaseStatus summary={summary} isLive={isLive} />
+      <ReleaseStatus payload={payload} isLive={isLive} />
 
       {/* -------------------------------------------------- Filter levels */}
       <section className="section-padding border-t border-border bg-surface-sunken" aria-label="רמות הסינון">
@@ -550,12 +553,12 @@ const FilterTube = () => {
             <div className="mt-9 flex flex-col items-center gap-4">
               <div className="w-full max-w-sm">
                 <ApkDownloadButton
-                  href={APK_URL}
+                  href={apkUrl}
                   label="הורדת FilterTube (APK)"
                   size="lg"
                   block
-                  downloads={summary?.totalDownloads ?? null}
-                  version={stable?.version ?? null}
+                  downloads={payload?.totalDownloads ?? null}
+                  version={stable?.versionName ?? null}
                 />
               </div>
               <a href={WA_FILTERTUBE} target="_blank" rel="noopener noreferrer">

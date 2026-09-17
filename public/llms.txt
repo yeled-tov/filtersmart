@@ -49,7 +49,7 @@ FilterPhone (פילטר פון) עוסק בסינון תוכן דיגיטלי, �
    - **דתי לייט** – מוסיף שירים חילוניים בביצוע זמרים גברים בלבד, שמתנגנים כאודיו. כל שאר התוכן, כולל כל המוזיקה, מוצג בווידאו.
    בנוסף: מצב אודיו לכל האפליקציה בכל רמת סינון, נגן ברקע, חלון צף, הורדות אופליין וללא פרסומות.
    - עמוד: https://www.filterphone.com/filtertube
-   - הורדת APK: https://github.com/yeled-tov/filtertube-android/releases/latest/download/FilterTube.apk
+   - הורדת APK: https://filter-tube-52d8e.web.app/download/FilterTube.apk
 
 ## איך לבחור
 

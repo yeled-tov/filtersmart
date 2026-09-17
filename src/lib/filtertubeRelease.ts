@@ -1,125 +1,78 @@
 /**
- * Shapes GitHub's releases payload into what the FilterTube page shows.
+ * FilterTube's release data.
  *
- * The same function runs over the snapshot baked in at build time and over the
- * live response fetched in the browser, so the two can never drift apart.
+ * The app's repository is going private, which takes GitHub's public API and its
+ * release assets down with it. So the app's own CI mirrors everything it used to
+ * serve — the APK and the release metadata — onto Firebase Hosting, which stays
+ * public either way. That mirror is the source of truth here.
+ *
+ * We read it through `/api/filtertube-releases.json` on our own domain rather
+ * than from the mirror directly. Two reasons, both real: Firebase Hosting sends
+ * no `Access-Control-Allow-Origin`, so a browser fetch straight to it is blocked;
+ * and visitors on filtered networks — this site's whole audience — reach
+ * filterphone.com but not necessarily an unfamiliar third-party host.
  */
 
-export const FILTERTUBE_REPO = "yeled-tov/filtertube-android";
+/** Where the app's CI publishes the mirror. */
+export const MIRROR_ORIGIN = "https://filter-tube-52d8e.web.app";
 
-/**
- * Release data comes from FilterTube's own site, not from GitHub.
- *
- * The browser used to call api.github.com directly, which only works while the
- * repository is public — the moment it is made private every visitor gets a 404
- * and the download button loses its version and its counter. This file is a
- * mirror published by the app's release workflow on every build, and it keeps
- * GitHub's exact payload shape so nothing downstream had to change.
- *
- * It also removes the 60-requests-per-hour unauthenticated GitHub limit, which
- * every visitor behind the same carrier NAT was sharing.
- */
-export const RELEASES_API = "https://filter-tube-52d8e.web.app/releases.json";
+/** Same-origin proxy, configured as a rewrite in vercel.json. */
+export const RELEASES_URL = "/api/filtertube-releases.json";
 
-/** The fields we keep from GitHub. Anything else is dropped before it reaches the bundle. */
-export interface RawAsset {
-  name: string;
-  size: number;
-  download_count: number;
-  browser_download_url: string;
-}
+/** Direct link, used at build time and as the download fallback. */
+export const MIRROR_RELEASES_URL = `${MIRROR_ORIGIN}/releases.json`;
+export const FALLBACK_APK_URL = `${MIRROR_ORIGIN}/download/FilterTube.apk`;
 
-export interface RawRelease {
-  tag_name: string;
-  name: string | null;
-  body: string | null;
-  published_at: string;
-  html_url: string;
-  prerelease: boolean;
-  draft: boolean;
-  assets: RawAsset[];
-}
-
-export interface ReleaseView {
-  version: string;
-  build: string | null;
+/** One channel — the stable build, or the test build. */
+export interface ChannelRelease {
+  build: number;
   tag: string;
-  notes: string;
+  versionName: string;
+  /**
+   * What changed, written for the customer. The app's CI takes these from its
+   * CHANGELOG rather than from commit subjects, so this is release-note prose
+   * and not a developer's shorthand.
+   */
+  changes: string[];
   publishedAt: string;
-  url: string;
-  downloadUrl: string | null;
   sizeBytes: number | null;
   downloads: number;
+  /** Path on the mirror, e.g. "/download/FilterTube.apk". */
+  apkUrl: string | null;
 }
 
-export interface ReleaseSummary {
+export interface ReleasePayload {
+  updatedAt: string;
+  stable: ChannelRelease | null;
+  test: ChannelRelease | null;
   totalDownloads: number;
   releaseCount: number;
-  stable: ReleaseView | null;
-  beta: ReleaseView | null;
 }
 
-const isApk = (name: string | undefined) => Boolean(name?.toLowerCase().endsWith(".apk"));
+/** Absolute download URL for a channel, falling back to the stable path. */
+export const apkUrlFor = (release: ChannelRelease | null | undefined): string =>
+  release?.apkUrl ? `${MIRROR_ORIGIN}${release.apkUrl}` : FALLBACK_APK_URL;
 
-/** The marketing version lives in the release title: "גרסה 2.0.1 (בנייה 218)". */
-function parseVersion(release: RawRelease): string {
-  const fromTitle = release.name?.match(/(\d+\.\d+\.\d+(?:-test\.\d+)?)/);
-  if (fromTitle) return fromTitle[1];
-  const fromBody = release.body?.match(/FilterTube\s+(\d+\.\d+\.\d+)/);
-  return fromBody ? fromBody[1] : release.tag_name;
-}
+const isChannel = (value: unknown): value is ChannelRelease => {
+  if (!value || typeof value !== "object") return false;
+  const c = value as Partial<ChannelRelease>;
+  return typeof c.versionName === "string" && typeof c.publishedAt === "string";
+};
 
-function view(release: RawRelease | undefined): ReleaseView | null {
-  if (!release) return null;
-  const asset = release.assets?.find((a) => isApk(a.name));
+/**
+ * Validates a payload before it reaches the UI. A mirror that is mid-deploy, or
+ * an HTML error page served with a JSON content type, must not blank the panel —
+ * returning null keeps whatever is already on screen.
+ */
+export function parsePayload(value: unknown): ReleasePayload | null {
+  if (!value || typeof value !== "object") return null;
+  const p = value as Partial<ReleasePayload>;
+  if (typeof p.totalDownloads !== "number" || !isChannel(p.stable)) return null;
   return {
-    version: parseVersion(release),
-    build: release.tag_name?.replace(/^\D+/, "") || null,
-    tag: release.tag_name,
-    notes: release.body ?? "",
-    publishedAt: release.published_at,
-    url: release.html_url,
-    downloadUrl: asset?.browser_download_url ?? null,
-    sizeBytes: asset?.size ?? null,
-    downloads: asset?.download_count ?? 0,
+    updatedAt: typeof p.updatedAt === "string" ? p.updatedAt : new Date().toISOString(),
+    stable: p.stable,
+    test: isChannel(p.test) ? p.test : null,
+    totalDownloads: p.totalDownloads,
+    releaseCount: typeof p.releaseCount === "number" ? p.releaseCount : 0,
   };
-}
-
-export function shapeReleases(releases: RawRelease[]): ReleaseSummary | null {
-  const published = releases.filter((r) => !r.draft);
-  if (published.length === 0) return null;
-
-  // Sum every APK ever published: that is the real number of installs, as opposed
-  // to counting clicks on our own download button.
-  const totalDownloads = published.reduce(
-    (sum, r) =>
-      sum + (r.assets ?? []).reduce((s, a) => s + (isApk(a.name) ? a.download_count ?? 0 : 0), 0),
-    0,
-  );
-
-  return {
-    totalDownloads,
-    releaseCount: published.filter((r) => !r.prerelease).length,
-    stable: view(published.find((r) => !r.prerelease)),
-    beta: view(published.find((r) => r.prerelease)),
-  };
-}
-
-/** Keeps only the fields `shapeReleases` reads, so the baked snapshot stays small. */
-export function trimReleases(releases: RawRelease[]): RawRelease[] {
-  return releases.map((r) => ({
-    tag_name: r.tag_name,
-    name: r.name,
-    body: r.body,
-    published_at: r.published_at,
-    html_url: r.html_url,
-    prerelease: r.prerelease,
-    draft: r.draft,
-    assets: (r.assets ?? []).filter((a) => isApk(a.name)).map((a) => ({
-      name: a.name,
-      size: a.size,
-      download_count: a.download_count,
-      browser_download_url: a.browser_download_url,
-    })),
-  }));
 }
