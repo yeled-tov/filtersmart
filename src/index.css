@@ -310,49 +310,75 @@
 }
 
 /*
-  FilterTube is a product page with its own identity, but it is still our page:
-  the site's ink navy as the base, with the app's red as the single accent.
-  Re-mapping the tokens inside this scope means panels, buttons, the accordion
-  and the prose styles all work here unchanged.
+  FilterTube on the site should look like FilterTube on the phone. These tokens
+  are sampled straight from the app's light mode: #F7F7F9 behind, white cards,
+  #FF2D43 for every action, #101014 for text. Re-mapping the tokens inside this
+  scope means panels, buttons, the accordion and the prose styles all follow.
 */
 .theme-filtertube {
-  --background: 208 46% 8%;
-  --surface: 208 36% 12%;
-  --surface-sunken: 208 42% 10%;
+  --background: 240 11% 97%;
+  --surface: 0 0% 100%;
+  --surface-sunken: 240 11% 95%;
 
-  --card: 208 36% 12%;
-  --card-foreground: 40 25% 96%;
-  --popover: 208 36% 12%;
-  --popover-foreground: 40 25% 96%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 12% 7%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 12% 7%;
 
-  --foreground: 40 25% 96%;
-  --ink: 0 0% 100%;
-  --ink-soft: 205 16% 76%;
+  --foreground: 240 12% 7%;
+  --ink: 240 12% 7%;
+  --ink-soft: 240 6% 34%;
 
-  --primary: 358 76% 55%;
+  --primary: 353 100% 59%;
   --primary-foreground: 0 0% 100%;
-  --primary-hover: 358 76% 47%;
-  --primary-tint: 358 38% 18%;
+  --primary-hover: 353 84% 50%;
+  --primary-tint: 353 100% 96%;
 
-  --accent: 24 74% 56%;
+  /* The amber the app uses on its Premium tile, kept for anything secondary. */
+  --accent: 38 78% 42%;
   --accent-foreground: 0 0% 100%;
-  --accent-tint: 22 38% 18%;
+  --accent-tint: 42 72% 93%;
 
-  --secondary: 208 28% 18%;
-  --secondary-foreground: 40 25% 96%;
+  --secondary: 240 11% 95%;
+  --secondary-foreground: 240 12% 7%;
 
-  --muted: 208 28% 16%;
-  --muted-foreground: 205 12% 62%;
+  --muted: 240 11% 95%;
+  --muted-foreground: 240 6% 45%;
 
-  --border: 208 22% 21%;
-  --border-strong: 208 18% 30%;
-  --input: 208 22% 21%;
-  --ring: 358 76% 55%;
+  --border: 240 13% 91%;
+  --border-strong: 240 10% 82%;
+  --input: 240 13% 91%;
+  --ring: 353 100% 59%;
 
-  --shadow-xs: 0 1px 2px hsl(0 0% 0% / 0.3);
-  --shadow-sm: 0 1px 2px hsl(0 0% 0% / 0.3), 0 2px 8px -2px hsl(0 0% 0% / 0.4);
-  --shadow-md: 0 1px 2px hsl(0 0% 0% / 0.3), 0 12px 28px -14px hsl(0 0% 0% / 0.7);
-  --shadow-lg: 0 2px 4px hsl(0 0% 0% / 0.3), 0 30px 60px -28px hsl(0 0% 0% / 0.85);
+  /* Soft and wide, the way the app's cards sit on their background. */
+  --shadow-xs: 0 1px 2px hsl(240 12% 7% / 0.04);
+  --shadow-sm: 0 1px 2px hsl(240 12% 7% / 0.04), 0 2px 8px -2px hsl(240 12% 7% / 0.06);
+  --shadow-md: 0 2px 4px hsl(240 12% 7% / 0.04), 0 10px 24px -8px hsl(240 12% 7% / 0.10);
+  --shadow-lg: 0 4px 8px hsl(240 12% 7% / 0.04), 0 24px 48px -16px hsl(240 12% 7% / 0.14);
+}
+
+/*
+  The app rounds everything: cards to ~20px, every button to a full pill.
+  Scoping it here keeps the rest of the site on its own squarer geometry.
+*/
+.theme-filtertube .panel,
+.theme-filtertube .rounded-lg {
+  border-radius: 1.25rem;
+}
+
+.theme-filtertube .rounded-md {
+  border-radius: 0.875rem;
+}
+
+.theme-filtertube button,
+.theme-filtertube .btn-pill,
+.theme-filtertube a > button {
+  border-radius: 9999px;
+}
+
+/* The app's primary button is a gradient pill, not a flat fill. */
+.theme-filtertube .bg-primary {
+  background-image: linear-gradient(135deg, hsl(353 100% 62%), hsl(353 92% 54%));
 }
 
 /* High-contrast accessibility mode (toggled from the a11y menu) */

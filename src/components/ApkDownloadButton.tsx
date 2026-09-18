@@ -36,7 +36,8 @@ const ApkDownloadButton = ({
       <a
         href={href}
         download
-        className={`group flex ${block ? "w-full" : ""} items-center justify-between gap-6 rounded-xl bg-[#E31E24] ${pad} font-bold text-white shadow-2xl shadow-red-900/30 transition-all hover:bg-[#ff2a31] active:scale-[0.985]`}
+        /* A full pill with a gradient fill, the way the app draws its primary button. */
+        className={`group flex ${block ? "w-full" : ""} items-center justify-between gap-6 rounded-full bg-gradient-to-br from-[hsl(353_100%_62%)] to-[hsl(353_92%_54%)] ${pad} font-bold text-white shadow-lg shadow-[hsl(353_100%_59%/0.28)] transition-all hover:brightness-[1.06] active:scale-[0.985]`}
       >
         <span>{label}</span>
         <ArrowDown className="h-5 w-5 transition-transform group-hover:translate-y-0.5" />
@@ -45,12 +46,12 @@ const ApkDownloadButton = ({
       {hasMeta && (
         <div className={`mt-3 flex items-center gap-2 ${block ? "justify-center" : ""}`}>
           <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-70 motion-safe:animate-ping" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-70 motion-safe:animate-ping" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
           </span>
           {/* Only the numerals get LTR isolation; isolating the whole line would
               reorder the Hebrew words around them. */}
-          <span className="text-[0.6875rem] font-medium text-white/45">
+          <span className="text-[0.6875rem] font-medium text-muted-foreground">
             {downloads !== null && (
               <>
                 <span className="num">{nf.format(downloads)}</span> הורדות
