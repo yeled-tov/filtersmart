@@ -47,7 +47,7 @@ const Stat = ({
     {pending ? (
       <span className="mt-2 block h-8 w-24 animate-pulse rounded bg-surface-sunken" aria-hidden="true" />
     ) : (
-      <span className={`mt-2 block text-2xl font-extrabold leading-none text-white md:text-[1.75rem] ${numeric ? "num" : ""}`}>
+      <span className={`mt-2 block text-2xl font-extrabold leading-none text-ink md:text-[1.75rem] ${numeric ? "num" : ""}`}>
         {value}
       </span>
     )}
@@ -123,7 +123,7 @@ const ReleaseStatus = ({ payload, isLive }: { payload: ReleasePayload | null; is
       <div className="container-custom">
         <AnimatedSection className="max-w-2xl">
           <span className="eyebrow">נתונים חיים</span>
-          <h2 className="mt-4 text-display-md text-white">האפליקציה עכשיו</h2>
+          <h2 className="mt-4 text-display-md text-ink">האפליקציה עכשיו</h2>
           <p className="mt-4 text-[1.0625rem] leading-relaxed text-ink-soft">
             המספרים כאן מתעדכנים מעצמם עם כל גרסה שיוצאת. מספר ההורדות הוא הספירה האמיתית של
             קובץ ההתקנה — לא לחיצות על הכפתור באתר.
@@ -167,7 +167,7 @@ const ReleaseStatus = ({ payload, isLive }: { payload: ReleasePayload | null; is
         {stable && stable.changes.length > 0 && (
           <AnimatedSection delay={0.12} className="mt-4">
             <div className="rounded-lg border border-border bg-surface p-6 md:p-7">
-              <h3 className="text-lg font-bold text-white">
+              <h3 className="text-lg font-bold text-ink">
                 מה חדש בגרסה <span className="num">{stable.versionName}</span>
               </h3>
               <Changes items={stable.changes} />

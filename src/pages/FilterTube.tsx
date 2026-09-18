@@ -2,9 +2,9 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft, Check, ChevronDown, Download, Headphones, Layers, Lock,
-  MessageCircle, Minus, Music, Radio, Settings2, Shield, ShieldCheck,
-  Smartphone, Sparkles, Video,
+  ArrowLeft, Bell, Check, CloudCog, Download, Headphones, Layers, ListMusic,
+  Lock, MessageCircle, Minus, Music, PlayCircle, Radio, Settings2, Share2,
+  Shield, ShieldCheck, Smartphone, Sparkles, UserCheck, Video,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -19,19 +19,22 @@ import { apkUrlFor } from "@/lib/filtertubeRelease";
 
 /* App screenshots, bundled in /public/filtertube so they work on any host. */
 const SHOTS = {
-  login: "/filtertube/142557.jpg",
-  password: "/filtertube/142641.jpg",
-  levels: "/filtertube/142652.jpg",
-  music: "/filtertube/142658.jpg",
-  success: "/filtertube/142705.jpg",
-  feed: "/filtertube/142716.jpg",
-  player: "/filtertube/142911.jpg",
-  overlay: "/filtertube/143005.jpg",
-  quality: "/filtertube/143022.jpg",
-  shorts: "/filtertube/143258.jpg",
+  account: "/filtertube/account.jpg",
+  parentcode: "/filtertube/parentcode.jpg",
+  levels: "/filtertube/levels.jpg",
+  artists: "/filtertube/artists.jpg",
+  success: "/filtertube/success.jpg",
+  feed: "/filtertube/feed.jpg",
+  shorts: "/filtertube/shorts.jpg",
+  player: "/filtertube/player.jpg",
+  music: "/filtertube/music.jpg",
+  mixes: "/filtertube/mixes.jpg",
+  library: "/filtertube/library.jpg",
+  settings: "/filtertube/settings.jpg",
+  settings2: "/filtertube/settings2.jpg",
 };
 
-const WA_FILTERTUBE = waLink("שלום, אשמח לפרטים על FilterTube – יוטיוב מסונן");
+const WA_FILTERTUBE = waLink("שלום, אשמח לפרטים על FilterTube – יוטיוב ויוטיוב מיוזיק מסוננים");
 
 /* ------------------------------------------------------------------ */
 
@@ -42,55 +45,112 @@ const WA_FILTERTUBE = waLink("שלום, אשמח לפרטים על FilterTube �
 const Phone = ({
   src, alt, className = "", priority = false,
 }: { src: string; alt: string; className?: string; priority?: boolean }) => (
-  <div className={`relative aspect-[9/19.5] w-full max-w-[15rem] overflow-hidden rounded-[1.75rem] border-[6px] border-[hsl(208_30%_7%)] bg-black shadow-float ${className}`}>
+  <div className={`relative aspect-[9/18.8] w-full max-w-[15rem] overflow-hidden rounded-[2rem] border-[6px] border-[hsl(240_12%_9%)] bg-[hsl(240_12%_9%)] shadow-float ${className}`}>
     <img
       src={src}
       alt={alt}
       width={240}
-      height={520}
+      height={501}
       loading={priority ? "eager" : "lazy"}
       decoding="async"
       className="h-full w-full object-cover"
     />
     {/* Notch */}
-    <span className="pointer-events-none absolute left-1/2 top-1.5 h-4 w-20 -translate-x-1/2 rounded-full bg-black" aria-hidden="true" />
+    <span className="pointer-events-none absolute left-1/2 top-2 h-4 w-20 -translate-x-1/2 rounded-full bg-[hsl(240_12%_9%)]" aria-hidden="true" />
   </div>
 );
 
 /**
- * The three levels exactly as the app presents them on its setup screen.
- * They differ on two axes: whether the "דתי לייט" channels are shown at all,
- * and which content is downgraded to audio.
+ * The app opens on a segmented pill: one app, two homes. Repeating it here
+ * means the page and the phone show the same control.
+ */
+const ModeSwitch = ({ active }: { active: "music" | "tube" }) => (
+  <div
+    className="inline-flex items-center gap-1 rounded-full bg-secondary p-1.5"
+    role="img"
+    aria-label={`האפליקציה נפתחת על מתג בין FilterMusic ל-FilterTube; כעת ${active === "music" ? "FilterMusic" : "FilterTube"}`}
+  >
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[0.9375rem] font-bold ${
+        active === "music" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground"
+      }`}
+    >
+      FilterMusic
+      <Music className="h-3.5 w-3.5" aria-hidden="true" />
+    </span>
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[0.9375rem] font-bold ${
+        active === "tube" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground"
+      }`}
+    >
+      FilterTube
+      <PlayCircle className="h-3.5 w-3.5" aria-hidden="true" />
+    </span>
+  </div>
+);
+
+/**
+ * The two halves of the app, described the way the app itself splits them.
+ */
+const modes = [
+  {
+    key: "tube" as const,
+    name: "FilterTube",
+    tagline: "יוטיוב מסונן",
+    icon: PlayCircle,
+    body: "הפיד, החיפוש, השורטס והשידורים החיים של יוטיוב – אחרי סינון. לשוניות של הכל, חדשים, שידורים חיים ותורה, נגן מלא עם מהירות ואיכות, חלון צף וניגון ברקע.",
+    points: ["פיד וידאו מסונן", "שורטס מסוננים", "שידורים חיים ותורה", "נגן ברקע וחלון צף"],
+    shot: { src: SHOTS.feed, alt: "הפיד המסונן של FilterTube" },
+  },
+  {
+    key: "music" as const,
+    name: "FilterMusic",
+    tagline: "יוטיוב מיוזיק מסונן",
+    icon: Music,
+    body: "נגן מוזיקה מלא בתוך אותה אפליקציה: בחירה מהירה, מיקסים שנבנים ממה שאתם שומעים, ספרייה עם לייקים והורדות, ורדיו לפי שיר. מה שיוטיוב מיוזיק עושה – רק שכל מה שנכנס פנימה עבר אישור.",
+    points: ["מיקס יומי אישי", "מיקס לכל זמר", "רדיו לפי שיר", "האזנה במסך נעול"],
+    shot: { src: SHOTS.music, alt: "המסך הראשי של FilterMusic – יוטיוב מיוזיק מסונן" },
+  },
+];
+
+/**
+ * The three levels, plus the audio switch, in the app's own words from its
+ * setup screen. They differ on two axes: whether the "דתי לייט" channels are
+ * shown at all, and which content is downgraded to audio.
  */
 const filterLevels = [
   {
     name: "מחמיר",
     icon: Headphones,
     summary: "מוזיקה כאודיו, השאר וידאו",
-    detail: "ערוצי המוזיקה נשמעים כאודיו בלבד, וכל שאר התוכן מוצג כרגיל בווידאו. ערוצי ״דתי לייט״ מוסתרים לגמרי.",
+    detail: "כל התוכן מוצג כווידאו, ומוזיקה נשמעת כאודיו בלבד – בלי קליפים. ערוצי ״דתי לייט״ אינם מוצגים.",
   },
   {
     name: "רגיל",
     icon: Video,
     summary: "הכול וידאו",
-    detail: "אותו תוכן שיש במחמיר, אבל גם המוזיקה מוצגת כווידאו. ערוצי ״דתי לייט״ עדיין מוסתרים.",
+    detail: "כמו ״מחמיר״, אבל גם המוזיקה מוצגת כווידאו. ערוצי ״דתי לייט״ עדיין אינם מוצגים.",
   },
   {
     name: "דתי לייט",
     icon: ShieldCheck,
-    summary: "מוסיף ערוצי דתי לייט, כאודיו",
-    detail: "מוסיף גם שירים חילוניים בביצוע זמרים גברים בלבד, והם מתנגנים כאודיו בלבד. כל שאר התוכן, כולל כל המוזיקה, מוצג כווידאו.",
+    summary: "מוסיף שירים חילוניים, כאודיו",
+    detail: "מוסיף שירים חילוניים – גברים בלבד – והם מתנגנים כאודיו בלבד, לעולם לא כווידאו.",
   },
 ];
 
 const features = [
   { icon: Shield, title: "שלוש רמות סינון", desc: "מחמיר, רגיל ודתי לייט – ונעילה שלהן בקוד הורים." },
-  { icon: Radio, title: "מצב אודיו לכל האפליקציה", desc: "הופכים את כל התוכן לשמע בלבד, בכל רמת סינון, בלחיצה אחת." },
+  { icon: Radio, title: "מצב ״הכל כאודיו״", desc: "בלי מסך בכלל: שיעורים, חדשות ומוזיקה נשמעים ולא נראים." },
+  { icon: ListMusic, title: "מיקסים שמתעדכנים", desc: "מיקס יומי ומיקס לכל זמר, שנבנים ממה שאתם באמת שומעים." },
   { icon: Layers, title: "חלון צף ונגן ברקע", desc: "הניגון ממשיך תוך כדי גלישה, כתיבה או מסך נעול." },
-  { icon: Download, title: "הורדות לצפייה אופליין", desc: "להוריד מראש ולצפות גם בלי אינטרנט – נוח לנסיעות." },
-  { icon: Lock, title: "קוד הורים בן 4 ספרות", desc: "נועל את ההגדרות ואת רמת הסינון. רק ההורה משנה." },
-  { icon: Music, title: "מוזיקה יהודית מובנית", desc: "בוחרים אמנים, ומקבלים פיד אישי של תוכן שמע." },
-  { icon: Settings2, title: "שליטה באיכות ובמהירות", desc: "מ-144p ועד 1080p, מהירות ניגון וטעינה חסכונית." },
+  { icon: Download, title: "הורדות לצפייה אופליין", desc: "מנהל הורדות עם לייקים, מהירות והורדות במקביל." },
+  { icon: Lock, title: "קוד הורים", desc: "נועל את רמת הסינון ואת הצגת השורטס. רק ההורה משנה." },
+  { icon: CloudCog, title: "סנכרון ענן", desc: "החשבון, הלייקים והספרייה נשמרים ועוברים איתכם למכשיר הבא." },
+  { icon: Bell, title: "התראה על סרטון חדש", desc: "רק מערוץ מאושר שבחרתם לעקוב אחריו. שום דבר אחר." },
+  { icon: Settings2, title: "שליטה בנגן ובתצוגה", desc: "איכות ומהירות, מחוות בנגן, צבע ראשי, מצב בהיר או כהה ו-120 הרץ." },
+  { icon: Share2, title: "שיתוף האפליקציה", desc: "קישור להורדה, קוד QR או העברת קובץ ההתקנה בבלוטות'." },
+  { icon: UserCheck, title: "חיבור לחשבון יוטיוב", desc: "מביא את הלייקים, המנויים והמוזיקה שאהבתם – לא חובה." },
   { icon: Sparkles, title: "בלי פרסומות ובלי תגובות", desc: "אין פרסומות, אין תגובות, ואין אלגוריתם שמושך הלאה." },
 ];
 
@@ -101,16 +161,21 @@ const comparison: { label: string; ours: boolean; theirs: boolean }[] = [
   { label: "חלון צף", ours: true, theirs: true },
   { label: "אפליקציה חוקית, לא APK פרוץ", ours: true, theirs: false },
   { label: "סינון תוכן לפני הצגה", ours: true, theirs: false },
+  { label: "אישור ידני של כל ערוץ, על ידי אדם", ours: true, theirs: false },
   { label: "שלוש רמות סינון להורים", ours: true, theirs: false },
   { label: "קוד הורים לנעילת הגדרות", ours: true, theirs: false },
+  { label: "יוטיוב מיוזיק מסונן בתוך האפליקציה", ours: true, theirs: false },
   { label: "ממשק מלא בעברית", ours: true, theirs: false },
-  { label: "מוזיקה יהודית מובנית", ours: true, theirs: false },
 ];
 
 const faqs = [
   {
     q: "מה זה FilterTube ובמה זה שונה מיוטיוב רגיל?",
-    a: "FilterTube היא אפליקציית וידאו כשרה לאנדרואיד שמציגה תוכן יוטיוב אחרי סינון. יש בה שלוש רמות סינון, קוד הורים, ותכונות שביוטיוב שמורות למנוי בתשלום – נגן ברקע, חלון צף והורדות – בלי פרסומות ובלי תגובות.",
+    a: "FilterTube היא אפליקציית אנדרואיד בעברית שמציגה תוכן יוטיוב אחרי סינון. בתוכה יש שני חלקים: FilterTube – יוטיוב מסונן עם פיד, חיפוש, שורטס ושידורים חיים, ו-FilterMusic – יוטיוב מיוזיק מסונן עם מיקסים, רדיו וספרייה. יש שלוש רמות סינון, קוד הורים, ותכונות שביוטיוב שמורות למנוי בתשלום – נגן ברקע, חלון צף והורדות – בלי פרסומות ובלי תגובות.",
+  },
+  {
+    q: "מה זה FilterMusic, ומה הקשר ליוטיוב מיוזיק?",
+    a: "FilterMusic הוא מצב המוזיקה של האפליקציה, ומחליף בפועל את יוטיוב מיוזיק. מחליפים אליו בלחיצה על המתג בראש המסך ומקבלים מסך בית מוזיקלי, מיקס יומי אישי, מיקס נפרד לכל זמר שאתם שומעים, רדיו שממשיך מכל שיר, ספרייה עם הלייקים וההורדות – הכול מתוך אותה רשימת ערוצים מאושרת, ובלי פרסומות.",
   },
   {
     q: "זו חלופה חוקית ליוטיוב פרוץ?",
@@ -118,27 +183,35 @@ const faqs = [
   },
   {
     q: "מה ההבדל בין שלוש רמות הסינון?",
-    a: "ההבדל הוא בשני דברים: אילו ערוצים מוצגים, ומה מתנגן כאודיו. מחמיר – המוזיקה נשמעת כאודיו בלבד, כל שאר התוכן בווידאו, וערוצי ״דתי לייט״ מוסתרים. רגיל – אותו תוכן, אבל גם המוזיקה בווידאו, וערוצי ״דתי לייט״ עדיין מוסתרים. דתי לייט – מוסיף שירים חילוניים בביצוע זמרים גברים בלבד, שמתנגנים כאודיו, וכל שאר התוכן כולל המוזיקה מוצג בווידאו. בנוסף, בכל רמה אפשר להפוך את כל האפליקציה למצב אודיו בלבד.",
+    a: "ההבדל הוא בשני דברים: אילו ערוצים מוצגים, ומה מתנגן כאודיו. מחמיר – כל התוכן מוצג כווידאו, והמוזיקה נשמעת כאודיו בלבד בלי קליפים, וערוצי ״דתי לייט״ אינם מוצגים. רגיל – כמו מחמיר, אבל גם המוזיקה מוצגת כווידאו, וערוצי ״דתי לייט״ עדיין אינם מוצגים. דתי לייט – מוסיף שירים חילוניים בביצוע גברים בלבד, והם מתנגנים כאודיו בלבד ולעולם לא כווידאו. בנוסף יש מתג ״הכל כאודיו״ שחל על כל הרמות.",
+  },
+  {
+    q: "מה עושה המתג ״הכל כאודיו״?",
+    a: "הוא מבטל את המסך לגמרי: גם שיעורים, גם חדשות וגם מוזיקה יישמעו ולא ייראו. הוא חל על כל רמות הסינון, לא תלוי בהן, ואפשר לכבות אותו בהגדרות. בשילוב עם ניגון ברקע האפליקציה עובדת כמו נגן שמע רגיל.",
+  },
+  {
+    q: "מי מחליט אילו ערוצים נכנסים?",
+    a: "כל ערוץ ברשימה נבדק ואושר ידנית על ידי אדם – לא על ידי בינה מלאכותית ולא באופן אוטומטי. מה שלא אושר פשוט לא קיים באפליקציה, גם לא בחיפוש.",
   },
   {
     q: "איך מורידים ומתקינים?",
-    a: "לוחצים על כפתור ההורדה בעמוד ומקבלים את קובץ ה-APK הרשמי. ההתקנה חינמית, לא דורשת חשבון גוגל ולא דורשת רוט. מתאים לאנדרואיד 7.0 ומעלה.",
+    a: "לוחצים על כפתור ההורדה בעמוד ומקבלים את קובץ ה-APK הרשמי. ההתקנה חינמית, לא דורשת חשבון גוגל ולא דורשת רוט. מתאים לאנדרואיד 7.0 ומעלה. אפשר גם לשתף את האפליקציה הלאה בקישור, בקוד QR או בהעברת הקובץ בבלוטות'.",
   },
   {
     q: "הפרימיום באמת חינם ל-30 יום?",
-    a: "כן, שלושים ימי ניסיון מלאים – כולל הורדות, נגן ברקע וחלון צף. לא נדרש אמצעי תשלום כדי להתחיל.",
+    a: "כן, שלושים ימי ניסיון מלאים – כולל הורדות מהירות, ניגון ברקע ומסך כבוי, סינון מותאם אישית וקוד הורים. לא נדרש אמצעי תשלום כדי להתחיל.",
   },
   {
     q: "ילדים יכולים להשתמש בזה?",
-    a: "כן. קוד הורים בן ארבע ספרות נועל את ההגדרות, כך שרק ההורה יכול לשנות רמת סינון או להוסיף אמנים.",
+    a: "כן. קוד הורים של ארבעה תווים ומעלה נועל את רמת הסינון ואת הצגת השורטס, כך שרק ההורה יכול לשנות אותם. הקוד עצמו אינו נשמר כטקסט במכשיר.",
   },
   {
-    q: "אפשר להאזין רק למוזיקה, בלי וידאו?",
-    a: "כן. ברמת הסינון המחמירה המוזיקה מתנגנת כאודיו בלבד, ובכל רמה אפשר להפעיל מצב אודיו לכל האפליקציה. בשילוב עם ניגון ברקע, FilterTube עובדת כמו נגן מוזיקה רגיל – גם כשהמסך נעול.",
+    q: "צריך חשבון גוגל או מנוי יוטיוב פרימיום?",
+    a: "לא. אפשר לפתוח חשבון FilterTube עם קוד בלבד, בלי גוגל. מי שכן בוחר להתחבר לחשבון יוטיוב מקבל את הלייקים, המנויים והמוזיקה שאהב – אבל זו אפשרות, לא דרישה. תכונות כמו ניגון ברקע והורדות כלולות באפליקציה עצמה ולא דורשות מנוי יוטיוב.",
   },
   {
-    q: "צריך מנוי יוטיוב פרימיום?",
-    a: "לא. אין קשר לחשבון יוטיוב או למנוי פרימיום. FilterTube לא דורשת חשבון גוגל בכלל, ותכונות כמו ניגון ברקע והורדות כלולות בתוכה.",
+    q: "מה קורה כשמחליפים מכשיר?",
+    a: "יש סנכרון ענן. החשבון, הלייקים, המנויים והספרייה חוזרים במכשיר החדש אחרי כניסה לאותו חשבון.",
   },
   {
     q: "יש גרסה לאייפון?",
@@ -166,14 +239,14 @@ const ShowcaseRow = ({
     <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
       <div className={reverse ? "lg:order-2" : ""}>
         <Eyebrow>{eyebrow}</Eyebrow>
-        <h3 className="mt-4 text-display-sm text-white">{title}</h3>
+        <h3 className="mt-4 text-display-sm text-ink">{title}</h3>
         <p className="mt-4 text-[1.0625rem] leading-relaxed text-ink-soft">{body}</p>
         {points && (
           <ul className="mt-6 space-y-2.5">
             {points.map((t) => (
               <li key={t} className="flex items-center gap-2.5 text-[0.9375rem] text-ink-soft">
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/15 ring-1 ring-primary/40">
-                  <Check className="h-3 w-3 text-primary" />
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                  <Check className="h-3 w-3" />
                 </span>
                 {t}
               </li>
@@ -207,8 +280,11 @@ const FilterTube = () => {
   const softwareLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    name: "FilterTube – יוטיוב מסונן וכשר",
-    alternateName: ["פילטר טיוב", "FilterTube APK", "יוטיוב כשר", "יוטיוב מסונן"],
+    name: "FilterTube – יוטיוב ויוטיוב מיוזיק מסוננים",
+    alternateName: [
+      "פילטר טיוב", "FilterTube APK", "FilterMusic", "פילטר מיוזיק",
+      "יוטיוב כשר", "יוטיוב מסונן", "יוטיוב מיוזיק מסונן",
+    ],
     operatingSystem: "Android 7.0+",
     applicationCategory: "MultimediaApplication",
     applicationSubCategory: "VideoApplication",
@@ -226,12 +302,12 @@ const FilterTube = () => {
       availability: "https://schema.org/InStock",
     },
     description:
-      "FilterTube – אפליקציית יוטיוב מסוננת וכשרה בעברית לאנדרואיד. שלוש רמות סינון, מצב שמע, נגן ברקע, חלון צף, הורדות לצפייה אופליין, קוד הורים וללא פרסומות. חלופה חוקית לאפליקציות יוטיוב פרוצות.",
+      "FilterTube – אפליקציה אחת בעברית לאנדרואיד ובה יוטיוב מסונן ויוטיוב מיוזיק מסונן. שלוש רמות סינון, מצב ״הכל כאודיו״, מיקסים, נגן ברקע, חלון צף, הורדות אופליין, קוד הורים וללא פרסומות. חלופה חוקית לאפליקציות יוטיוב פרוצות.",
     featureList: features.map((f) => f.title),
     publisher: { "@id": `${SITE.url}/#business` },
     screenshot: [
       `${SITE.url}${SHOTS.feed}`,
-      `${SITE.url}${SHOTS.player}`,
+      `${SITE.url}${SHOTS.music}`,
       `${SITE.url}${SHOTS.levels}`,
     ],
   };
@@ -249,12 +325,12 @@ const FilterTube = () => {
   return (
     <div className="theme-filtertube bg-background text-foreground">
       <SEOHead
-        title="FilterTube (פילטר טיוב) – יוטיוב מסונן וכשר להורדה APK"
-        description="FilterTube (פילטר טיוב) – אפליקציית יוטיוב מסוננת וכשרה בעברית לאנדרואיד, להורדה חינם. שלוש רמות סינון, מוזיקה כאודיו, נגן ברקע, הורדות אופליין, קוד הורים וללא פרסומות. חלופה חוקית ובטוחה לאפליקציות יוטיוב פרוצות."
+        title="FilterTube (פילטר טיוב) – יוטיוב ויוטיוב מיוזיק מסוננים, להורדה APK"
+        description="FilterTube (פילטר טיוב) – אפליקציה אחת בעברית לאנדרואיד ובה יוטיוב מסונן וגם יוטיוב מיוזיק מסונן, להורדה חינם. שלוש רמות סינון, מצב הכל כאודיו, מיקסים, נגן ברקע, הורדות אופליין, קוד הורים וללא פרסומות. חלופה חוקית ובטוחה לאפליקציות יוטיוב פרוצות."
         path="/filtertube"
-        keywords="פילטר טיוב, FilterTube, יוטיוב מסונן, יוטיוב כשר, סינון ליוטיוב, סינון יוטיוב, יוטיוב מסונן להורדה, אפליקציית יוטיוב כשרה, יוטיוב ללא פרסומות, יוטיוב לילדים, יוטיוב מיוזיק כשר, מוזיקה יהודית אפליקציה, יוטיוב פרוץ חלופה"
+        keywords="פילטר טיוב, FilterTube, FilterMusic, יוטיוב מסונן, יוטיוב כשר, סינון ליוטיוב, סינון יוטיוב, יוטיוב מיוזיק מסונן, יוטיוב עם מיוזיק, יוטיוב מיוזיק כשר, יוטיוב מסונן להורדה, אפליקציית יוטיוב כשרה, יוטיוב ללא פרסומות, יוטיוב לילדים, מוזיקה יהודית אפליקציה, יוטיוב פרוץ חלופה, נגן מוזיקה כשר"
         image={`${SITE.url}/filtertube-og.jpg`}
-        imageAlt="FilterTube – יוטיוב מסונן וכשר, אפליקציה לאנדרואיד"
+        imageAlt="FilterTube – יוטיוב ויוטיוב מיוזיק מסוננים, אפליקציה לאנדרואיד"
       />
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(softwareLd)}</script>
@@ -264,10 +340,9 @@ const FilterTube = () => {
       <Breadcrumbs items={[{ label: "FilterTube – יוטיוב מסונן" }]} />
 
       {/* ------------------------------------------------------------ Hero */}
-      <section className="relative overflow-hidden" aria-label="FilterTube – יוטיוב מסונן וכשר">
-        <div className="pointer-events-none absolute inset-0 texture-traces opacity-40" aria-hidden="true" />
+      <section className="relative overflow-hidden" aria-label="FilterTube – יוטיוב ויוטיוב מיוזיק מסוננים">
         <div
-          className="pointer-events-none absolute inset-x-0 top-0 h-[32rem] bg-[radial-gradient(ellipse_70%_60%_at_50%_0%,hsl(358_76%_50%/0.18),transparent_70%)]"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[34rem] bg-[radial-gradient(ellipse_70%_60%_at_50%_0%,hsl(353_100%_59%/0.10),transparent_70%)]"
           aria-hidden="true"
         />
 
@@ -278,7 +353,7 @@ const FilterTube = () => {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="lg:col-span-6"
           >
-            <span className="inline-flex items-center gap-2 rounded-sm border border-primary/35 bg-primary/10 px-3 py-1.5 text-[0.8125rem] font-bold text-primary">
+            <span className="inline-flex items-center gap-2 rounded-full bg-primary-tint px-3.5 py-1.5 text-[0.8125rem] font-bold text-primary">
               <span className="relative flex h-1.5 w-1.5">
                 <span className="absolute inline-flex h-full w-full rounded-full bg-primary opacity-70 motion-safe:animate-ping" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
@@ -286,18 +361,24 @@ const FilterTube = () => {
               אפליקציה משלנו · 30 יום פרימיום חינם
             </span>
 
-            <h1 className="mt-6 text-display-xl text-white">
-              יוטיוב מסונן,
-              <span className="mt-1 block text-primary">בלי הפתעות.</span>
+            <h1 className="mt-6 text-display-xl text-ink">
+              יוטיוב ומיוזיק,
+              <span className="mt-1 block text-primary">אחרי סינון.</span>
             </h1>
 
             <p className="mt-6 max-w-lg text-[1.0625rem] leading-relaxed text-ink-soft">
-              <strong className="font-semibold text-white">FilterTube (פילטר טיוב)</strong> היא
-              אפליקציית אנדרואיד שמציגה תוכן יוטיוב אחרי סינון: שלוש רמות סינון לבחירתכם, קוד הורים
-              שנועל אותן, מוזיקה שאפשר לשמוע כאודיו ונגן שממשיך ברקע – וללא פרסומות ותגובות.
+              <strong className="font-semibold text-ink">FilterTube (פילטר טיוב)</strong> היא
+              אפליקציית אנדרואיד אחת ובה שני עולמות: <strong className="font-semibold text-ink">FilterTube</strong> –
+              יוטיוב מסונן, ו-<strong className="font-semibold text-ink">FilterMusic</strong> – יוטיוב
+              מיוזיק מסונן. מחליפים ביניהם בלחיצה. שלוש רמות סינון, קוד הורים שנועל אותן, ונגן
+              שממשיך ברקע – בלי פרסומות ובלי תגובות.
             </p>
 
-            <div className="mt-9 max-w-sm space-y-3">
+            <div className="mt-8">
+              <ModeSwitch active="tube" />
+            </div>
+
+            <div className="mt-8 max-w-sm space-y-3">
               <ApkDownloadButton
                 href={apkUrl}
                 label="הורדת האפליקציה (APK)"
@@ -322,7 +403,7 @@ const FilterTube = () => {
               ].map((f) => (
                 <div key={f.term}>
                   <dt className="text-[0.75rem] text-muted-foreground">{f.term}</dt>
-                  <dd className="mt-1 text-[0.9375rem] font-bold text-white">{f.value}</dd>
+                  <dd className="mt-1 text-[0.9375rem] font-bold text-ink">{f.value}</dd>
                 </div>
               ))}
             </dl>
@@ -334,7 +415,7 @@ const FilterTube = () => {
             transition={{ duration: 0.7, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
             className="flex items-end justify-center gap-4 lg:col-span-6 lg:gap-6"
           >
-            <Phone src={SHOTS.player} alt="נגן הווידאו של FilterTube" className="hidden max-w-[12.5rem] translate-y-10 sm:block" />
+            <Phone src={SHOTS.music} alt="FilterMusic – יוטיוב מיוזיק מסונן" className="hidden max-w-[12.5rem] translate-y-10 sm:block" />
             <Phone src={SHOTS.feed} alt="מסך הפיד של FilterTube – יוטיוב מסונן" priority />
             <Phone src={SHOTS.levels} alt="בחירת רמת סינון ב-FilterTube" className="hidden max-w-[12.5rem] translate-y-10 md:block" />
           </motion.div>
@@ -343,28 +424,42 @@ const FilterTube = () => {
 
       <ReleaseStatus payload={payload} isLive={isLive} />
 
-      {/* -------------------------------------------------- Filter levels */}
-      <section className="section-padding border-t border-border bg-surface-sunken" aria-label="רמות הסינון">
+      {/* -------------------------------------------------- Two apps in one */}
+      <section className="section-padding border-t border-border bg-surface-sunken" aria-label="FilterTube ו-FilterMusic">
         <div className="container-custom">
           <AnimatedSection className="max-w-2xl">
-            <Eyebrow>הלב של האפליקציה</Eyebrow>
-            <h2 className="mt-4 text-display-md text-white">בוחרים רמת סינון – ונועלים אותה</h2>
+            <Eyebrow>אפליקציה אחת, שני בתים</Eyebrow>
+            <h2 className="mt-4 text-display-md text-ink">וידאו ומוזיקה – במתג אחד</h2>
             <p className="mt-4 text-[1.0625rem] leading-relaxed text-ink-soft">
-              לא כל בית צריך את אותו דבר. FilterTube נותנת שלוש רמות, וקוד הורים בן ארבע ספרות
-              שמונע שינוי שלהן.
+              בראש המסך יש מתג. צד אחד הוא יוטיוב מסונן, הצד השני הוא יוטיוב מיוזיק מסונן. אותה
+              רשימת ערוצים מאושרת, אותה רמת סינון, אותו קוד הורים – שני ממשקים שונים.
             </p>
+            <div className="mt-7">
+              <ModeSwitch active="music" />
+            </div>
           </AnimatedSection>
 
-          <div className="mt-12 grid gap-px overflow-hidden rounded-lg border border-border bg-border md:grid-cols-3">
-            {filterLevels.map((lvl, i) => (
-              <AnimatedSection key={lvl.name} delay={i * 0.06}>
-                <div className="h-full bg-surface p-7">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-md bg-primary/15 text-primary ring-1 ring-primary/30">
-                    <lvl.icon className="h-5 w-5" />
-                  </span>
-                  <h3 className="mt-5 text-lg font-bold text-white">{lvl.name}</h3>
-                  <p className="mt-1 text-[0.875rem] font-semibold text-primary">{lvl.summary}</p>
-                  <p className="mt-3 text-[0.9375rem] leading-relaxed text-ink-soft">{lvl.detail}</p>
+          <div className="mt-12 grid gap-6 lg:grid-cols-2">
+            {modes.map((m, i) => (
+              <AnimatedSection key={m.key} delay={i * 0.08}>
+                <div className="flex h-full flex-col gap-7 rounded-[1.25rem] border border-border bg-surface p-7 shadow-sm sm:flex-row sm:items-start md:p-8">
+                  <div className="flex-1">
+                    <span className="flex h-11 w-11 items-center justify-center rounded-[0.875rem] bg-primary text-primary-foreground">
+                      <m.icon className="h-5 w-5" />
+                    </span>
+                    <h3 className="mt-5 text-xl font-bold text-ink">{m.name}</h3>
+                    <p className="mt-1 text-[0.875rem] font-semibold text-primary">{m.tagline}</p>
+                    <p className="mt-3 text-[0.9375rem] leading-relaxed text-ink-soft">{m.body}</p>
+                    <ul className="mt-5 space-y-2">
+                      {m.points.map((p) => (
+                        <li key={p} className="flex items-center gap-2 text-[0.875rem] text-ink-soft">
+                          <Check className="h-3.5 w-3.5 shrink-0 text-primary" />
+                          {p}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <Phone src={m.shot.src} alt={m.shot.alt} className="mx-auto max-w-[11rem] sm:mx-0 sm:max-w-[9.5rem]" />
                 </div>
               </AnimatedSection>
             ))}
@@ -372,22 +467,79 @@ const FilterTube = () => {
         </div>
       </section>
 
+      {/* -------------------------------------------------- Filter levels */}
+      <section className="section-padding border-t border-border" aria-label="רמות הסינון">
+        <div className="container-custom">
+          <AnimatedSection className="max-w-2xl">
+            <Eyebrow>הלב של האפליקציה</Eyebrow>
+            <h2 className="mt-4 text-display-md text-ink">בוחרים רמת סינון – ונועלים אותה</h2>
+            <p className="mt-4 text-[1.0625rem] leading-relaxed text-ink-soft">
+              לא כל בית צריך את אותו דבר. FilterTube נותנת שלוש רמות, וקוד הורים שמונע שינוי שלהן.
+            </p>
+          </AnimatedSection>
+
+          <div className="mt-12 grid gap-4 md:grid-cols-3">
+            {filterLevels.map((lvl, i) => (
+              <AnimatedSection key={lvl.name} delay={i * 0.06}>
+                <div className="h-full rounded-[1.25rem] border border-border bg-surface p-7 shadow-sm">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-[0.875rem] bg-primary-tint text-primary">
+                    <lvl.icon className="h-5 w-5" />
+                  </span>
+                  <h3 className="mt-5 text-lg font-bold text-ink">{lvl.name}</h3>
+                  <p className="mt-1 text-[0.875rem] font-semibold text-primary">{lvl.summary}</p>
+                  <p className="mt-3 text-[0.9375rem] leading-relaxed text-ink-soft">{lvl.detail}</p>
+                </div>
+              </AnimatedSection>
+            ))}
+          </div>
+
+          {/* The audio switch is not a fourth level – it sits on top of all three. */}
+          <AnimatedSection delay={0.18} className="mt-4">
+            <div className="flex flex-col gap-5 rounded-[1.25rem] border border-border bg-surface p-7 shadow-sm sm:flex-row sm:items-center sm:gap-7">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[0.875rem] bg-primary text-primary-foreground">
+                <Headphones className="h-5 w-5" />
+              </span>
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-ink">
+                  ומעל הכול: מתג ״הכל כאודיו״
+                </h3>
+                <p className="mt-2 text-[0.9375rem] leading-relaxed text-ink-soft">
+                  בלי מסך בכלל – גם שיעורים, גם חדשות וגם מוזיקה יישמעו ולא ייראו. המתג חל על כל
+                  שלוש רמות הסינון, לא תלוי בהן, ואפשר לכבות אותו בהגדרות.
+                </p>
+              </div>
+            </div>
+          </AnimatedSection>
+
+          {/* The app says this on its own setup screen. It is the real differentiator. */}
+          <AnimatedSection delay={0.24} className="mt-4">
+            <div className="flex items-start gap-4 rounded-[1.25rem] bg-primary-tint p-7">
+              <UserCheck className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+              <p className="text-[0.9375rem] leading-relaxed text-ink">
+                <strong className="font-bold">כל ערוץ ברשימה נבדק ואושר ידנית על ידי אדם</strong> – לא
+                על ידי בינה מלאכותית ולא באופן אוטומטי. מה שלא אושר, פשוט לא קיים באפליקציה.
+              </p>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
       {/* ------------------------------------------------------- Features */}
-      <section className="section-padding" aria-label="תכונות האפליקציה">
+      <section className="section-padding border-t border-border bg-surface-sunken" aria-label="תכונות האפליקציה">
         <div className="container-custom">
           <AnimatedSection className="max-w-2xl">
             <Eyebrow>מה יש באפליקציה</Eyebrow>
-            <h2 className="mt-4 text-display-md text-white">כל מה שמחפשים באפליקציה פרוצה, בלי הסיכון</h2>
+            <h2 className="mt-4 text-display-md text-ink">כל מה שמחפשים באפליקציה פרוצה, בלי הסיכון</h2>
           </AnimatedSection>
 
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {features.map((f, i) => (
               <AnimatedSection key={f.title} delay={(i % 4) * 0.05}>
-                <div className="h-full panel panel-hover p-6">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/12 text-primary ring-1 ring-primary/25">
+                <div className="h-full rounded-[1.25rem] border border-border bg-surface p-6 shadow-sm transition-shadow hover:shadow-md">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-[0.875rem] bg-primary-tint text-primary">
                     <f.icon className="h-[1.125rem] w-[1.125rem]" />
                   </span>
-                  <h3 className="mt-4 text-[0.9375rem] font-bold text-white">{f.title}</h3>
+                  <h3 className="mt-4 text-[0.9375rem] font-bold text-ink">{f.title}</h3>
                   <p className="mt-2 text-[0.875rem] leading-relaxed text-ink-soft">{f.desc}</p>
                 </div>
               </AnimatedSection>
@@ -397,67 +549,68 @@ const FilterTube = () => {
       </section>
 
       {/* ------------------------------------------------------- Showcase */}
-      <section className="section-padding border-t border-border bg-surface-sunken" aria-label="מסכים מתוך האפליקציה">
+      <section className="section-padding border-t border-border" aria-label="מסכים מתוך האפליקציה">
         <div className="container-custom space-y-24 md:space-y-32">
           <ShowcaseRow
             eyebrow="הגדרה ראשונה"
-            title="שלוש דקות, ומותאם לבית שלכם"
-            body="בוחרים רמת סינון, קובעים קוד הורים, ומסמנים את סוג התוכן שמעניין. מכאן האפליקציה יודעת מה להראות – ובעיקר מה להסתיר."
-            points={["התאמה לפי גיל וסוג תוכן", "קוד הורים לנעילת ההגדרות", "החלפת רמת סינון בלחיצה", "30 יום פרימיום חינם"]}
+            title="ארבעה מסכים, ומותאם לבית שלכם"
+            body="נכנסים לחשבון – בגוגל או בקוד בלבד – קובעים קוד הורים, בוחרים רמת סינון, ומסמנים זמרים וערוצים שאוהבים. מכאן האפליקציה יודעת מה להראות, ובעיקר מה להסתיר."
+            points={["כניסה בלי חשבון גוגל, אם רוצים", "קוד הורים שנועל את רמת הסינון", "בחירת זמרים שבונה את הבית", "30 יום פרימיום חינם"]}
             shots={[
-              { src: SHOTS.login, alt: "מסך ההתחברות של FilterTube" },
+              { src: SHOTS.account, alt: "מסך פתיחת החשבון ב-FilterTube" },
               { src: SHOTS.levels, alt: "בחירת רמת הסינון ב-FilterTube" },
             ]}
           />
 
           <ShowcaseRow
             reverse
-            eyebrow="חוויית הניגון"
-            title="נגן מלא, בלי מה שמסביב"
-            body="שליטה במהירות ובאיכות, מצב שמע בלבד, ניגון ברקע וחלון צף. כל מה שהיה דורש אפליקציה חיצונית – נמצא כאן, בתוך סביבה מסוננת."
-            points={["ללא פרסומות", "נגן ברקע וחלון צף", "איכות עד 1080p", "הורדות לצפייה אופליין"]}
+            eyebrow="מוזיקה"
+            title="FilterMusic: יוטיוב מיוזיק, מסונן"
+            body="מסך בית מוזיקלי עם בחירה מהירה, מיקס יומי אישי ומיקס נפרד לכל זמר – שנבנים ממה שאתם באמת שומעים ומתעדכנים לבד. רדיו שממשיך מכל שיר, ונגן שלא עוצר כשהמסך נכבה."
+            points={["המיקס היומי שלך", "מיקס לכל זמר, מתעדכן מעצמו", "רדיו לפי שיר", "האזנה ברקע ובמסך נעול"]}
             shots={[
-              { src: SHOTS.overlay, alt: "שכבת הניגון של FilterTube" },
-              { src: SHOTS.quality, alt: "הגדרות איכות ומהירות ב-FilterTube" },
+              { src: SHOTS.music, alt: "המסך הראשי של FilterMusic" },
+              { src: SHOTS.mixes, alt: "מסך המיקסים של FilterMusic" },
             ]}
           />
 
           <ShowcaseRow
-            eyebrow="תוכן וגילוי"
-            title="פיד שאפשר לתת לילד ביד"
-            body="כל סרטון עובר סינון לפני שהוא מגיע לפיד. אין תגובות, אין תכנים מוצעים שמושכים הלאה, ואין פרסומות – גם לא בשורטס."
+            eyebrow="חוויית הניגון"
+            title="נגן מלא, בלי מה שמסביב"
+            body="עקוב, הורדה, רדיו, מצב אודיו וחלון צף – הכול משורת פעולות אחת מתחת לנגן. שליטה במהירות ובאיכות, תור ניגון, ומיני-נגן שנשאר איתכם בזמן שגולשים הלאה."
+            points={["ללא פרסומות ובלי תגובות", "חלון צף וניגון ברקע", "מהירות ואיכות לבחירתכם", "תור ניגון והבא בתור"]}
             shots={[
+              { src: SHOTS.player, alt: "נגן הווידאו של FilterTube" },
               { src: SHOTS.shorts, alt: "פיד השורטס המסונן של FilterTube" },
-              { src: SHOTS.feed, alt: "הפיד הראשי המסונן של FilterTube" },
             ]}
           />
 
           <ShowcaseRow
             reverse
-            eyebrow="מוזיקה"
-            title="כמו יוטיוב מיוזיק, רק מסונן"
-            body="בוחרים את האמנים שאוהבים, ומקבלים פיד מוזיקה אישי. ברמת מחמיר המוזיקה מתנגנת כאודיו בלבד – מה שהופך את האפליקציה לנגן מוזיקה כשר לכל דבר, שממשיך לנגן גם כשהמסך נעול."
-            points={["בחירת אמנים אישית", "מוזיקה כאודיו ברמת מחמיר", "ניגון ברקע ובמסך נעול", "הורדה להאזנה גם בלי אינטרנט"]}
+            eyebrow="ספרייה והגדרות"
+            title="הכול נשמר, וההורה בשליטה"
+            body="ספרייה עם סרטונים שאהבתם, ההורדות, הערוצים המאושרים והמנויים – עם סנכרון ענן שמחזיר את הכול במכשיר הבא. בהגדרות: רמת סינון נעולה, מנהל הורדות, מחוות בנגן, התראות ושיתוף האפליקציה."
+            points={["סנכרון ענן לחשבון", "מנהל הורדות", "התראה על סרטון חדש בערוץ מאושר", "שיתוף בקישור, QR או בלוטות'"]}
             shots={[
-              { src: SHOTS.music, alt: "בחירת אמנים למוזיקה ב-FilterTube" },
-              { src: SHOTS.overlay, alt: "נגן המוזיקה של FilterTube" },
+              { src: SHOTS.library, alt: "מסך הספרייה של FilterTube" },
+              { src: SHOTS.settings, alt: "מסך ההגדרות של FilterTube" },
             ]}
           />
         </div>
       </section>
 
       {/* ----------------------------------------------------- Comparison */}
-      <section className="section-padding" aria-label="השוואה לאפליקציות יוטיוב פרוצות">
+      <section className="section-padding border-t border-border bg-surface-sunken" aria-label="השוואה לאפליקציות יוטיוב פרוצות">
         <div className="container-custom max-w-3xl">
           <AnimatedSection className="text-center">
-            <h2 className="text-display-md text-white">FilterTube מול אפליקציה פרוצה</h2>
+            <h2 className="text-display-md text-ink">FilterTube מול אפליקציה פרוצה</h2>
             <p className="mx-auto mt-4 max-w-xl text-[1.0625rem] leading-relaxed text-ink-soft">
               אותן תכונות שאנשים מחפשים – בלי להתקין APK ממקור לא מוכר, ועם סינון.
             </p>
           </AnimatedSection>
 
           <AnimatedSection delay={0.08} className="mt-10">
-            <div className="overflow-hidden rounded-lg border border-border bg-surface">
+            <div className="overflow-hidden rounded-[1.25rem] border border-border bg-surface shadow-sm">
               <table className="w-full text-right">
                 <caption className="sr-only">
                   השוואת תכונות בין FilterTube לבין אפליקציות יוטיוב פרוצות
@@ -482,12 +635,12 @@ const FilterTube = () => {
                         {row.label}
                       </th>
                       <td className="px-3 py-3.5">
-                        <span className="mx-auto flex h-7 w-7 items-center justify-center rounded-full bg-primary/15 ring-1 ring-primary/40">
-                          <Check className="h-3.5 w-3.5 text-primary" aria-label="יש" />
+                        <span className="mx-auto flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                          <Check className="h-3.5 w-3.5" aria-label="יש" />
                         </span>
                       </td>
                       <td className="px-3 py-3.5">
-                        <span className="mx-auto flex h-7 w-7 items-center justify-center rounded-full bg-white/5 ring-1 ring-border-strong">
+                        <span className="mx-auto flex h-7 w-7 items-center justify-center rounded-full bg-secondary">
                           {row.theirs ? (
                             <Check className="h-3.5 w-3.5 text-muted-foreground" aria-label="יש" />
                           ) : (
@@ -505,11 +658,11 @@ const FilterTube = () => {
       </section>
 
       {/* ------------------------------------------------------------ FAQ */}
-      <section className="section-padding border-t border-border bg-surface-sunken" aria-label="שאלות נפוצות על FilterTube">
+      <section className="section-padding border-t border-border" aria-label="שאלות נפוצות על FilterTube">
         <div className="container-custom grid gap-10 lg:grid-cols-12 lg:gap-12">
           <AnimatedSection className="lg:col-span-4">
             <Eyebrow>שאלות נפוצות</Eyebrow>
-            <h2 className="mt-4 text-display-md text-white">מה שואלים אותנו על FilterTube</h2>
+            <h2 className="mt-4 text-display-md text-ink">מה שואלים אותנו על FilterTube</h2>
             <a
               href={WA_FILTERTUBE}
               target="_blank"
@@ -522,10 +675,10 @@ const FilterTube = () => {
           </AnimatedSection>
 
           <AnimatedSection delay={0.08} className="lg:col-span-8">
-            <Accordion type="single" collapsible className="divide-y divide-border overflow-hidden rounded-lg border border-border bg-surface">
+            <Accordion type="single" collapsible className="divide-y divide-border overflow-hidden rounded-[1.25rem] border border-border bg-surface shadow-sm">
               {faqs.map((faq, i) => (
                 <AccordionItem key={faq.q} value={`ft-faq-${i}`} className="border-0 px-5 md:px-6">
-                  <AccordionTrigger className="py-[1.125rem] text-right text-[0.9375rem] font-bold text-white hover:no-underline md:text-base">
+                  <AccordionTrigger className="py-[1.125rem] text-right text-[0.9375rem] font-bold text-ink hover:no-underline md:text-base">
                     {faq.q}
                   </AccordionTrigger>
                   <AccordionContent className="pb-5 text-[0.9375rem] leading-relaxed text-ink-soft">
@@ -539,14 +692,14 @@ const FilterTube = () => {
       </section>
 
       {/* ------------------------------------------------------------ CTA */}
-      <section className="relative overflow-hidden section-padding" aria-label="הורדת FilterTube">
+      <section className="relative overflow-hidden section-padding border-t border-border bg-surface" aria-label="הורדת FilterTube">
         <div
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_70%_at_50%_100%,hsl(358_76%_50%/0.20),transparent_70%)]"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_70%_at_50%_100%,hsl(353_100%_59%/0.10),transparent_70%)]"
           aria-hidden="true"
         />
         <div className="container-custom relative max-w-3xl text-center">
           <AnimatedSection>
-            <h2 className="text-display-lg text-white">יוטיוב אחר. רגוע יותר.</h2>
+            <h2 className="text-display-lg text-ink">יוטיוב אחר. רגוע יותר.</h2>
             <p className="mx-auto mt-5 max-w-lg text-[1.0625rem] leading-relaxed text-ink-soft">
               שלושים יום פרימיום חינם, בלי כרטיס אשראי ובלי חשבון גוגל. אם לא מתאים – פשוט מוחקים.
             </p>
@@ -575,7 +728,7 @@ const FilterTube = () => {
       {/* --------------------------------------------------- Long-form copy */}
       <section className="section-padding border-t border-border" aria-label="על FilterTube – יוטיוב מסונן">
         <div className="container-custom max-w-3xl">
-          <h2 className="text-display-sm text-white">פילטר טיוב – יוטיוב מסונן בעברית, מה צריך לדעת</h2>
+          <h2 className="text-display-sm text-ink">פילטר טיוב – יוטיוב ומיוזיק מסוננים בעברית, מה צריך לדעת</h2>
           <div className="prose-fp mt-6">
             <p>
               <strong>FilterTube</strong>, או בעברית <strong>פילטר טיוב</strong>, היא אפליקציית
@@ -584,15 +737,32 @@ const FilterTube = () => {
               פרסומות, בלי תגובות ובלי תכנים מוצעים שמושכים הלאה.
             </p>
 
+            <h3>שתי אפליקציות בתוך אחת: FilterTube ו-FilterMusic</h3>
+            <p>
+              בראש המסך יש מתג. צד אחד הוא <strong>FilterTube</strong> – <strong>יוטיוב מסונן</strong> עם
+              פיד, חיפוש, שורטס, שידורים חיים וערוצי תורה. הצד השני הוא <strong>FilterMusic</strong> –
+              <strong> יוטיוב מיוזיק מסונן</strong>: מסך בית מוזיקלי, מיקס יומי אישי, מיקס נפרד לכל
+              זמר, רדיו שממשיך מכל שיר וספרייה עם לייקים והורדות. מי שחיפש <strong>יוטיוב עם
+              מיוזיק</strong> בגרסה מסוננת מקבל את שניהם בהתקנה אחת, על אותה רשימת ערוצים מאושרת
+              ותחת אותה רמת סינון וקוד הורים.
+            </p>
+
             <h3>שלוש רמות סינון, ומה בדיוק ההבדל</h3>
             <p>
-              רמת <strong>מחמיר</strong> מנגנת את המוזיקה כאודיו בלבד, מציגה את כל שאר התוכן
-              בווידאו, ומסתירה לגמרי את ערוצי ״דתי לייט״. רמת <strong>רגיל</strong> מציגה בדיוק את
-              אותו תוכן, אבל גם את המוזיקה כווידאו, וערוצי ״דתי לייט״ עדיין מוסתרים. רמת
-              <strong> דתי לייט</strong> מוסיפה שירים חילוניים בביצוע זמרים גברים בלבד, והם מתנגנים
-              כאודיו בלבד – בעוד שכל שאר התוכן, כולל כל המוזיקה, מוצג בווידאו. מעבר לזה, בכל רמה
-              אפשר להפוך את כל האפליקציה למצב אודיו בלבד. את הרמה נועלים בקוד הורים בן ארבע ספרות,
-              כך שרק מי שיודע את הקוד יכול לשנות אותה.
+              רמת <strong>מחמיר</strong> מציגה את כל התוכן כווידאו, אבל המוזיקה נשמעת כאודיו בלבד –
+              בלי קליפים – וערוצי ״דתי לייט״ אינם מוצגים. רמת <strong>רגיל</strong> זהה, אלא שגם
+              המוזיקה מוצגת כווידאו, וערוצי ״דתי לייט״ עדיין אינם מוצגים. רמת
+              <strong> דתי לייט</strong> מוסיפה שירים חילוניים בביצוע גברים בלבד, והם מתנגנים כאודיו
+              בלבד ולעולם לא כווידאו. מעל שלוש הרמות יש מתג נפרד, <strong>״הכל כאודיו״</strong>,
+              שמבטל את המסך לגמרי – גם שיעורים, גם חדשות וגם מוזיקה יישמעו ולא ייראו. את רמת הסינון
+              ואת הצגת השורטס נועלים בקוד הורים, כך שרק מי שיודע את הקוד יכול לשנות אותם.
+            </p>
+
+            <h3>מי מחליט מה נכנס פנימה</h3>
+            <p>
+              כל ערוץ ברשימה נבדק ואושר <strong>ידנית על ידי אדם</strong> – לא על ידי בינה מלאכותית
+              ולא באופן אוטומטי. מה שלא אושר פשוט לא קיים באפליקציה, גם לא בתוצאות החיפוש. זה ההבדל
+              המרכזי בין סינון אמיתי לבין חסימה לפי מילות מפתח.
             </p>
 
             <h3>סינון ליוטיוב בלי אפליקציה פרוצה</h3>
@@ -603,19 +773,20 @@ const FilterTube = () => {
               המשתמש זו אפליקציה אחת שמחליפה גם את הצורך בעקיפה וגם את הצורך בפיקוח.
             </p>
 
-            <h3>מוזיקה: נגן מוזיקה כשר בתוך האפליקציה</h3>
+            <h3>נגן מוזיקה כשר שממשיך גם כשהמסך נעול</h3>
             <p>
-              בוחרים אמנים, ומקבלים פיד מוזיקה אישי. ברמת מחמיר המוזיקה מתנגנת כאודיו, והנגן ממשיך
-              לעבוד כשהמסך נעול – כך שבפועל מקבלים <strong>נגן מוזיקה</strong> בסגנון יוטיוב מיוזיק,
-              בתוך סביבה מסוננת. אפשר גם להוריד מראש ולהאזין בלי חיבור לאינטרנט.
+              בוחרים אמנים בהתקנה, ומקבלים פיד מוזיקה אישי שמתעדכן לבד. הנגן ממשיך לעבוד ברקע
+              ובמסך נעול, יש חלון צף, ואפשר להוריד מראש ולהאזין בלי חיבור לאינטרנט. בפועל מקבלים{" "}
+              <strong>נגן מוזיקה</strong> בסגנון יוטיוב מיוזיק, בתוך סביבה מסוננת – בלי פרסומות
+              ובלי מנוי.
             </p>
 
             <h3>למי זה מתאים</h3>
             <p>
               להורים שרוצים לתת מכשיר לילד בלי לדאוג מה יופיע בפיד; לבחורי ישיבה ולציבור החרדי
-              והדתי שמחפשים <strong>יוטיוב כשר</strong>; ולכל מי שפשוט רוצה לצפות בלי פרסומות
-              ובלי אלגוריתם שמושך הלאה. ההורדה חינמית, הפרימיום חינם לשלושים יום, והאפליקציה עובדת
-              על אנדרואיד 7.0 ומעלה.
+              והדתי שמחפשים <strong>יוטיוב כשר</strong> ו<strong>מוזיקה כשרה</strong>; ולכל מי
+              שפשוט רוצה לצפות ולהאזין בלי פרסומות ובלי אלגוריתם שמושך הלאה. ההורדה חינמית,
+              הפרימיום חינם לשלושים יום, והאפליקציה עובדת על אנדרואיד 7.0 ומעלה.
             </p>
 
             <p>
@@ -628,16 +799,16 @@ const FilterTube = () => {
       </section>
 
       {/* ------------------------------------------- Back to the main business */}
-      <section className="border-t border-border bg-surface-sunken py-12" aria-label="שירותי הסינון שלנו">
+      <section className="border-t border-border bg-surface py-12" aria-label="שירותי הסינון שלנו">
         <div className="container-custom">
           <AnimatedSection>
             <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
               <div className="flex items-start gap-4">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-accent/15 text-accent ring-1 ring-accent/30">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[0.875rem] bg-primary-tint text-primary">
                   <Smartphone className="h-5 w-5" />
                 </span>
                 <div>
-                  <h2 className="text-lg font-bold text-white">רוצים לסנן גם את הטלפון עצמו?</h2>
+                  <h2 className="text-lg font-bold text-ink">רוצים לסנן גם את הטלפון עצמו?</h2>
                   <p className="mt-1.5 max-w-xl text-[0.9375rem] leading-relaxed text-ink-soft">
                     FilterPhone היא מעבדה באשדוד לסינון טלפונים – משווק מורשה של הדרן, עסקן וכושר פליי,
                     וצריבת גרסאות כשרות למכשירי שיאומי Qin.

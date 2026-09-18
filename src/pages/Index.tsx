@@ -391,12 +391,12 @@ const Index = () => {
       </section>
 
       {/* ------------------------------------------------------ FilterTube */}
-      <section id="filtertube" className="section-padding" aria-label="FilterTube – יוטיוב מסונן וכשר">
+      <section id="filtertube" className="section-padding" aria-label="FilterTube – יוטיוב ויוטיוב מיוזיק מסוננים">
         <div className="container-custom">
           <SectionHeading
             eyebrow="המוצר שלנו"
-            title="ויש לנו גם יוטיוב מסונן – FilterTube"
-            lead="הרבה לקוחות מסננים את הטלפון ואז נתקעים עם אותה שאלה: מה עושים עם יוטיוב. אז פיתחנו אפליקציה משלנו שפותרת את זה."
+            title="ויש לנו גם יוטיוב ומיוזיק מסוננים – FilterTube"
+            lead="הרבה לקוחות מסננים את הטלפון ואז נתקעים עם אותה שאלה: מה עושים עם יוטיוב, ומה עם המוזיקה. אז פיתחנו אפליקציה משלנו שפותרת את שניהם."
           />
 
           <AnimatedSection delay={0.08} className="mt-10">
@@ -408,20 +408,22 @@ const Index = () => {
                     אפליקציה לאנדרואיד · הורדה חינם
                   </span>
 
-                  <h3 className="mt-5 text-display-sm">יוטיוב בלי מה שלא רוצים שייכנס הביתה</h3>
+                  <h3 className="mt-5 text-display-sm">יוטיוב ומיוזיק, בלי מה שלא רוצים שייכנס הביתה</h3>
 
                   <p className="mt-4 max-w-xl text-[1.0625rem] leading-relaxed text-ink-soft">
-                    FilterTube היא אפליקציית יוטיוב מסוננת וכשרה בעברית. כל סרטון עובר סינון לפני
-                    שהוא מוצג, אין תגובות, אין פרסומות ואין אלגוריתם שמושך לאן שלא רוצים. בוחרים רמת
-                    סינון, נועלים אותה בקוד הורים – ומשאירים את התוכן שכן מתאים.
+                    FilterTube היא אפליקציה אחת בעברית ובה שני עולמות: <strong className="font-semibold text-ink">FilterTube</strong>{" "}
+                    – יוטיוב מסונן, ו-<strong className="font-semibold text-ink">FilterMusic</strong> – יוטיוב מיוזיק
+                    מסונן. כל ערוץ מאושר ידנית על ידי אדם לפני שהוא מוצג, אין תגובות, אין פרסומות
+                    ואין אלגוריתם שמושך לאן שלא רוצים. בוחרים רמת סינון, נועלים אותה בקוד הורים –
+                    ומשאירים את התוכן שכן מתאים.
                   </p>
 
                   <ul className="mt-7 grid gap-3 sm:grid-cols-2">
                     {[
                       ["שלוש רמות סינון", "מחמיר, רגיל ודתי לייט – נעולות בקוד הורים"],
-                      ["מנעול הורים", "קוד בן 4 ספרות שנועל את ההגדרות"],
-                      ["מצב אודיו ונגן ברקע", "אפשר להפוך את כל האפליקציה לשמע בלבד"],
-                      ["ללא פרסומות כלל", "וללא תגובות ותכנים מוצעים"],
+                      ["יוטיוב מיוזיק מסונן", "מיקס יומי, מיקס לכל זמר ורדיו – בלי פרסומות"],
+                      ["מצב ״הכל כאודיו״", "אפשר להפוך את כל האפליקציה לשמע בלבד"],
+                      ["אישור ידני של כל ערוץ", "על ידי אדם, לא על ידי בינה מלאכותית"],
                     ].map(([title, desc]) => (
                       <li key={title} className="flex gap-2.5">
                         <BadgeCheck className="mt-0.5 h-[1.125rem] w-[1.125rem] shrink-0 text-success" />
@@ -451,15 +453,15 @@ const Index = () => {
 
                 <div className="relative flex items-center justify-center gap-4 bg-surface-sunken p-8 lg:col-span-5">
                   <img
-                    src="/filtertube/142652.jpg"
-                    alt="מסך בחירת רמת הסינון באפליקציית FilterTube"
+                    src="/filtertube/music.jpg"
+                    alt="מסך FilterMusic – יוטיוב מיוזיק מסונן"
                     width={200}
                     height={430}
                     loading="lazy"
                     className="hidden h-[300px] w-auto rotate-[-4deg] rounded-xl border-4 border-ink object-cover shadow-card sm:block"
                   />
                   <img
-                    src="/filtertube/142716.jpg"
+                    src="/filtertube/feed.jpg"
                     alt="מסך הפיד של אפליקציית FilterTube – יוטיוב מסונן"
                     width={240}
                     height={520}
