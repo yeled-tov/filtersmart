@@ -39,13 +39,14 @@ const WA_FILTERTUBE = waLink("שלום, אשמח לפרטים על FilterTube �
 /* ------------------------------------------------------------------ */
 
 /**
- * A device frame that stands straight. No perspective, no tilt, no glare —
- * the screenshot is the point, the frame just holds it.
+ * A device frame that stands straight. No perspective, no tilt, no glare, and
+ * no drawn-on notch — the screenshots are Android, and anything painted over
+ * the top just hides the app's own header. The frame only holds the picture.
  */
 const Phone = ({
   src, alt, className = "", priority = false,
 }: { src: string; alt: string; className?: string; priority?: boolean }) => (
-  <div className={`relative aspect-[9/18.8] w-full max-w-[15rem] overflow-hidden rounded-[2rem] border-[6px] border-[hsl(240_12%_9%)] bg-[hsl(240_12%_9%)] shadow-float ${className}`}>
+  <div className={`aspect-[9/18.8] w-full max-w-[15rem] overflow-hidden rounded-[2rem] border-[6px] border-[hsl(240_12%_9%)] bg-[hsl(240_12%_9%)] shadow-float ${className}`}>
     <img
       src={src}
       alt={alt}
@@ -55,8 +56,6 @@ const Phone = ({
       decoding="async"
       className="h-full w-full object-cover"
     />
-    {/* Notch */}
-    <span className="pointer-events-none absolute left-1/2 top-2 h-4 w-20 -translate-x-1/2 rounded-full bg-[hsl(240_12%_9%)]" aria-hidden="true" />
   </div>
 );
 
