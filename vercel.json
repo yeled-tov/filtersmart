@@ -12,7 +12,7 @@
     },
     {
       "source": "/blog/:slug",
-      "destination": "/"
+      "destination": "/blog"
     },
     {
       "source": "/admin",
