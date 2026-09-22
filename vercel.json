@@ -1,4 +1,5 @@
 {
+  "$comment": "SPA rewrites must target / and not /index.html: cleanUrls:true makes /index.html a redirect source, so a rewrite pointing at it resolves to nothing and the route 404s at the edge. Unknown URLs are deliberately left to 404 rather than caught by a catch-all, which would turn every typo into a soft-404 copy of the home page.",
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
@@ -12,27 +13,27 @@
     },
     {
       "source": "/blog/:slug",
-      "destination": "/index.html"
+      "destination": "/"
     },
     {
       "source": "/admin",
-      "destination": "/index.html"
+      "destination": "/"
     },
     {
       "source": "/admin/login",
-      "destination": "/index.html"
+      "destination": "/"
     },
     {
       "source": "/reset-password",
-      "destination": "/index.html"
+      "destination": "/"
     },
     {
       "source": "/my-account",
-      "destination": "/index.html"
+      "destination": "/"
     },
     {
       "source": "/.lovable/oauth/consent",
-      "destination": "/index.html"
+      "destination": "/"
     }
   ],
   "headers": [
