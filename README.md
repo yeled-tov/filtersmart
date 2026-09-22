@@ -93,7 +93,10 @@ already caused a live outage or an indexing fault once:
 - **Blog posts are prerendered from Supabase at build time** by
   `scripts/prerender.mjs`, which also writes `sitemap.xml`. Publishing a post
   therefore needs a redeploy before it gets its own static page, canonical and
-  `Article` markup — until then it falls back to client-side rendering.
+  `Article` markup — until then `/blog/:slug` falls back to the `/blog` listing
+  and renders the post client-side. The fallback points at `/blog` rather than
+  `/` on purpose: an unknown slug then carries the listing's canonical instead
+  of claiming to be the home page.
 - **Only `www.filterphone.com` may be indexable.** `filtersmart.vercel.app`
   serves the same site, so any `*.vercel.app` host is sent
   `X-Robots-Tag: noindex, nofollow`.
