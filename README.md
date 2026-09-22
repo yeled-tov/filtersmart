@@ -71,3 +71,29 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+## Routing and indexing notes
+
+Things in this repo that look wrong until you know why, and that have each
+already caused a live outage or an indexing fault once:
+
+- **SPA rewrites in `vercel.json` must target `/`, never `/index.html`.**
+  `cleanUrls: true` makes `/index.html` a redirect source — it 308s to `/` — so
+  a rewrite pointing at it resolves to nothing and the route 404s at the edge.
+  This is what silently killed `/admin`, `/admin/login`, `/reset-password` and
+  every blog post URL.
+- **`vercel.json` takes no extra top-level keys.** Vercel validates it against a
+  strict schema and rejects the whole deployment before the build starts, with
+  no build log to explain it. There is no way to leave a comment in that file,
+  which is why this note lives here.
+- **There is deliberately no catch-all rewrite.** Unknown URLs should return a
+  real 404. A catch-all turns every typo into a soft 404 serving a copy of the
+  home page, which Google penalises. Routes are listed explicitly instead, so a
+  new non-prerendered route needs a line adding.
+- **Blog posts are prerendered from Supabase at build time** by
+  `scripts/prerender.mjs`, which also writes `sitemap.xml`. Publishing a post
+  therefore needs a redeploy before it gets its own static page, canonical and
+  `Article` markup — until then it falls back to client-side rendering.
+- **Only `www.filterphone.com` may be indexable.** `filtersmart.vercel.app`
+  serves the same site, so any `*.vercel.app` host is sent
+  `X-Robots-Tag: noindex, nofollow`.
