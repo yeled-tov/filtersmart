@@ -51,6 +51,14 @@ const BlogPost = () => {
   if (!post) {
     return (
       <div className="container-custom section-padding text-center">
+        {/* Served at 200, so it has to say noindex itself or Google files it
+            as a soft 404 under the post's URL. */}
+        <SEOHead
+          title="המאמר לא נמצא | FilterPhone"
+          description="המאמר המבוקש אינו קיים. אפשר לעבור לרשימת המדריכים המלאה."
+          path={`/blog/${slug ?? ""}`}
+          noindex
+        />
         <h1 className="text-display-sm">המאמר לא נמצא</h1>
         <p className="mt-4 text-ink-soft">ייתכן שהכתובת השתנתה.</p>
         <Link to="/blog" className="mt-6 inline-block">

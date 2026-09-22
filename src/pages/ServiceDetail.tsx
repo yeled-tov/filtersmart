@@ -54,6 +54,14 @@ const ServiceDetail = () => {
   if (!service) {
     return (
       <div className="container-custom section-padding text-center">
+        {/* Served at 200, so it has to say noindex itself or Google files it
+            as a soft 404 under the service's URL. */}
+        <SEOHead
+          title="השירות לא נמצא | FilterPhone"
+          description="השירות המבוקש אינו קיים. אפשר לעבור לרשימת השירותים המלאה."
+          path={`/services/${slug ?? ""}`}
+          noindex
+        />
         <h1 className="text-display-sm">השירות לא נמצא</h1>
         <p className="mt-4 text-ink-soft">ייתכן שהכתובת השתנתה. אפשר לחזור לרשימת השירותים המלאה.</p>
         <Link to="/services" className="mt-6 inline-block">

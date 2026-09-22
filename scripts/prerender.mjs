@@ -505,7 +505,10 @@ function injectRoute(template, route) {
   // Social preview image. Link-preview bots (WhatsApp, Telegram, Facebook) never
   // run JavaScript, so react-helmet's og:image never reaches them — only this does.
   if (route.image) {
-    const img = escapeHtml(`${SITE_URL}${route.image}`);
+    // A blog post may carry a fully-qualified image URL; site routes use a path.
+    const img = escapeHtml(
+      /^https?:\/\//i.test(route.image) ? route.image : `${SITE_URL}${route.image}`,
+    );
     const imgAlt = escapeHtml(route.imageAlt || route.title);
     const w = String(route.imageWidth || 1200);
     const h = String(route.imageHeight || 630);
@@ -589,6 +592,169 @@ function escapeHtml(str) {
     .replace(/>/g, "&gt;");
 }
 
+/**
+ * Blog posts live in Supabase, not in this file, so they have to be pulled in at
+ * build time. Without this every /blog/<slug> URL is a hard 404: no static file
+ * exists and the SPA fallback never gets a chance to run.
+ *
+ * A failure here must never break the build - it just means no post pages this
+ * time round, and the deploy is still good.
+ */
+/**
+ * Vite loads .env itself, but this script runs as plain Node and would not see
+ * it - so a build could silently skip the blog posts. Read it here so every
+ * environment agrees on what gets prerendered.
+ */
+async function loadDotEnv() {
+  try {
+    const raw = await readFile(path.resolve(__dirname, "..", ".env"), "utf8");
+    for (const line of raw.split("\n")) {
+      const match = /^\s*([A-Z0-9_]+)\s*=\s*(.*?)\s*$/i.exec(line);
+      if (!match) continue;
+      const [, key, rawValue] = match;
+      // Real environment variables always win over the checked-in file.
+      if (process.env[key]) continue;
+      process.env[key] = rawValue.replace(/^["']|["']$/g, "");
+    }
+  } catch {
+    // No .env is normal on CI, where the variables are already set.
+  }
+}
+
+async function fetchBlogRoutes() {
+  await loadDotEnv();
+  const base = process.env.VITE_SUPABASE_URL;
+  const key = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  if (!base || !key) {
+    console.warn("[prerender] Supabase env missing - skipping blog post pages.");
+    return [];
+  }
+
+  let posts;
+  try {
+    const url =
+      `${base}/rest/v1/blog_posts` +
+      `?select=slug,title,excerpt,meta_title,meta_description,category,featured_image,created_at,updated_at` +
+      `&published=eq.true&order=created_at.desc`;
+    const res = await fetch(url, {
+      headers: { apikey: key, Authorization: `Bearer ${key}` },
+      signal: AbortSignal.timeout(15000),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    posts = await res.json();
+  } catch (err) {
+    console.warn(`[prerender] Could not load blog posts (${err.message}) - skipping.`);
+    return [];
+  }
+
+  if (!Array.isArray(posts) || posts.length === 0) return [];
+
+  return posts
+    .filter((post) => post && typeof post.slug === "string" && post.slug)
+    .map((post) => {
+      const url = `${SITE_URL}/blog/${post.slug}`;
+      const published = post.created_at || undefined;
+      const modified = post.updated_at || post.created_at || undefined;
+      const description =
+        post.meta_description || post.excerpt || `${post.title} - מדריך מאת FilterPhone.`;
+      // A post may carry its own image; otherwise the site card is a safe default.
+      const image = post.featured_image?.startsWith("http")
+        ? post.featured_image
+        : post.featured_image || "/hero.jpg";
+
+      return {
+        path: `/blog/${post.slug}`,
+        title: post.meta_title || `${post.title} | מדריכי FilterPhone`,
+        description,
+        keywords: [post.category, "סינון טלפון", "מדריך סינון", "FilterPhone"]
+          .filter(Boolean)
+          .join(", "),
+        h1: post.title,
+        lead: post.excerpt || description,
+        image,
+        imageAlt: post.title,
+        links: [
+          { href: "/blog", text: "כל המדריכים" },
+          { href: "/services", text: "שירותי סינון טלפונים באשדוד" },
+          { href: "/pricing", text: "מחירון סינון" },
+        ],
+        jsonLd: [
+          {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: post.title,
+            description,
+            inLanguage: "he",
+            mainEntityOfPage: { "@type": "WebPage", "@id": url },
+            url,
+            datePublished: published,
+            dateModified: modified,
+            author: { "@type": "Organization", name: "FilterPhone", url: SITE_URL },
+            publisher: { "@id": `${SITE_URL}/#business` },
+                image: image.startsWith("http") ? image : `${SITE_URL}${image}`,
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "בית", item: `${SITE_URL}/` },
+              { "@type": "ListItem", position: 2, name: "מדריכים", item: `${SITE_URL}/blog` },
+              { "@type": "ListItem", position: 3, name: post.title, item: url },
+            ],
+          },
+        ],
+        lastmod: (modified || published || "").slice(0, 10) || undefined,
+      };
+    });
+}
+
+/**
+ * The sitemap used to be a hand-maintained file in public/. It drifted: its
+ * lastmod dates froze in the past and it never listed the blog posts at all.
+ * Generating it here keeps it in step with whatever was actually prerendered.
+ */
+const SITEMAP_PRIORITY = {
+  "/": "1.0",
+  "/services": "0.95",
+  "/pricing": "0.9",
+  "/filtertube": "0.9",
+  "/compare": "0.85",
+  "/contact": "0.8",
+  "/about": "0.7",
+  "/blog": "0.7",
+  "/privacy": "0.3",
+  "/refund-policy": "0.3",
+};
+
+function sitemapEntry(route, fallbackDate) {
+  const loc = `${SITE_URL}${route.path === "/" ? "/" : route.path}`;
+  const priority =
+    SITEMAP_PRIORITY[route.path] ?? (route.path.startsWith("/blog/") ? "0.6" : "0.8");
+  const changefreq = route.path.startsWith("/blog/") ? "monthly" : "weekly";
+  return [
+    "  <url>",
+    `    <loc>${escapeHtml(loc)}</loc>`,
+    `    <lastmod>${route.lastmod || fallbackDate}</lastmod>`,
+    `    <changefreq>${changefreq}</changefreq>`,
+    `    <priority>${priority}</priority>`,
+    "  </url>",
+  ].join("\n");
+}
+
+async function writeSitemap(allRoutes) {
+  const today = new Date().toISOString().slice(0, 10);
+  const indexable = allRoutes.filter((r) => !r.noindex);
+  const xml = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ...indexable.map((r) => sitemapEntry(r, today)),
+    "</urlset>",
+    "",
+  ].join("\n");
+  await writeFile(path.join(distDir, "sitemap.xml"), xml, "utf8");
+  console.log(`[prerender] wrote sitemap.xml (${indexable.length} URLs).`);
+}
+
 async function main() {
   let template;
   try {
@@ -598,8 +764,23 @@ async function main() {
     process.exit(1);
   }
 
+  const blogRoutes = await fetchBlogRoutes();
+  if (blogRoutes.length) {
+    console.log(`[prerender] found ${blogRoutes.length} published blog post(s).`);
+    // Without this the posts are only reachable once the listing page has run
+    // its JavaScript, which leaves them with no crawlable link pointing at them.
+    const listing = routes.find((r) => r.path === "/blog");
+    if (listing) {
+      listing.links = [
+        ...blogRoutes.map((r) => ({ href: r.path, text: r.h1 })),
+        ...(listing.links ?? []),
+      ];
+    }
+  }
+  const allRoutes = [...routes, ...blogRoutes];
+
   let generated = 0;
-  for (const route of routes) {
+  for (const route of allRoutes) {
     const html = injectRoute(template, route);
     const outDir =
       route.path === "/" ? distDir : path.join(distDir, route.path);
@@ -613,6 +794,8 @@ async function main() {
     generated++;
     console.log(`[prerender] wrote ${path.relative(distDir, outFile)}`);
   }
+
+  await writeSitemap(allRoutes);
 
   console.log(`[prerender] Generated ${generated} static HTML files.`);
 }

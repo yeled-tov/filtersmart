@@ -13,6 +13,11 @@ interface SEOHeadProps {
     modifiedTime?: string;
     author?: string;
   };
+  /**
+   * For states that render at 200 but hold no real content - a slug that
+   * matched no post or service. Without this they read as soft 404s.
+   */
+  noindex?: boolean;
 }
 
 const SEOHead = ({
@@ -24,6 +29,7 @@ const SEOHead = ({
   image,
   imageAlt,
   article,
+  noindex = false,
 }: SEOHeadProps) => {
   const baseUrl = "https://www.filterphone.com";
   const fullUrl = `${baseUrl}${path}`;
@@ -37,7 +43,14 @@ const SEOHead = ({
       <title>{title}</title>
       <meta name="description" content={description} />
       {keywords && <meta name="keywords" content={keywords} />}
-      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      <meta
+        name="robots"
+        content={
+          noindex
+            ? "noindex, follow"
+            : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+        }
+      />
       <link rel="canonical" href={fullUrl} />
 
       {/* ===== Facebook / Instagram / WhatsApp / Telegram / LinkedIn ===== */}
