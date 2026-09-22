@@ -11,11 +11,46 @@
       "destination": "http://151.145.88.42:3001/:path*"
     },
     {
-      "source": "/((?!api|_next|.*\\..*).*)",
+      "source": "/blog/:slug",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/admin/login",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/reset-password",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/my-account",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/.lovable/oauth/consent",
       "destination": "/index.html"
     }
   ],
   "headers": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "(?<host>.*\\.vercel\\.app)"
+        }
+      ],
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
     {
       "source": "/(.*)",
       "headers": [
