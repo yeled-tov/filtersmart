@@ -6,15 +6,21 @@ import SEOHead from "@/components/SEOHead";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import SectionHeading from "@/components/SectionHeading";
 import AnimatedSection from "@/components/AnimatedSection";
-import { SOLUTIONS } from "@/lib/advisor";
+import { SOLUTIONS, solutionHref } from "@/lib/advisor";
 import { SITE, waLink } from "@/lib/site";
 
-const ORDER = ["kosher-play", "basic-filtering", "hadran", "askan", "qin-f21-pro", "qin-f25"];
+const ORDER = ["kosher-play", "basic-filtering", "filterphone", "hadran", "askan", "qin-f21-pro", "qin-f25"];
 
 /** The system we point most customers to today. */
 const RECOMMENDED = "askan";
 
 const includes: Record<string, string[]> = {
+  filterphone: [
+    "שלוש רמות סינון תמונות, כולל צביעת אזורי חשיפה",
+    "45 חסימות אתרים ואפליקציות בלחיצה",
+    "בלי לאפס את המכשיר ובלי חשבון גוגל",
+    "מנוי שנתי הכולל שרת, עדכונים ותמיכה",
+  ],
   "basic-filtering": [
     "חסימת אתרים ותכנים פוגעניים",
     "רמת סינון לבחירה, כולל חסימת רשתות חברתיות",
@@ -66,7 +72,7 @@ const Pricing = () => {
       price: String(s.price),
       priceCurrency: "ILS",
       availability: "https://schema.org/InStock",
-      url: `${SITE.url}/services/${s.slug}`,
+      url: `${SITE.url}${solutionHref(s)}`,
       itemOffered: { "@type": "Service", name: s.name, description: s.summary },
     })),
   };
@@ -134,7 +140,7 @@ const Pricing = () => {
                         )}
                       </td>
                       <td className="px-6 py-4">
-                        <Link to={`/services/${s.slug}`} className="flex items-center gap-1 text-sm font-semibold text-primary">
+                        <Link to={solutionHref(s)} className="flex items-center gap-1 text-sm font-semibold text-primary">
                           לפרטים
                           <ArrowLeft className="h-4 w-4" />
                         </Link>
@@ -168,7 +174,7 @@ const Pricing = () => {
                     <div className="flex justify-between gap-3"><dt>נתונים</dt><dd className="font-medium text-ink-soft">{s.wipesDevice ? "נדרש גיבוי" : "נשמרים"}</dd></div>
                     <div className="flex justify-between gap-3"><dt>ניתן להסרה</dt><dd className="font-medium text-ink-soft">{s.removable ? "כן" : "לא"}</dd></div>
                   </dl>
-                  <Link to={`/services/${s.slug}`} className="mt-5 flex items-center gap-1.5 border-t border-border pt-4 text-sm font-semibold text-primary">
+                  <Link to={solutionHref(s)} className="mt-5 flex items-center gap-1.5 border-t border-border pt-4 text-sm font-semibold text-primary">
                     לפרטים המלאים
                     <ArrowLeft className="h-4 w-4" />
                   </Link>

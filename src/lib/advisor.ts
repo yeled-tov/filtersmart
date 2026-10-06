@@ -31,6 +31,13 @@ export interface SolutionProfile {
   shortName: string;
   price: number;
   priceLabel: string;
+  /**
+   * Where this solution is written up. Most live at /services/<slug>; our own
+   * app has its own page, so it cannot be derived from the slug.
+   */
+  href?: string;
+  /** Set when the price recurs rather than being a one-off installation fee. */
+  recurring?: boolean;
   installTime: string;
   /** Wiping the device means the customer must back up first. */
   wipesDevice: boolean;
@@ -40,6 +47,22 @@ export interface SolutionProfile {
 }
 
 export const SOLUTIONS: Record<string, SolutionProfile> = {
+  filterphone: {
+    slug: "filterphone",
+    name: "אפליקציית הסינון של FilterPhone",
+    shortName: "אפליקציית FilterPhone",
+    price: 150,
+    // Yearly, unlike every other option here, so the label has to say so —
+    // it is shown next to one-off installation prices.
+    priceLabel: "150₪ לשנה",
+    recurring: true,
+    href: "/filterphone",
+    installTime: "כ-10 דקות",
+    wipesDevice: false,
+    removable: true,
+    summary:
+      "סינון תמונות בשלוש רמות, כולל צביעת אזורי חשיפה לפי צורת הגוף, וחסימת אתרים ואפליקציות בלחיצה — בלי לאפס את המכשיר.",
+  },
   "basic-filtering": {
     slug: "basic-filtering",
     name: "סינון בסיסי לאייפון ואנדרואיד",
@@ -203,7 +226,7 @@ function candidatesFor(device: DeviceKind): string[] {
       return ["basic-filtering"];
     case "android":
     default:
-      return ["basic-filtering", "kosher-play", "hadran", "askan"];
+      return ["basic-filtering", "filterphone", "kosher-play", "hadran", "askan"];
   }
 }
 
@@ -228,6 +251,10 @@ function dedupe(reasons: Reason[]): string[] {
  * Ranks the available solutions against the visitor's answers.
  * Always returns at least one recommendation.
  */
+/** Where to send someone who wants to read about a solution. */
+export const solutionHref = (profile: SolutionProfile): string =>
+  profile.href ?? `/services/${profile.slug}`;
+
 export function recommend(answers: AdvisorAnswers): Recommendation[] {
   const slugs = candidatesFor(answers.device);
   const buckets = new Map<string, Bucket>();
@@ -244,16 +271,19 @@ export function recommend(answers: AdvisorAnswers): Recommendation[] {
         b.cautions.push("המשתמש יכול להסיר את הסינון בעצמו – שווה לשקול פתרון נעול");
       }
       if (slug === "askan") add(b, 16, "flagship", "הפתרון שאנחנו ממליצים עליו הכי הרבה כיום");
+      if (slug === "filterphone") add(b, 10, "fit", "סינון תמונות שאפשר להתאים בדיוק לגיל, ולשנות בכל רגע בלי להתקין מחדש");
     }
     if (answers.whoFor === "business") {
       if (slug === "askan") add(b, 26, "fit", "נבנה בדיוק לשימוש עסקי – סינון תמונות חכם בלי לחסום את העבודה");
       if (slug === "hadran") add(b, 6, "fit", "הגנה מלאה, אבל נוקשה יותר לשימוש עסקי יומיומי");
       if (slug === "basic-filtering") add(b, 8, "fit", "מאפשר להשאיר פתוח כל מה שצריך לעבודה");
+      if (slug === "filterphone") add(b, 10, "fit", "חוסם תמונות בלי לחסום את האפליקציות שצריך לעבודה");
     }
     if (answers.whoFor === "adult") {
       if (slug === "basic-filtering") add(b, 10, "fit", "שליטה מלאה ברמת הסינון, בלי לשנות את אופן השימוש במכשיר");
       if (slug === "kosher-play") add(b, 8, "fit", "מאזן בין סינון אמיתי לבין מכשיר שנשאר שמיש");
       if (slug === "askan") add(b, 12, "flagship", "הפתרון שאנחנו ממליצים עליו הכי הרבה כיום");
+      if (slug === "filterphone") add(b, 11, "fit", "הסינון החזק ביותר לתמונות שיש לנו, בלי לשנות את אופן השימוש במכשיר");
     }
 
     // --- How strict ----------------------------------------------------
@@ -262,6 +292,7 @@ export function recommend(answers: AdvisorAnswers): Recommendation[] {
       if (slug === "qin-f21-pro" || slug === "qin-f25") add(b, 22, "strictness", "גרסה כשרה מלאה עם סינון מובנה");
       if (slug === "kosher-play") add(b, 14, "strictness", "חנות אפליקציות כשרה ווואטסאפ מסונן");
       if (slug === "askan") add(b, 12);
+      if (slug === "filterphone") add(b, 14, "strictness", "ברמה המחמירה כל תמונה של אישה נחסמת, גם בלבוש צנוע");
       if (slug === "basic-filtering") {
         b.cautions.push("סינון בסיסי הוא פתרון קל יחסית – לרמת חומרה גבוהה עדיף פתרון צרוב");
       }
@@ -271,10 +302,12 @@ export function recommend(answers: AdvisorAnswers): Recommendation[] {
       if (slug === "basic-filtering") add(b, 16, "strictness", "אפשר לחסום רשתות חברתיות ובידור ולהשאיר את השאר פתוח");
       if (slug === "askan") add(b, 12);
       if (slug === "hadran") add(b, 10);
+      if (slug === "filterphone") add(b, 18, "strictness", "הרמה הבינונית מיועדת בדיוק לזה – לבוש צנוע עובר, ואזורי חשיפה נצבעים");
     }
     if (answers.strictness === "light") {
       if (slug === "basic-filtering") add(b, 24, "strictness", "בדיוק הרמה שביקשתם – חסימה ממוקדת בלי לשנות את המכשיר");
       if (slug === "kosher-play") add(b, 8);
+      if (slug === "filterphone") add(b, 10, "strictness", "ברמה הבסיסית רק עירום מפורש נחסם, והשאר עובר");
       if (slug === "hadran" || slug === "askan") {
         b.cautions.push("זה פתרון חזק בהרבה ממה שביקשתם – ייתכן שתרגישו אותו ביום-יום");
       }
@@ -293,8 +326,9 @@ export function recommend(answers: AdvisorAnswers): Recommendation[] {
         );
       else b.cautions.push("ניתן להסרה על ידי המשתמש");
     }
-    if (answers.removability === "prefer-locked" && !s.removable) {
-      add(b, 9, "locked", "נעול בפני הסרה על ידי המשתמש");
+    if (answers.removability === "prefer-locked") {
+      if (!s.removable) add(b, 9, "locked", "נעול בפני הסרה על ידי המשתמש");
+      else b.cautions.push("ניתן להסרה על ידי המשתמש");
     }
     if (answers.removability === "flexible" && s.removable) {
       add(b, 7, "locked", "אפשר לשנות את רמת הסינון או להסיר בקלות בהמשך");
@@ -305,10 +339,12 @@ export function recommend(answers: AdvisorAnswers): Recommendation[] {
       if (slug === "kosher-play") add(b, 12, "whatsapp", "וואטסאפ ממשיך לעבוד, מסונן – בלי תמונות פרופיל וסטטוסים");
       if (slug === "basic-filtering") add(b, 8, "whatsapp", "לא נוגע באפליקציות שכבר מותקנות, כולל וואטסאפ");
       if (slug === "askan") add(b, 6);
+      if (slug === "filterphone") add(b, 11, "whatsapp", "אפשר להעלים תמונות פרופיל וסטטוסים בוואטסאפ ולהשאיר את ההודעות והשיחות");
     }
     if (answers.mustKeep.includes("work")) {
       if (slug === "askan") add(b, 14, "work", "מיועד למי שצריך שהמכשיר ימשיך לתפקד לעבודה");
       if (slug === "basic-filtering") add(b, 10, "work", "אפשר להשאיר פתוחות את כל אפליקציות העבודה והבנק");
+      if (slug === "filterphone") add(b, 8, "work", "חוסמים לפי רשימה, כך שאפליקציות העבודה נשארות פתוחות");
       if (slug === "hadran") b.cautions.push("סביבה סגורה – כדאי לוודא מראש שאפליקציות העבודה נתמכות");
       if (slug === "qin-f21-pro" || slug === "qin-f25") {
         b.cautions.push("מכשיר Qin מוגבל באפליקציות – לא תמיד מתאים לשימוש עבודה");
@@ -343,6 +379,11 @@ export function recommend(answers: AdvisorAnswers): Recommendation[] {
       b.score -= 14;
       b.cautions.push(`${s.priceLabel} – מעל התקציב שציינתם`);
     }
+    // Every other option is a one-off installation fee, so say it outright
+    // rather than letting the number sit beside them as if it were one.
+    if (s.recurring) {
+      b.cautions.push("מנוי שנתי, לא תשלום חד-פעמי כמו שאר הפתרונות");
+    }
     if (answers.budget === "tight" && s.price <= 70) {
       add(b, 6, "budget", "אחד הפתרונות המשתלמים שלנו");
     }
@@ -354,6 +395,9 @@ export function recommend(answers: AdvisorAnswers): Recommendation[] {
     if ((answers.device === "tablet" || answers.device === "computer") && slug === "basic-filtering") {
       add(b, 18, "device", `אנחנו מסננים גם ${DEVICE_LABEL[answers.device]} – הפתרון מותאם למכשיר`);
       b.cautions.push("לסינון טאבלט או מחשב נתאים את ההגדרות בשיחה קצרה איתכם");
+    }
+    if (answers.device === "android" && slug === "filterphone") {
+      add(b, 10, "device", "פיתוח שלנו – התמיכה והעדכונים מגיעים ישירות מאיתנו");
     }
     if (answers.device === "iphone" && slug === "basic-filtering") {
       add(b, 8, "device", "באייפון אפשר גם לחסום את ה-App Store לחלוטין");

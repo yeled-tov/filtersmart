@@ -5,10 +5,10 @@ import SEOHead from "@/components/SEOHead";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import SectionHeading from "@/components/SectionHeading";
 import AnimatedSection from "@/components/AnimatedSection";
-import { SOLUTIONS } from "@/lib/advisor";
+import { SOLUTIONS, solutionHref } from "@/lib/advisor";
 import { waLink } from "@/lib/site";
 
-const COMPARED = ["basic-filtering", "kosher-play", "askan", "hadran"];
+const COMPARED = ["basic-filtering", "filterphone", "kosher-play", "askan", "hadran"];
 
 /** The system we point most customers to today. */
 const RECOMMENDED = "askan";
@@ -20,6 +20,7 @@ const criteria: { label: string; values: Record<string, Cell> }[] = [
     label: "רמת הסינון",
     values: {
       "basic-filtering": "קלה עד בינונית, לבחירתכם",
+      filterphone: "לבחירתכם, בשלוש רמות",
       "kosher-play": "בינונית–גבוהה",
       askan: "גבוהה",
       hadran: "הגבוהה ביותר",
@@ -27,35 +28,36 @@ const criteria: { label: string; values: Record<string, Cell> }[] = [
   },
   {
     label: "נעול בפני הסרה",
-    values: { "basic-filtering": false, "kosher-play": true, askan: true, hadran: true },
+    values: { "basic-filtering": false, filterphone: false, "kosher-play": true, askan: true, hadran: true },
   },
   {
     label: "עמיד לאיפוס יצרן",
-    values: { "basic-filtering": false, "kosher-play": true, askan: true, hadran: true },
+    values: { "basic-filtering": false, filterphone: false, "kosher-play": true, askan: true, hadran: true },
   },
   {
     label: "שומר על התוכן שבמכשיר",
-    values: { "basic-filtering": true, "kosher-play": true, askan: false, hadran: false },
+    values: { "basic-filtering": true, filterphone: true, "kosher-play": true, askan: false, hadran: false },
   },
   {
     label: "חנות אפליקציות כשרה",
-    values: { "basic-filtering": false, "kosher-play": true, askan: false, hadran: false },
+    values: { "basic-filtering": false, filterphone: false, "kosher-play": true, askan: false, hadran: false },
   },
   {
     label: "סינון תמונות חכם",
-    values: { "basic-filtering": false, "kosher-play": true, askan: true, hadran: true },
+    values: { "basic-filtering": false, filterphone: "מתקדם — שלוש רמות וסגמנטציה", "kosher-play": true, askan: true, hadran: true },
   },
   {
     label: "מתאים לאייפון",
-    values: { "basic-filtering": true, "kosher-play": false, askan: "לדגמים נבחרים", hadran: "לדגמים נבחרים" },
+    values: { "basic-filtering": true, filterphone: "בפיתוח", "kosher-play": false, askan: "לדגמים נבחרים", hadran: "לדגמים נבחרים" },
   },
   {
     label: "מתאים לשימוש עבודה",
-    values: { "basic-filtering": true, "kosher-play": "חלקית", askan: true, hadran: "חלקית" },
+    values: { "basic-filtering": true, filterphone: true, "kosher-play": "חלקית", askan: true, hadran: "חלקית" },
   },
 ];
 
 const bestFor: Record<string, string> = {
+  filterphone: "מי שרוצה את סינון התמונות החזק ביותר שלנו, בלי לאפס את המכשיר ובלי לוותר על השימוש היומיומי.",
   "basic-filtering": "מי שרוצה חסימה ממוקדת ומהירה בלי לשנות את אופן השימוש במכשיר.",
   "kosher-play": "מי שרוצה מכשיר שנשאר שמיש, עם חנות אפליקציות כשרה ווואטסאפ מסונן.",
   askan: "רוב הלקוחות שלנו: הגנה חזקה יחד עם מכשיר שממשיך לתפקד ביום-יום.",
@@ -139,7 +141,7 @@ const Compare = () => {
                     <td />
                     {cols.map((c) => (
                       <td key={c.slug} className="px-5 py-4">
-                        <Link to={`/services/${c.slug}`}>
+                        <Link to={solutionHref(c)}>
                           <Button variant="outline" size="sm" className="w-full">לפרטים</Button>
                         </Link>
                       </td>
@@ -177,7 +179,7 @@ const Compare = () => {
                       </div>
                     ))}
                   </dl>
-                  <Link to={`/services/${c.slug}`} className="mt-4 flex items-center gap-1.5 text-sm font-semibold text-primary">
+                  <Link to={solutionHref(c)} className="mt-4 flex items-center gap-1.5 text-sm font-semibold text-primary">
                     לפרטים המלאים
                     <ArrowLeft className="h-4 w-4" />
                   </Link>

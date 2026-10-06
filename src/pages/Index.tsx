@@ -390,6 +390,74 @@ const Index = () => {
         </div>
       </section>
 
+      {/* ------------------------------------------------- Our own filter app */}
+      <section id="filterphone" className="section-padding bg-surface-sunken" aria-label="אפליקציית סינון התמונות שלנו">
+        <div className="container-custom">
+          <SectionHeading
+            eyebrow="פיתוח עצמי"
+            title="סינון התמונות שלנו – אפליקציה משלנו"
+            lead="הפער בין ״הכול חסום״ ל״כלום לא חסום״ גדול מדי, אז בנינו סינון תמונות עם שלוש רמות – כולל רמה שצובעת רק את אזורי החשיפה ומשאירה את שאר התמונה."
+          />
+
+          <AnimatedSection delay={0.08} className="mt-10">
+            <div className="overflow-hidden rounded-xl border border-border bg-surface shadow-card">
+              <div className="grid lg:grid-cols-12">
+                <div className="p-8 md:p-11 lg:col-span-7">
+                  <span className="inline-flex items-center gap-2 rounded-sm bg-accent-tint px-3 py-1.5 text-[0.8125rem] font-bold text-accent">
+                    <ShieldCheck className="h-4 w-4" />
+                    אנדרואיד · בלי לאפס את המכשיר
+                  </span>
+
+                  <h3 className="mt-5 text-display-sm">שלוש רמות סינון תמונות, ואתם בוחרים</h3>
+
+                  <ul className="mt-7 grid gap-3 sm:grid-cols-3">
+                    {[
+                      ["מחמיר", "כל תמונה של אישה נחסמת, גם בלבוש צנוע"],
+                      ["בינוני", "לבוש צנוע עובר, ואזורי חשיפה נצבעים לפי צורת הגוף"],
+                      ["בסיסי", "רק עירום מפורש נחסם"],
+                    ].map(([title, desc]) => (
+                      <li key={title} className="rounded-md border border-border bg-surface-sunken p-4">
+                        <span className="block text-[0.9375rem] font-bold text-ink">{title}</span>
+                        <span className="mt-1 block text-[0.8125rem] leading-snug text-muted-foreground">{desc}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <p className="mt-6 text-[0.9375rem] leading-relaxed text-ink-soft">
+                    בנוסף: <strong className="font-semibold text-ink">45 חסימות בלחיצה</strong> – רשתות
+                    חברתיות, חנות האפליקציות, תמונות פרופיל בוואטסאפ, אתרי קניות ועוד – ורמת סינון
+                    שרק אנחנו יכולים לשנות.
+                  </p>
+
+                  <div className="mt-8 flex flex-wrap items-center gap-4">
+                    <Link to="/filterphone">
+                      <Button className="gap-2">
+                        <ArrowLeft className="h-4 w-4" />
+                        לעמוד המלא
+                      </Button>
+                    </Link>
+                    <span className="text-[0.9375rem] text-ink-soft">
+                      <strong className="num font-extrabold text-primary">150₪</strong> לשנה, למכשיר
+                    </span>
+                  </div>
+                </div>
+
+                <div className="relative flex items-center justify-center bg-surface-sunken p-8 lg:col-span-5">
+                  <img
+                    src="/filterphone-app-icon.png"
+                    alt="סמל אפליקציית הסינון של FilterPhone"
+                    width={160}
+                    height={160}
+                    loading="lazy"
+                    className="h-32 w-32 rounded-3xl shadow-card md:h-40 md:w-40"
+                  />
+                </div>
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
       {/* ------------------------------------------------------ FilterTube */}
       <section id="filtertube" className="section-padding" aria-label="FilterTube – יוטיוב ויוטיוב מיוזיק מסוננים">
         <div className="container-custom">

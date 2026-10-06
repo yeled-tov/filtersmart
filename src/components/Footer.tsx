@@ -20,6 +20,7 @@ const navColumns = [
     links: [
       { href: "/pricing", label: "מחירון מלא" },
       { href: "/compare", label: "השוואת מערכות סינון" },
+      { href: "/filterphone", label: "אפליקציית סינון התמונות שלנו" },
       { href: "/filtertube", label: "FilterTube – יוטיוב ומיוזיק מסוננים" },
       { href: "/blog", label: "מדריכים ומאמרים" },
       { href: "/about", label: "אודות FilterPhone" },
