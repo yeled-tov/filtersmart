@@ -10,6 +10,7 @@ const navLinks = [
   { href: "/services", label: "שירותים" },
   { href: "/pricing", label: "מחירון" },
   { href: "/compare", label: "השוואת מערכות" },
+  { href: "/filterphone", label: "סינון תמונות" },
   { href: "/filtertube", label: "FilterTube" },
   { href: "/blog", label: "מדריכים" },
   { href: "/about", label: "אודות" },

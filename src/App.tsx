@@ -8,6 +8,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import Layout from "./components/Layout";
 import { AuthProvider } from "./hooks/useAuth";
 import Index from "./pages/Index";
+import FilterPhoneApp from "./pages/FilterPhoneApp";
 
 const About = lazy(() => import("./pages/About"));
 const Services = lazy(() => import("./pages/Services"));
@@ -60,6 +61,7 @@ const App = () => (
                 <Route path="/refund-policy" element={<RefundPolicy />} />
                 <Route path="/my-account" element={<MyAccount />} />
                 <Route path="/filtertube" element={<FilterTube />} />
+                <Route path="/filterphone" element={<FilterPhoneApp />} />
               </Route>
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin" element={<Admin />} />

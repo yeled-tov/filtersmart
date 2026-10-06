@@ -50,6 +50,27 @@ describe("recommend", () => {
     expect(top.slug).toBe("basic-filtering");
   });
 
+  it("leads with our own app when the phone must keep its data and the ask is image filtering", () => {
+    const [top] = recommend(
+      answers({ dataState: "keep", removability: "flexible", budget: "balanced" }),
+    );
+    expect(top.slug).toBe("filterphone");
+    expect(top.profile.wipesDevice).toBe(false);
+  });
+
+  it("never offers our own app on an iPhone or a Qin, which it does not support", () => {
+    for (const device of ["iphone", "qin", "tablet", "computer"] as const) {
+      const slugs = recommend(answers({ device })).map((r) => r.slug);
+      expect(slugs).not.toContain("filterphone");
+    }
+  });
+
+  it("says the app is a yearly subscription, since every other price here is one-off", () => {
+    const app = recommend(answers()).find((r) => r.slug === "filterphone");
+    expect(app?.profile.priceLabel).toMatch(/לשנה/);
+    expect(app?.cautions.join(" ")).toMatch(/שנתי/);
+  });
+
   it("only offers Qin flashing options for a Qin device", () => {
     const slugs = recommend(answers({ device: "qin" })).map((r) => r.slug);
     expect(slugs).toContain("qin-f21-pro");

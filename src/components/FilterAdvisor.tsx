@@ -16,6 +16,7 @@ import {
   recommend, summariseAnswers,
   type AdvisorAnswers, type Budget, type DataState, type DeviceKind,
   type MustKeep, type Recommendation, type Removability, type Strictness, type WhoFor,
+  solutionHref,
 } from "@/lib/advisor";
 
 type Draft = Partial<AdvisorAnswers>;
@@ -226,7 +227,7 @@ const ResultCard = ({ rec, rank }: { rec: Recommendation; rank: number }) => {
       )}
 
       <Link
-        to={`/services/${rec.profile.slug}`}
+        to={solutionHref(rec.profile)}
         className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary link-underline"
       >
         כל הפרטים על {rec.profile.shortName}
