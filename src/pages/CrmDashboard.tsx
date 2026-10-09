@@ -34,6 +34,10 @@ import {
   Plus,
   Trash2,
   Search,
+  Smartphone,
+  Pause,
+  Play,
+  LogIn,
 } from "lucide-react";
 import {
   authApi,
@@ -707,6 +711,246 @@ function ImageFilterTab() {
   );
 }
 
+// ============== FilterPhone device controls ==============
+const FILTERPHONE_API = "https://api.filterphone.com";
+const FILTERPHONE_ADMIN_TOKEN = "fp_filterphone_admin_token";
+
+function FilterPhoneControlTab() {
+  const { toast } = useToast();
+  const [token, setToken] = useState(() => sessionStorage.getItem(FILTERPHONE_ADMIN_TOKEN) || "");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [devices, setDevices] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [loginBusy, setLoginBusy] = useState(false);
+  const [minutes, setMinutes] = useState("60");
+  const [reason, setReason] = useState("השהיה יזומה מהדשבורד");
+  const [busyDevice, setBusyDevice] = useState<number | null>(null);
+
+  const request = async (path: string, options: RequestInit = {}, authToken = token) => {
+    const response = await fetch(FILTERPHONE_API + path, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...(authToken ? { Authorization: "Bearer " + authToken } : {}),
+        ...((options.headers as Record<string, string>) || {}),
+      },
+    });
+    const data = await response.json().catch(() => ({}));
+    if (response.status === 401) {
+      sessionStorage.removeItem(FILTERPHONE_ADMIN_TOKEN);
+      setToken("");
+      throw new Error("ההתחברות לניהול מכשירי FilterPhone פגה. התחברו שוב.");
+    }
+    if (!response.ok) throw new Error(data.error || "שגיאה " + response.status);
+    return data;
+  };
+
+  const load = async (authToken = token) => {
+    if (!authToken) return;
+    setLoading(true);
+    try {
+      const list = await request("/v1/admin/devices", {}, authToken);
+      const rows = Array.isArray(list) ? list : [];
+      // רשימת המכשירים אינה כוללת את מצב ההשהיה, לכן מושכים לכל מכשיר את פרטי התחזוקה.
+      const detailed = await Promise.all(rows.map(async (device: any) => {
+        try {
+          const detail = await request("/v1/admin/devices/" + device.id, {}, authToken);
+          return { ...device, pause: detail.pause, unmanage_requested: detail.unmanage_requested };
+        } catch {
+          return device;
+        }
+      }));
+      setDevices(detailed);
+    } catch (err: any) {
+      toast({ title: "שגיאה בטעינת המכשירים", description: err.message, variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem(FILTERPHONE_ADMIN_TOKEN);
+    if (saved) {
+      setToken(saved);
+      load(saved);
+    }
+  }, []);
+
+  const login = async (event: FormEvent) => {
+    event.preventDefault();
+    setLoginBusy(true);
+    try {
+      const result = await request("/v1/admin/login", {
+        method: "POST",
+        body: JSON.stringify({ username: username.trim(), password }),
+      }, "");
+      if (!result.token) throw new Error("השרת לא החזיר אסימון מנהל.");
+      sessionStorage.setItem(FILTERPHONE_ADMIN_TOKEN, result.token);
+      setToken(result.token);
+      setPassword("");
+      toast({ title: "מחובר לניהול FilterPhone" });
+      await load(result.token);
+    } catch (err: any) {
+      toast({ title: "שגיאת התחברות", description: err.message, variant: "destructive" });
+    } finally {
+      setLoginBusy(false);
+    }
+  };
+
+  const logout = () => {
+    sessionStorage.removeItem(FILTERPHONE_ADMIN_TOKEN);
+    setToken("");
+    setDevices([]);
+    setPassword("");
+  };
+
+  const act = async (device: any, action: "pause" | "resume" | "unmanage") => {
+    if (action === "unmanage" && !window.confirm(
+      "להסיר את ניהול FilterPhone מהמכשיר \"" + (device.label || device.name || device.id) +
+      "\"? הפעולה משחררת את ההגבלות לאחר שהטלפון מקבל את הפקודה."
+    )) return;
+    setBusyDevice(Number(device.id));
+    try {
+      if (action === "pause") {
+        const mins = Math.max(1, Math.min(1440, Number(minutes) || 60));
+        await request("/v1/admin/devices/" + device.id + "/pause", {
+          method: "POST",
+          body: JSON.stringify({ minutes: mins, reason: reason.trim() }),
+        });
+        toast({ title: "החסימה הושהתה", description: (device.label || device.name || ("מכשיר " + device.id)) + " · " + mins + " דקות" });
+      } else if (action === "resume") {
+        await request("/v1/admin/devices/" + device.id + "/resume", { method: "POST", body: JSON.stringify({}) });
+        toast({ title: "החסימה חזרה לפעול" });
+      } else {
+        await request("/v1/admin/devices/" + device.id + "/unmanage", { method: "POST", body: JSON.stringify({}) });
+        toast({ title: "נשלחה בקשה להסרת ניהול", description: "הטלפון ישלים אותה בסנכרון הבא." });
+      }
+      await load(token);
+    } catch (err: any) {
+      toast({ title: "הפעולה נכשלה", description: err.message, variant: "destructive" });
+    } finally {
+      setBusyDevice(null);
+    }
+  };
+
+  if (!token) {
+    return (
+      <Card className="max-w-xl">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2"><Smartphone className="w-5 h-5" /> ניהול מכשירי FilterPhone</CardTitle>
+          <p className="text-sm text-muted-foreground">
+            התחברות זו מיועדת לשרת FilterPhone החדש ונפרדת מהתחברות ה-CRM. הסיסמה נשלחת לשרת ונשמר רק אסימון זמני בלשונית הדפדפן.
+          </p>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={login} className="space-y-4">
+            <div>
+              <Label htmlFor="fp-admin-user">שם משתמש של FilterPhone</Label>
+              <Input id="fp-admin-user" value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" required />
+            </div>
+            <div>
+              <Label htmlFor="fp-admin-password">סיסמת מנהל FilterPhone</Label>
+              <Input id="fp-admin-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" required />
+            </div>
+            <Button type="submit" disabled={loginBusy} className="w-full">
+              {loginBusy ? <Loader2 className="w-4 h-4 ml-2 animate-spin" /> : <LogIn className="w-4 h-4 ml-2" />}
+              כניסה לניהול מכשירים
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2"><Smartphone className="w-5 h-5" /> שליטה במכשירי FilterPhone</CardTitle>
+          <p className="text-sm text-muted-foreground">
+            השהיה זמנית פותחת את סינון הרשת ומרפה זמנית את נעילת ה-VPN בטלפון. כשתוקף ההשהיה פג, ההגנה חוזרת אוטומטית.
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-[140px_1fr] gap-3">
+            <div>
+              <Label htmlFor="fp-pause-minutes">משך ההשהיה (דקות)</Label>
+              <Input id="fp-pause-minutes" type="number" min="1" max="1440" value={minutes} onChange={(e) => setMinutes(e.target.value)} />
+            </div>
+            <div>
+              <Label htmlFor="fp-pause-reason">סיבת ההשהיה</Label>
+              <Input id="fp-pause-reason" value={reason} onChange={(e) => setReason(e.target.value)} maxLength={200} />
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Button variant="outline" onClick={() => load(token)} disabled={loading}>
+              <RefreshCw className={loading ? "w-4 h-4 ml-2 animate-spin" : "w-4 h-4 ml-2"} /> רענן מכשירים
+            </Button>
+            <Button variant="ghost" onClick={logout}>יציאה מניהול FilterPhone</Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {loading && devices.length === 0 ? (
+        <Loader2 className="w-7 h-7 animate-spin mx-auto mt-10" />
+      ) : devices.length === 0 ? (
+        <Card><CardContent className="py-8 text-center text-sm text-muted-foreground">לא נמצאו מכשירים במערכת FilterPhone.</CardContent></Card>
+      ) : (
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
+          {devices.map((device) => {
+            const paused = device.pause?.active === true;
+            const label = device.label || device.name || ("מכשיר " + device.id);
+            return (
+              <Card key={device.id} className="border-border/70">
+                <CardContent className="p-4 space-y-3">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                      <Smartphone className="w-5 h-5 text-primary" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-semibold break-words">{label}</div>
+                      <div className="text-xs text-muted-foreground break-words">
+                        {device.customer?.name || "ללא לקוח משויך"}
+                        {device.customer?.phone ? " · " + device.customer.phone : ""}
+                      </div>
+                      <div className="text-xs text-muted-foreground mt-1">מזהה {device.id} · רמה {device.level} · {device.status === "active" ? "פעיל" : device.status}</div>
+                    </div>
+                    <Badge variant={paused ? "secondary" : device.status === "active" ? "default" : "destructive"}>
+                      {paused ? "החסימה מושהית" : device.unmanage_requested ? "ממתין להסרת ניהול" : device.status === "active" ? "פעיל" : "לא פעיל"}
+                    </Badge>
+                  </div>
+                  {paused && (
+                    <p className="text-sm text-amber-600">
+                      מושהה עד {device.pause?.until ? new Date(device.pause.until * 1000).toLocaleString("he-IL") : "ללא זמן סיום זמין"}
+                      {device.pause?.reason ? " · " + device.pause.reason : ""}
+                    </p>
+                  )}
+                  <div className="flex flex-wrap gap-2">
+                    {paused ? (
+                      <Button size="sm" onClick={() => act(device, "resume")} disabled={busyDevice === device.id}>
+                        <Play className="w-4 h-4 ml-1" /> החזר חסימה
+                      </Button>
+                    ) : (
+                      <Button size="sm" variant="outline" onClick={() => act(device, "pause")} disabled={busyDevice === device.id || device.status !== "active"}>
+                        <Pause className="w-4 h-4 ml-1" /> השהיית חסימה
+                      </Button>
+                    )}
+                    <Button size="sm" variant="destructive" onClick={() => act(device, "unmanage")} disabled={busyDevice === device.id || device.status !== "active" || device.unmanage_requested}>
+                      הסרת ניהול
+                    </Button>
+                    {busyDevice === device.id && <Loader2 className="w-4 h-4 animate-spin self-center" />}
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ============== Main Page ==============
 const CrmDashboard = () => {
   const [user, setUser] = useState<any>(null);
@@ -789,6 +1033,7 @@ const CrmDashboard = () => {
             <TabsTrigger value="vpn"><Wifi className="w-4 h-4 ml-1.5" /> VPN</TabsTrigger>
             <TabsTrigger value="adguard"><Globe className="w-4 h-4 ml-1.5" /> AdGuard</TabsTrigger>
             <TabsTrigger value="images"><ImageOff className="w-4 h-4 ml-1.5" /> סינון תמונות</TabsTrigger>
+            <TabsTrigger value="filterphone"><Smartphone className="w-4 h-4 ml-1.5" /> השהיית חסימה</TabsTrigger>
           </TabsList>
 
           <TabsContent value="stats"><StatsTab /></TabsContent>
@@ -798,6 +1043,7 @@ const CrmDashboard = () => {
           <TabsContent value="vpn"><VpnTab /></TabsContent>
           <TabsContent value="adguard"><AdGuardTab /></TabsContent>
           <TabsContent value="images"><ImageFilterTab /></TabsContent>
+          <TabsContent value="filterphone"><FilterPhoneControlTab /></TabsContent>
         </Tabs>
       </main>
     </div>
