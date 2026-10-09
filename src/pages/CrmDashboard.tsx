@@ -717,7 +717,7 @@ const FILTERPHONE_ADMIN_TOKEN = "fp_filterphone_admin_token";
 
 function FilterPhoneControlTab() {
   const { toast } = useToast();
-  const [token, setToken] = useState(() => sessionStorage.getItem(FILTERPHONE_ADMIN_TOKEN) || "");
+  const [token, setToken] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [devices, setDevices] = useState<any[]>([]);
