@@ -7,6 +7,7 @@ const navColumns = [
   {
     title: "השירותים",
     links: [
+      { href: "/", label: "FilterPhone — הסינון שלנו", meta: "150₪ לשנה" },
       { href: "/services/basic-filtering", label: "סינון בסיסי", meta: "100₪" },
       { href: "/services/kosher-play", label: "כושר פליי", meta: "70₪" },
       { href: "/services/hadran", label: "הדרן", meta: "300₪" },
@@ -20,7 +21,8 @@ const navColumns = [
     links: [
       { href: "/pricing", label: "מחירון מלא" },
       { href: "/compare", label: "השוואת מערכות סינון" },
-      { href: "/filterphone", label: "אפליקציית סינון התמונות שלנו" },
+      { href: "/install", label: "מדריך התקנה" },
+      { href: "/filterphone", label: "סינון תמונות – איך זה עובד" },
       { href: "/filtertube", label: "FilterTube – יוטיוב ומיוזיק מסוננים" },
       { href: "/blog", label: "מדריכים ומאמרים" },
       { href: "/about", label: "אודות FilterPhone" },
