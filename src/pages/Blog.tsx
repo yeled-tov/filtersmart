@@ -35,6 +35,7 @@ const Blog = () => {
       <section className="section-padding">
         <div className="container-custom max-w-3xl">
           <SectionHeading
+            as="h1"
             eyebrow="מדריכים"
             title="מה שלמדנו במעבדה, בכתב"
             lead="מדריכים קצרים וענייניים על סינון, חסימת תוכן ובחירת המערכת הנכונה."

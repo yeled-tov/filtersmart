@@ -86,6 +86,7 @@ const Compare = () => {
       <section className="section-padding">
         <div className="container-custom">
           <SectionHeading
+            as="h1"
             eyebrow="השוואה"
             title="הדרן, עסקן או כושר פליי – מה ההבדל באמת"
             lead="אנחנו עובדים מול כל החברות, ולכן אין לנו אינטרס לדחוף מערכת אחת. הטבלה הזו אומרת את זה כמו שזה."

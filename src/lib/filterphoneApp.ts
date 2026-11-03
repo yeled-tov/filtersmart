@@ -1,5 +1,5 @@
 import {
-  AppWindow, Ban, Bell, Bot, Eye, Flag, Globe, ImageOff, KeyRound, Link, Lock,
+  AppWindow, Ban, Bell, Bot, Eye, Flag, Shield, ShieldHalf, Globe, ImageOff, KeyRound, Link, Lock,
   MessageCircle, Navigation, Network, PackageCheck, RefreshCw, Scan, ScanSearch,
   Search, SearchX, Send, ShieldAlert, ShieldCheck, Smartphone, Store, UserX,
   VideoOff, WifiOff, Youtube, BatteryFull,
@@ -69,7 +69,7 @@ export const FILTER_LEVELS: FilterLevel[] = [
     short: "תמונות צנועות עוברות",
     desc: "חשיפה מוסתרת אוטומטית — נצבעת באפור לפי הצורה — ותמונה חשופה ברובה נחסמת כולה.",
     detail: "כל אדם בתמונה מסווג בנפרד, כך שהצביעה חלה רק על מי שצריך. תוכן בוטה נחסם לגמרי. תקלה במנוע — חסימה.",
-    icon: Scan,
+    icon: ShieldHalf,
   },
   {
     level: 3,
@@ -77,7 +77,7 @@ export const FILTER_LEVELS: FilterLevel[] = [
     short: "רק תוכן בוטה נחסם",
     desc: "רק תוכן בוטה ומפורש נחסם. כל השאר עובר.",
     detail: "מתאים למי שרוצה רשת נקייה בלי להגביל גלישה יומיומית.",
-    icon: Eye,
+    icon: Shield,
   },
 ];
 

@@ -8,6 +8,11 @@ interface Props {
   align?: "start" | "center";
   inverse?: boolean;
   className?: string;
+  /**
+   * The page's own heading. Index pages like /services open with this
+   * component, and without it they rendered with no <h1> at all.
+   */
+  as?: "h1" | "h2";
 }
 
 const SectionHeading = ({
@@ -17,6 +22,7 @@ const SectionHeading = ({
   align = "start",
   inverse = false,
   className = "",
+  as: Heading = "h2",
 }: Props) => (
   <AnimatedSection
     className={`${align === "center" ? "mx-auto max-w-2xl text-center" : "max-w-2xl"} ${className}`}
@@ -24,11 +30,7 @@ const SectionHeading = ({
     {eyebrow && (
       <span className={`eyebrow ${inverse ? "text-white/70 before:bg-white/30" : ""}`}>{eyebrow}</span>
     )}
-    <h2
-      className={`mt-4 text-display-md ${inverse ? "text-white" : "text-ink"}`}
-    >
-      {title}
-    </h2>
+    <Heading className={`mt-4 text-display-md ${inverse ? "text-white" : "text-ink"}`}>{title}</Heading>
     {lead && (
       <p
         className={`mt-4 text-[1.0625rem] leading-relaxed ${

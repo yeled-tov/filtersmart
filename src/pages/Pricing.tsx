@@ -93,6 +93,7 @@ const Pricing = () => {
       <section className="section-padding">
         <div className="container-custom">
           <SectionHeading
+            as="h1"
             eyebrow="מחירון"
             title="כמה עולה סינון טלפון אצלנו"
             lead="כל המחירים כוללים את ההתקנה, ואין עלויות נסתרות. אם פתרון זול יותר עושה את העבודה עבורכם – זה מה שנמליץ."

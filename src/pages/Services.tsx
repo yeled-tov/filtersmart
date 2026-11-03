@@ -77,6 +77,7 @@ const Services = () => {
       <section className="section-padding" aria-label="שירותי סינון וצריבה">
         <div className="container-custom">
           <SectionHeading
+            as="h1"
             eyebrow="השירותים שלנו"
             title="כל רמות הסינון, בשקיפות מלאה"
             lead="בכל כרטיס כתוב כמה זה עולה, כמה זמן ההתקנה לוקחת ומה קורה לתוכן שבמכשיר. בעמוד של כל שירות תמצאו את הפירוט המלא."
@@ -88,7 +89,8 @@ const Services = () => {
               to="/"
               className="group relative grid gap-6 overflow-hidden rounded-xl border-2 border-primary/25 bg-primary-tint/40 p-6 transition-colors hover:border-primary/50 md:grid-cols-[1fr_auto] md:items-center md:p-8"
             >
-              <span className="absolute left-6 top-6 flex items-center gap-1 rounded-sm bg-accent px-2.5 py-1 text-[0.6875rem] font-bold text-accent-foreground">
+              {/* In the flow on phones, so it can never sit on top of the heading */}
+              <span className="flex w-fit items-center gap-1 rounded-sm bg-accent px-2.5 py-1 text-[0.6875rem] font-bold text-accent-foreground md:absolute md:left-6 md:top-6">
                 <Star className="h-3 w-3 fill-current" />
                 ההמלצה שלנו
               </span>
