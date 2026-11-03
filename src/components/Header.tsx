@@ -7,12 +7,14 @@ import { Button } from "./ui/button";
 import { SITE, WA_DEFAULT } from "@/lib/site";
 
 const navLinks = [
+  { href: "/install", label: "מדריך התקנה" },
+  { href: "/filterphone", label: "סינון תמונות" },
   { href: "/services", label: "שירותים" },
   { href: "/pricing", label: "מחירון" },
   { href: "/compare", label: "השוואת מערכות" },
-  { href: "/filterphone", label: "סינון תמונות" },
   { href: "/filtertube", label: "FilterTube" },
-  { href: "/blog", label: "מדריכים" },
+  // "מאמרים", not "מדריכים": it sits next to the install guide and means something else.
+  { href: "/blog", label: "מאמרים" },
   { href: "/about", label: "אודות" },
   { href: "/contact", label: "צור קשר" },
 ];

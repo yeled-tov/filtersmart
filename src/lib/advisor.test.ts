@@ -25,13 +25,14 @@ describe("recommend", () => {
     expect([...scores].sort((a, b) => b - a)).toEqual(scores);
   });
 
-  it("leads with Askan, the house recommendation, for a child who needs a locked filter", () => {
+  it("leads with FilterPhone, the house recommendation, for a child who needs a locked filter", () => {
     const [top, second] = recommend(
       answers({ whoFor: "child", strictness: "strict", removability: "locked" }),
     );
-    expect(top.slug).toBe("askan");
+    expect(top.slug).toBe("filterphone");
+    expect(top.profile.removable).toBe(false);
     expect(top.reasons.length).toBeGreaterThan(0);
-    // Hadran stays the runner-up: it is still the most hermetic option we sell.
+    // Hadran stays the runner-up: it is the only option that survives a factory reset.
     expect(second.slug).toBe("hadran");
   });
 

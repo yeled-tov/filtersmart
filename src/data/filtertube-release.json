@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-10-05T15:37:37.146Z",
+  "updatedAt": "2026-11-01T04:07:57.216Z",
   "stable": {
-    "build": 374,
-    "tag": "build-374",
+    "build": 375,
+    "tag": "build-375",
     "versionName": "2.0.10",
     "changes": [
       "בחירת זמרים בהרשמה בסגנון ספוטיפיי — תמונות עגולות גדולות, שמות בעברית, ואחרי שבוחרים זמר מופיעים עוד זמרים באותו סגנון (חסידי, מזרחי…). החיפוש מוצא זמר גם כשהוא רשום באנגלית (\"אייל גולן\").",
@@ -19,9 +19,9 @@
       "ערוצים חדשים לא הופיעו במסך בחירת הזמרים.",
       "הרבה פחות פניות לשרת ברקע."
     ],
-    "publishedAt": "2026-10-05T15:37:27Z",
+    "publishedAt": "2026-10-07T06:09:09Z",
     "sizeBytes": 7266735,
-    "downloads": 0,
+    "downloads": 1,
     "apkUrl": "/download/FilterTube.apk"
   },
   "test": {
@@ -45,9 +45,9 @@
     ],
     "publishedAt": "2026-10-05T10:18:12Z",
     "sizeBytes": 7266747,
-    "downloads": 6,
+    "downloads": 9,
     "apkUrl": "/download/FilterTube-test.apk"
   },
-  "totalDownloads": 239,
+  "totalDownloads": 235,
   "releaseCount": 100
 }

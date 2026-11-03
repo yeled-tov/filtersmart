@@ -12,14 +12,14 @@ import { SITE, waLink } from "@/lib/site";
 const ORDER = ["kosher-play", "basic-filtering", "filterphone", "hadran", "askan", "qin-f21-pro", "qin-f25"];
 
 /** The system we point most customers to today. */
-const RECOMMENDED = "askan";
+const RECOMMENDED = "filterphone";
 
 const includes: Record<string, string[]> = {
   filterphone: [
-    "שלוש רמות סינון תמונות, כולל צביעת אזורי חשיפה",
-    "45 חסימות אתרים ואפליקציות בלחיצה",
-    "בלי לאפס את המכשיר ובלי חשבון גוגל",
-    "מנוי שנתי הכולל שרת, עדכונים ותמיכה",
+    "סינון תמונות בשלוש רמות, וארבע רמות גלישה",
+    "וואטסאפ מסונן ו-Google Play מנוהל",
+    "ניהול מכשיר מלא — בלי הסרה ובלי עקיפה",
+    "ברוב הטלפונים בלי איפוס · מנוי שנתי עם תמיכה",
   ],
   "basic-filtering": [
     "חסימת אתרים ותכנים פוגעניים",
@@ -93,6 +93,7 @@ const Pricing = () => {
       <section className="section-padding">
         <div className="container-custom">
           <SectionHeading
+            as="h1"
             eyebrow="מחירון"
             title="כמה עולה סינון טלפון אצלנו"
             lead="כל המחירים כוללים את ההתקנה, ואין עלויות נסתרות. אם פתרון זול יותר עושה את העבודה עבורכם – זה מה שנמליץ."
