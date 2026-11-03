@@ -11,7 +11,7 @@ import { waLink } from "@/lib/site";
 const COMPARED = ["basic-filtering", "filterphone", "kosher-play", "askan", "hadran"];
 
 /** The system we point most customers to today. */
-const RECOMMENDED = "askan";
+const RECOMMENDED = "filterphone";
 
 type Cell = boolean | string;
 
@@ -28,11 +28,11 @@ const criteria: { label: string; values: Record<string, Cell> }[] = [
   },
   {
     label: "נעול בפני הסרה",
-    values: { "basic-filtering": false, filterphone: false, "kosher-play": true, askan: true, hadran: true },
+    values: { "basic-filtering": false, filterphone: true, "kosher-play": true, askan: true, hadran: true },
   },
   {
     label: "עמיד לאיפוס יצרן",
-    values: { "basic-filtering": false, filterphone: false, "kosher-play": true, askan: true, hadran: true },
+    values: { "basic-filtering": false, filterphone: "חוסם איפוס מההגדרות", "kosher-play": true, askan: true, hadran: true },
   },
   {
     label: "שומר על התוכן שבמכשיר",
@@ -44,7 +44,7 @@ const criteria: { label: string; values: Record<string, Cell> }[] = [
   },
   {
     label: "סינון תמונות חכם",
-    values: { "basic-filtering": false, filterphone: "מתקדם — שלוש רמות וסגמנטציה", "kosher-play": true, askan: true, hadran: true },
+    values: { "basic-filtering": false, filterphone: "כל תמונה נבדקת, בשלוש רמות", "kosher-play": true, askan: true, hadran: true },
   },
   {
     label: "מתאים לאייפון",
@@ -57,10 +57,10 @@ const criteria: { label: string; values: Record<string, Cell> }[] = [
 ];
 
 const bestFor: Record<string, string> = {
-  filterphone: "מי שרוצה את סינון התמונות החזק ביותר שלנו, בלי לאפס את המכשיר ובלי לוותר על השימוש היומיומי.",
+  filterphone: "רוב הלקוחות שלנו היום: טלפון שנשאר חכם ופתוח, עם סינון תמונות, רמות גלישה וניהול מכשיר מלא — בלי איפוס ברוב הטלפונים.",
   "basic-filtering": "מי שרוצה חסימה ממוקדת ומהירה בלי לשנות את אופן השימוש במכשיר.",
   "kosher-play": "מי שרוצה מכשיר שנשאר שמיש, עם חנות אפליקציות כשרה ווואטסאפ מסונן.",
-  askan: "רוב הלקוחות שלנו: הגנה חזקה יחד עם מכשיר שממשיך לתפקד ביום-יום.",
+  askan: "מי שרוצה צריבה עמוקה, עם הגנה חזקה ומכשיר שממשיך לתפקד ביום-יום.",
   hadran: "מי שרוצה את האטימות המרבית — הגנה שלא ניתן לעקוף או להסיר בשום דרך.",
 };
 
@@ -192,12 +192,20 @@ const Compare = () => {
           <div className="mt-16 max-w-3xl">
             <h2 className="text-display-sm">איך לבחור, בפועל</h2>
             <div className="prose-fp mt-5">
-              <h3>מתי בוחרים עסקן — ההמלצה שלנו כיום</h3>
+              <h3>מתי בוחרים FilterPhone — ההמלצה שלנו כיום</h3>
               <p>
-                <strong>עסקן</strong> הוא הפתרון שאנחנו מפנים אליו את רוב הלקוחות היום. הוא צריבה
-                עמוקה ברמת הגנה גבוהה, עם סינון תמונות מבוסס AI, אבל נבנה מזווית של מכשיר שממשיך
-                לתפקד — ולא סביבה סגורה שמקשה על היום-יום. במחיר 300₪ הוא נותן את האיזון הטוב ביותר
-                בין הגנה לבין מכשיר שאפשר לחיות איתו. נדרש מכשיר מאופס או חדש.
+                <strong>FilterPhone</strong> היא הסינון שפיתחנו בעצמנו, והפתרון שאנחנו מפנים אליו את
+                רוב הלקוחות היום. הטלפון נשאר חכם ופתוח — אפליקציות, חנות, כרום ווואטסאפ — ומה שעובר
+                בו מסונן: סינון תמונות בשלוש רמות, ארבע רמות גלישה, וואטסאפ מסונן וניהול מכשיר מלא
+                שלא מאפשר להסיר את הסינון. ההתקנה נעשית מהטלפון עצמו, וברוב הטלפונים בלי איפוס ובלי
+                מחיקת חשבונות. <Link to="/">150₪ לשנה, לאנדרואיד 8 ומעלה</Link>.
+              </p>
+
+              <h3>מתי בוחרים עסקן</h3>
+              <p>
+                <strong>עסקן</strong> הוא צריבה עמוקה ברמת הגנה גבוהה, עם סינון תמונות מבוסס AI, שנבנתה
+                מזווית של מכשיר שממשיך לתפקד — ולא סביבה סגורה שמקשה על היום-יום. במחיר 300₪ הוא נותן
+                איזון טוב בין הגנה לבין מכשיר שאפשר לחיות איתו. נדרש מכשיר מאופס או חדש.
               </p>
 
               <h3>מתי בוחרים הדרן</h3>

@@ -49,19 +49,21 @@ export interface SolutionProfile {
 export const SOLUTIONS: Record<string, SolutionProfile> = {
   filterphone: {
     slug: "filterphone",
-    name: "אפליקציית הסינון של FilterPhone",
-    shortName: "אפליקציית FilterPhone",
+    name: "FilterPhone — הסינון שלנו",
+    shortName: "FilterPhone",
     price: 150,
     // Yearly, unlike every other option here, so the label has to say so —
     // it is shown next to one-off installation prices.
     priceLabel: "150₪ לשנה",
     recurring: true,
-    href: "/filterphone",
+    // The homepage is FilterPhone's page now.
+    href: "/",
     installTime: "כ-10 דקות",
     wipesDevice: false,
-    removable: true,
+    // Device management blocks uninstalling it and switching the filter off.
+    removable: false,
     summary:
-      "סינון תמונות בשלוש רמות, כולל צביעת אזורי חשיפה לפי צורת הגוף, וחסימת אתרים ואפליקציות בלחיצה — בלי לאפס את המכשיר.",
+      "סינון תמונות חכם בשלוש רמות, ארבע רמות גלישה, וואטסאפ מסונן וניהול מכשיר מלא — והטלפון נשאר חכם ופתוח, בלי איפוס ברוב הטלפונים.",
   },
   "basic-filtering": {
     slug: "basic-filtering",
@@ -270,8 +272,10 @@ export function recommend(answers: AdvisorAnswers): Recommendation[] {
       } else {
         b.cautions.push("המשתמש יכול להסיר את הסינון בעצמו – שווה לשקול פתרון נעול");
       }
-      if (slug === "askan") add(b, 16, "flagship", "הפתרון שאנחנו ממליצים עליו הכי הרבה כיום");
-      if (slug === "filterphone") add(b, 10, "fit", "סינון תמונות שאפשר להתאים בדיוק לגיל, ולשנות בכל רגע בלי להתקין מחדש");
+      if (slug === "filterphone") {
+        add(b, 16, "flagship", "הפתרון שאנחנו ממליצים עליו הכי הרבה כיום");
+        add(b, 10, "fit", "סינון תמונות שאפשר להתאים בדיוק לגיל, ולשנות בכל רגע בלי להתקין מחדש");
+      }
     }
     if (answers.whoFor === "business") {
       if (slug === "askan") add(b, 26, "fit", "נבנה בדיוק לשימוש עסקי – סינון תמונות חכם בלי לחסום את העבודה");
@@ -282,8 +286,11 @@ export function recommend(answers: AdvisorAnswers): Recommendation[] {
     if (answers.whoFor === "adult") {
       if (slug === "basic-filtering") add(b, 10, "fit", "שליטה מלאה ברמת הסינון, בלי לשנות את אופן השימוש במכשיר");
       if (slug === "kosher-play") add(b, 8, "fit", "מאזן בין סינון אמיתי לבין מכשיר שנשאר שמיש");
-      if (slug === "askan") add(b, 12, "flagship", "הפתרון שאנחנו ממליצים עליו הכי הרבה כיום");
-      if (slug === "filterphone") add(b, 11, "fit", "הסינון החזק ביותר לתמונות שיש לנו, בלי לשנות את אופן השימוש במכשיר");
+      if (slug === "askan") add(b, 8, "fit", "צריבה עמוקה שנבנתה כדי שהמכשיר ימשיך לתפקד");
+      if (slug === "filterphone") {
+        add(b, 12, "flagship", "הפתרון שאנחנו ממליצים עליו הכי הרבה כיום");
+        add(b, 6, "fit", "הטלפון נשאר חכם ופתוח, ורק מה שעובר בו מסונן");
+      }
     }
 
     // --- How strict ----------------------------------------------------
@@ -292,7 +299,7 @@ export function recommend(answers: AdvisorAnswers): Recommendation[] {
       if (slug === "qin-f21-pro" || slug === "qin-f25") add(b, 22, "strictness", "גרסה כשרה מלאה עם סינון מובנה");
       if (slug === "kosher-play") add(b, 14, "strictness", "חנות אפליקציות כשרה ווואטסאפ מסונן");
       if (slug === "askan") add(b, 12);
-      if (slug === "filterphone") add(b, 14, "strictness", "ברמה המחמירה כל תמונה של אישה נחסמת, גם בלבוש צנוע");
+      if (slug === "filterphone") add(b, 14, "strictness", "ברמה המחמירה עוברים רק נופים, מוצרים ותמונות של גברים");
       if (slug === "basic-filtering") {
         b.cautions.push("סינון בסיסי הוא פתרון קל יחסית – לרמת חומרה גבוהה עדיף פתרון צרוב");
       }
@@ -302,12 +309,12 @@ export function recommend(answers: AdvisorAnswers): Recommendation[] {
       if (slug === "basic-filtering") add(b, 16, "strictness", "אפשר לחסום רשתות חברתיות ובידור ולהשאיר את השאר פתוח");
       if (slug === "askan") add(b, 12);
       if (slug === "hadran") add(b, 10);
-      if (slug === "filterphone") add(b, 18, "strictness", "הרמה הבינונית מיועדת בדיוק לזה – לבוש צנוע עובר, ואזורי חשיפה נצבעים");
+      if (slug === "filterphone") add(b, 18, "strictness", "הרמה הבינונית מיועדת בדיוק לזה – תמונות צנועות עוברות, וחשיפה מוסתרת אוטומטית");
     }
     if (answers.strictness === "light") {
       if (slug === "basic-filtering") add(b, 24, "strictness", "בדיוק הרמה שביקשתם – חסימה ממוקדת בלי לשנות את המכשיר");
       if (slug === "kosher-play") add(b, 8);
-      if (slug === "filterphone") add(b, 10, "strictness", "ברמה הבסיסית רק עירום מפורש נחסם, והשאר עובר");
+      if (slug === "filterphone") add(b, 10, "strictness", "ברמה הבסיסית רק תוכן בוטה ומפורש נחסם, והשאר עובר");
       if (slug === "hadran" || slug === "askan") {
         b.cautions.push("זה פתרון חזק בהרבה ממה שביקשתם – ייתכן שתרגישו אותו ביום-יום");
       }
