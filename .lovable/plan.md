@@ -1,25 +1,32 @@
+# סרטוני הדרכה להתקנת FilterPhone
 
+בעמוד ההתקנה יש כבר מקום לסרטון לכל סוג טלפון. כרגע כתוב שם "סרטון הדרכה — בקרוב". נכין 3 סרטונים מונפשים ונשים כל אחד במקום שלו.
 
-## Plan: Technical Updates for FilterSmart
+## הסרטונים
+כל סרטון מראה טלפון אנדרואיד שנראה אמיתי. אצבע מסומנת מראה איפה ללחוץ, יש כיתוב בעברית לכל שלב וקריינות בעברית שמסבירה מה לעשות.
 
-### 1. Remove Built-in Chatbot
-- Delete `src/components/SmartChatbot.tsx`
-- Remove `SmartChatbot` import and usage from `src/components/Layout.tsx`
+1. **כללי (שאר הטלפונים)**, בערך 60–75 שניות
+   - פותחים את האתר בכרום ולוחצים "הורדת האפליקציה"
+   - כרום מזהיר ש"הקובץ עלול להזיק", ולוחצים "הורדה בכל זאת"
+   - מכבים זמנית את Play Protect: חנות Play ← תמונת הפרופיל ← Play Protect ← גלגל השיניים ← מכבים "סריקת אפליקציות"
+   - פותחים את הקובץ, מאשרים "התקנה ממקורות לא ידועים" ומתקינים
+   - מדליקים את Play Protect בחזרה
+2. **סמסונג גלקסי**: כל מה שבסרטון הכללי, ובנוסף מכבים את "חסימה אוטומטית" (הגדרות ← אבטחה ופרטיות ← חסימה אוטומטית ← כיבוי) לפני ההתקנה, ומדליקים אותה בחזרה בסוף.
+3. **שיאומי / רדמי / פוקו**: השלבים לפי מה שכבר כתוב בעמוד לשיאומי.
 
-### 2. Embed Chatbase Chatbot
-- The Chatbase script is already present in `index.html` (confirmed from the provided file). No changes needed here.
+כל המסכים בסרטונים יהיו העתק מצויר של המסכים האמיתיים, עם אותם שמות כפתורים שכבר מופיעים במדריך הכתוב בעמוד, כדי שהסרטון והטקסט יתאימו זה לזה.
 
-### 3. Remove Hero Buttons ("דברו איתנו" and "לשירותים שלנו")
-- In `src/pages/Index.tsx`, remove lines 52-64 (the `div` containing both buttons in the Hero section).
+## איפה הסרטונים יופיעו
+- בעמוד ההתקנה, בלשונית של כל יצרן, יופיע הסרטון שלו במקום "בקרוב".
+- סרטון הסקירה הכללית שבראש העמוד ישתמש בסרטון הכללי.
+- הסרטונים לא ייטענו עד שלוחצים עליהם, כדי שהאתר יישאר מהיר.
 
-### 4. SEO Updates
-- **H1**: The current H1 in `Index.tsx` (lines 45-48) splits across two elements. Will consolidate to: `פילטר סמארט - סינון טלפונים וצריבת גרסאות באשדוד`
-- **Meta Description**: Update `SEOHead` call (line 23) and `index.html` meta tags to: `המעבדה המובילה באשדוד לסינון מכשירים, התקנת הדרן, עסקן וכושר פליי. שירות מקצועי ומהיר לציבור החרדי והדתי`
-- **Favicon**: Already set as `/favicon.png` in `index.html`. No change needed.
+## מה כדאי לדעת
+- הסרטון מונפש, לא צילום מסך אמיתי. השלבים מדויקים, אבל המראה יכול להיות קצת שונה מגרסת אנדרואיד שלכם.
+- הקריינות היא קול ממוחשב בעברית.
+- אחרי שהסרטונים יוכנו אבדוק אותם, ואם שלב או שם של כפתור לא מתאימים לטלפון שלכם, אפשר לתקן.
 
-### Files to modify:
-- `src/components/Layout.tsx` — remove SmartChatbot
-- `src/pages/Index.tsx` — remove hero buttons, update H1 and meta description
-- `index.html` — update meta description
-- Delete `src/components/SmartChatbot.tsx`
-
+## פרטים טכניים
+- נוצר באמצעות סוכן סרטונים מונפשים (motion graphics), ותיקיית הפלט היא `/mnt/documents/videos/`. קריינות עברית נעשית בהמרת טקסט לדיבור. קודם קוראים את שלבי שיאומי מ-`Install.tsx`.
+- רושמים כל MP4 עם `lovable-assets` ואת קובצי ה-`.asset.json` שומרים תחת `src/assets/videos/`.
+- ב-`Install.tsx` מעדכנים את `VIDEOS.{all,samsung,xiaomi,other}.src` עם כתובות הקבצים. מוסיפים `VideoObject` ל-JSON-LD בשביל SEO.
