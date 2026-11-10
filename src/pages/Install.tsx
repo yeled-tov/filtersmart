@@ -13,6 +13,9 @@ import PhoneFrame from "@/components/PhoneFrame";
 import { SITE, waLink } from "@/lib/site";
 import { faqJsonLd, type FaqItem } from "@/lib/faq";
 import { FILTERPHONE } from "@/lib/filterphoneApp";
+import generalVideo from "@/assets/videos/install_general.mp4.asset.json";
+import samsungVideo from "@/assets/videos/install_samsung.mp4.asset.json";
+import xiaomiVideo from "@/assets/videos/install_xiaomi.mp4.asset.json";
 
 /**
  * The install guide, by phone maker.
@@ -36,14 +39,15 @@ const MAKERS: { id: Maker; label: string }[] = [
 ];
 
 /**
- * Tutorial videos. Each slot is a real <video> with a poster already; to publish
- * a video, drop the file in /public/install and set `src` (e.g. "/install/samsung.mp4").
+ * Tutorial videos. `src` is the landscape cut (desktop); `vertical` is the portrait
+ * cut shown on phones. Missing vertical falls back to the landscape one.
  */
-const VIDEOS: Record<"all" | Maker, { src: string | null; poster: string; title: string }> = {
-  all: { src: null, poster: "/install/poster-all.webp", title: "סרטון: הורדה והתקנה של FilterPhone" },
-  samsung: { src: null, poster: "/install/poster-samsung.webp", title: "סרטון: התקנת FilterPhone בסמסונג" },
-  xiaomi: { src: null, poster: "/install/poster-xiaomi.webp", title: "סרטון: התקנת FilterPhone בשיאומי" },
-  other: { src: null, poster: "/install/poster-all.webp", title: "סרטון: הורדה והתקנה של FilterPhone" },
+type GuideSrc = { src: string | null; vertical: string | null; poster: string; title: string };
+const VIDEOS: Record<"all" | Maker, GuideSrc> = {
+  all: { src: generalVideo.url, vertical: null, poster: "/install/poster-all.webp", title: "סרטון: הורדה והתקנה של FilterPhone" },
+  samsung: { src: samsungVideo.url, vertical: null, poster: "/install/poster-samsung.webp", title: "סרטון: התקנת FilterPhone בסמסונג" },
+  xiaomi: { src: xiaomiVideo.url, vertical: null, poster: "/install/poster-xiaomi.webp", title: "סרטון: התקנת FilterPhone בשיאומי" },
+  other: { src: generalVideo.url, vertical: null, poster: "/install/poster-all.webp", title: "סרטון: הורדה והתקנה של FilterPhone" },
 };
 
 const WA = waLink("שלום, אני מנסה להתקין את FilterPhone ואשמח לעזרה");
@@ -120,22 +124,37 @@ const StepList = ({ steps, start = 1 }: { steps: Step[]; start?: number }) => (
   </ol>
 );
 
+const useIsPhone = () => {
+  const [phone, setPhone] = useState(() => typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches);
+  useEffect(() => {
+    const m = window.matchMedia("(max-width: 767px)");
+    const on = () => setPhone(m.matches);
+    m.addEventListener("change", on);
+    return () => m.removeEventListener("change", on);
+  }, []);
+  return phone;
+};
+
 const GuideVideo = ({ which }: { which: keyof typeof VIDEOS }) => {
   const v = VIDEOS[which];
+  const phone = useIsPhone();
+  const vertical = phone && Boolean(v.vertical);
+  const src = vertical ? v.vertical : v.src;
   return (
-    <figure className="overflow-hidden rounded-lg border border-border bg-ink shadow-sm">
-      <div className="relative aspect-video">
+    <figure className={`overflow-hidden rounded-lg border border-border bg-ink shadow-sm ${vertical ? "mx-auto max-w-[22rem]" : ""}`}>
+      <div className={`relative ${vertical ? "aspect-[9/16]" : "aspect-video"}`}>
         <video
-          className="h-full w-full object-cover"
-          poster={v.poster}
-          preload="none"
+          key={src ?? "none"}
+          className="h-full w-full object-contain"
+          poster={vertical ? undefined : v.poster}
+          preload="metadata"
           playsInline
-          controls={Boolean(v.src)}
+          controls={Boolean(src)}
           aria-label={v.title}
         >
-          {v.src && <source src={v.src} type="video/mp4" />}
+          {src && <source src={src} type="video/mp4" />}
         </video>
-        {!v.src && (
+        {!src && (
           <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-sm bg-white/90 px-2.5 py-1 text-[0.75rem] font-bold text-ink">
             <PlayCircle className="h-3.5 w-3.5" />
             סרטון הדרכה — בקרוב
