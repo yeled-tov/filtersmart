@@ -1,0 +1,2 @@
+# Architecture rules
+- Installation guides select portrait media below the existing mobile breakpoint and landscape media on desktop; keep media URLs in CDN asset pointers so videos do not inflate the source repository.

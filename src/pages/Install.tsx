@@ -16,6 +16,9 @@ import { FILTERPHONE } from "@/lib/filterphoneApp";
 import generalVideo from "@/assets/videos/install_general.mp4.asset.json";
 import samsungVideo from "@/assets/videos/install_samsung.mp4.asset.json";
 import xiaomiVideo from "@/assets/videos/install_xiaomi.mp4.asset.json";
+import generalVerticalVideo from "@/assets/videos/install_general_vertical.mp4.asset.json";
+import samsungVerticalVideo from "@/assets/videos/install_samsung_vertical.mp4.asset.json";
+import xiaomiVerticalVideo from "@/assets/videos/install_xiaomi_vertical.mp4.asset.json";
 
 /**
  * The install guide, by phone maker.
@@ -44,10 +47,10 @@ const MAKERS: { id: Maker; label: string }[] = [
  */
 type GuideSrc = { src: string | null; vertical: string | null; poster: string; title: string };
 const VIDEOS: Record<"all" | Maker, GuideSrc> = {
-  all: { src: generalVideo.url, vertical: null, poster: "/install/poster-all.webp", title: "סרטון: הורדה והתקנה של FilterPhone" },
-  samsung: { src: samsungVideo.url, vertical: null, poster: "/install/poster-samsung.webp", title: "סרטון: התקנת FilterPhone בסמסונג" },
-  xiaomi: { src: xiaomiVideo.url, vertical: null, poster: "/install/poster-xiaomi.webp", title: "סרטון: התקנת FilterPhone בשיאומי" },
-  other: { src: generalVideo.url, vertical: null, poster: "/install/poster-all.webp", title: "סרטון: הורדה והתקנה של FilterPhone" },
+  all: { src: generalVideo.url, vertical: generalVerticalVideo.url, poster: "/install/poster-all.webp", title: "סרטון: הורדה והתקנה של FilterPhone" },
+  samsung: { src: samsungVideo.url, vertical: samsungVerticalVideo.url, poster: "/install/poster-samsung.webp", title: "סרטון: התקנת FilterPhone בסמסונג" },
+  xiaomi: { src: xiaomiVideo.url, vertical: xiaomiVerticalVideo.url, poster: "/install/poster-xiaomi.webp", title: "סרטון: התקנת FilterPhone בשיאומי" },
+  other: { src: generalVideo.url, vertical: generalVerticalVideo.url, poster: "/install/poster-all.webp", title: "סרטון: הורדה והתקנה של FilterPhone" },
 };
 
 const WA = waLink("שלום, אני מנסה להתקין את FilterPhone ואשמח לעזרה");
