@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import {
-  AlertTriangle, ArrowLeft, Download, Info, MessageCircle, PlayCircle, Smartphone,
+  AlertTriangle, ArrowLeft, Download, Info, MessageCircle, PlayCircle, Maximize, Smartphone,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -45,12 +45,16 @@ const MAKERS: { id: Maker; label: string }[] = [
  * Tutorial videos. `src` is the landscape cut (desktop); `vertical` is the portrait
  * cut shown on phones. Missing vertical falls back to the landscape one.
  */
-type GuideSrc = { src: string | null; vertical: string | null; poster: string; title: string };
+/** Asset URLs are relative to Lovable hosting; the Vercel-hosted domain can't serve them, so point at the Lovable origin. */
+const ASSET_ORIGIN = "https://filtersmart.lovable.app";
+const cdn = (u: string) => (u.startsWith("/") ? ASSET_ORIGIN + u : u);
+
+type GuideSrc = { src: string | null; vertical: string | null; poster: string; vposter?: string; title: string };
 const VIDEOS: Record<"all" | Maker, GuideSrc> = {
-  all: { src: generalVideo.url, vertical: generalVerticalVideo.url, poster: "/install/poster-all.webp", title: "סרטון: הורדה והתקנה של FilterPhone" },
-  samsung: { src: samsungVideo.url, vertical: samsungVerticalVideo.url, poster: "/install/poster-samsung.webp", title: "סרטון: התקנת FilterPhone בסמסונג" },
-  xiaomi: { src: xiaomiVideo.url, vertical: xiaomiVerticalVideo.url, poster: "/install/poster-xiaomi.webp", title: "סרטון: התקנת FilterPhone בשיאומי" },
-  other: { src: generalVideo.url, vertical: generalVerticalVideo.url, poster: "/install/poster-all.webp", title: "סרטון: הורדה והתקנה של FilterPhone" },
+  all: { src: cdn(generalVideo.url), vertical: cdn(generalVerticalVideo.url), vposter: "/install/poster-general-vertical.webp", poster: "/install/poster-all.webp", title: "סרטון: הורדה והתקנה של FilterPhone" },
+  samsung: { src: cdn(samsungVideo.url), vertical: cdn(samsungVerticalVideo.url), vposter: "/install/poster-samsung-vertical.webp", poster: "/install/poster-samsung.webp", title: "סרטון: התקנת FilterPhone בסמסונג" },
+  xiaomi: { src: cdn(xiaomiVideo.url), vertical: cdn(xiaomiVerticalVideo.url), vposter: "/install/poster-xiaomi-vertical.webp", poster: "/install/poster-xiaomi.webp", title: "סרטון: התקנת FilterPhone בשיאומי" },
+  other: { src: cdn(generalVideo.url), vertical: cdn(generalVerticalVideo.url), vposter: "/install/poster-general-vertical.webp", poster: "/install/poster-all.webp", title: "סרטון: הורדה והתקנה של FilterPhone" },
 };
 
 const WA = waLink("שלום, אני מנסה להתקין את FilterPhone ואשמח לעזרה");
@@ -143,27 +147,46 @@ const GuideVideo = ({ which }: { which: keyof typeof VIDEOS }) => {
   const phone = useIsPhone();
   const vertical = phone && Boolean(v.vertical);
   const src = vertical ? v.vertical : v.src;
+  const ref = useRef<HTMLVideoElement>(null);
+  const fullscreen = () => {
+    const el = ref.current as (HTMLVideoElement & { webkitEnterFullscreen?: () => void }) | null;
+    if (!el) return;
+    el.play().catch(() => {});
+    if (el.requestFullscreen) el.requestFullscreen().catch(() => el.webkitEnterFullscreen?.());
+    else el.webkitEnterFullscreen?.();
+  };
   return (
-    <figure className={`overflow-hidden rounded-lg border border-border bg-ink shadow-sm ${vertical ? "mx-auto max-w-[22rem]" : ""}`}>
-      <div className={`relative ${vertical ? "aspect-[9/16]" : "aspect-video"}`}>
+    <figure className={vertical ? "mx-auto max-w-[22rem]" : ""}>
+      <div className={`relative overflow-hidden rounded-lg border border-border bg-ink shadow-sm ${vertical ? "aspect-[9/16]" : "aspect-video"}`}>
         <video
+          ref={ref}
           key={src ?? "none"}
           className="h-full w-full object-contain"
-          poster={vertical ? undefined : v.poster}
+          poster={vertical ? v.vposter : v.poster}
           preload="metadata"
           playsInline
           controls={Boolean(src)}
           aria-label={v.title}
         >
-          {src && <source src={src} type="video/mp4" />}
+          {src && <source src={`${src}#t=0.1`} type="video/mp4" />}
         </video>
         {!src && (
-          <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-sm bg-white/90 px-2.5 py-1 text-[0.75rem] font-bold text-ink">
+          <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-sm bg-surface/90 px-2.5 py-1 text-[0.75rem] font-bold text-ink">
             <PlayCircle className="h-3.5 w-3.5" />
             סרטון הדרכה — בקרוב
           </span>
         )}
       </div>
+      {src && (
+        <button
+          type="button"
+          onClick={fullscreen}
+          className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-3 text-[0.9375rem] font-bold text-primary-foreground"
+        >
+          <Maximize className="h-4 w-4" />
+          צפייה במסך מלא
+        </button>
+      )}
       <figcaption className="sr-only">{v.title}</figcaption>
     </figure>
   );
