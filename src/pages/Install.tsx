@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import {
-  AlertTriangle, ArrowLeft, Download, Info, MessageCircle, PlayCircle, Smartphone,
+  AlertTriangle, ArrowLeft, Download, Info, MessageCircle, PlayCircle, Maximize, Smartphone,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
