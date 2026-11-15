@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { ArrowLeft, Cpu, Lock, Clock3, HardDriveDownload, ShieldCheck, Star } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -9,6 +10,10 @@ import { useServices, fallbackServices } from "@/hooks/useServices";
 import { SOLUTIONS } from "@/lib/advisor";
 import { SITE } from "@/lib/site";
 import { FILTERPHONE } from "@/lib/filterphoneApp";
+import TrustStrip from "@/components/TrustStrip";
+import FAQ from "@/components/FAQ";
+import { LabIntro, Process, WhyUs } from "@/components/LabSections";
+import { processSteps } from "@/lib/lab";
 
 const ServiceCard = ({
   slug, name, price, desc, logo, popular,
@@ -64,6 +69,21 @@ const Services = () => {
   const filtering = allServices.filter((s) => s.category === "filtering");
   const flashing = allServices.filter((s) => s.category === "flashing");
 
+  const howToJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: "איך מזמינים סינון טלפון ב-FilterPhone אשדוד",
+    description: "שלושה שלבים מפנייה ראשונה ועד מכשיר מסונן ומוכן לשימוש.",
+    totalTime: "PT1H",
+    estimatedCost: { "@type": "MonetaryAmount", currency: "ILS", value: "100" },
+    step: processSteps.map((s, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: s.title,
+      text: s.body,
+    })),
+  };
+
   return (
     <>
       <SEOHead
@@ -72,6 +92,9 @@ const Services = () => {
         path="/services"
         keywords="סינון טלפון אשדוד, סינון אייפון, סינון גלקסי, התקנת הדרן, כושר פליי התקנה, עסקן התקנה, צריבת גרסה שיאומי"
       />
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(howToJsonLd)}</script>
+      </Helmet>
       <Breadcrumbs items={[{ label: "שירותים" }]} />
 
       <section className="section-padding" aria-label="שירותי סינון וצריבה">
@@ -191,6 +214,13 @@ const Services = () => {
           </AnimatedSection>
         </div>
       </section>
+
+      {/* The lab's own story. These blocks were on the homepage; the wording is unchanged. */}
+      <TrustStrip />
+      <LabIntro />
+      <WhyUs />
+      <Process />
+      <FAQ className="" />
     </>
   );
 };

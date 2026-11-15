@@ -34,7 +34,8 @@ const PhoneFrame = ({ shot, alt, className = "", priority = false, sizes = "240p
           width={640}
           height={880}
           loading={priority ? "eager" : "lazy"}
-          fetchPriority={priority ? "high" : undefined}
+          // Lowercase on purpose: React 18 does not know the camelCase spelling and warns about it.
+          {...(priority ? ({ fetchpriority: "high" } as Record<string, string>) : {})}
           decoding="async"
           className="h-full w-full object-cover"
         />

@@ -5,6 +5,7 @@ import {
   VideoOff, WifiOff, Youtube, BatteryFull,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import webLevels from "@/data/webLevels.json";
 
 /**
  * The facts about our own filtering app, in one place.
@@ -95,31 +96,13 @@ export interface WebLevel {
   desc: string;
 }
 
-/** How much of the web is open at all, chosen per customer. Order matters: narrowest first. */
-export const WEB_LEVELS: WebLevel[] = [
-  {
-    name: "חיוני בלבד",
-    short: "רק מה שחייבים",
-    desc: "ממשלה ורשויות, בנקים ואשראי, קופות חולים, חשמל, תחבורה ציבורית, סלולר וביטוח, ודפי תשלום. בלי חיפוש ובלי שום אתר אחר.",
-  },
-  {
-    name: "נקי לגמרי",
-    short: "החיוני, ועוד אתרים נקיים",
-    desc: "החיוני, ועוד תורה ויהדות, כלים ושירותים (PDF, טפסים, מייל, אישורי הגעה), קניות נקיות, חיפוש גוגל מסונן — וכל אתר שהבוט בדק ומצא נקי.",
-  },
-  {
-    name: "נקי + קניות",
-    short: "נקי, ועוד חנויות כלליות",
-    desc: "כמו נקי, ועוד קניות כלליות — אליאקספרס, שיין, טמו, אמזון, יד 2 ועוד. התמונות באתרים האלה מסוננות.",
-  },
-  {
-    name: "פתוח עם סינון",
-    short: "הכול, חוץ ממה שנחסם",
-    desc: "הכול פתוח חוץ מהקטגוריות שנחסמו — עם סינון התמונות המלא.",
-  },
-];
+/**
+ * How much of the web is open at all, chosen per customer. Order matters: narrowest first.
+ * Kept in JSON so the prerenderer can read the same text the pages show.
+ */
+export const WEB_LEVELS: WebLevel[] = webLevels.levels;
 
-export const WEB_EXTRAS = ["חדשות לציבור החרדי", "חדשות כלליות", "ספורט", "קניות"];
+export const WEB_EXTRAS: string[] = webLevels.extras;
 
 /* ------------------------------------------------------------- Comparison */
 

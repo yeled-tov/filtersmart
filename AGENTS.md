@@ -1,2 +1,4 @@
 # Architecture rules
 - Installation guides select portrait media below the existing mobile breakpoint and landscape media on desktop; keep media URLs in CDN asset pointers so videos do not inflate the source repository.
+- The install guide (`/install`) shows one step at a time. Its wording lives in `src/data/installGuide.json`, which `scripts/prerender.mjs` also reads, so edit steps there and not in the page. Each step plays its own `[start, end]` range of a video, listed in `src/lib/installVideos.ts`; if a video is re-rendered, measure those ranges again and regenerate the posters in `public/install/clips/`.
+- The search-topic pages (`/internet-filtering`, `/samsung-filtering`, `/xiaomi-filtering`, `/kosher-phone`) are rendered by `src/pages/Landing.tsx` from `src/data/landings.json`, read by the prerenderer too. Do not state anything there that the app does not do.
