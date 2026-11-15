@@ -29,6 +29,7 @@ const MyAccount = lazy(() => import("./pages/MyAccount"));
 const CrmDashboard = lazy(() => import("./pages/CrmDashboard"));
 const FilterTube = lazy(() => import("./pages/FilterTube"));
 const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
+const Landing = lazy(() => import("./pages/Landing"));
 
 const queryClient = new QueryClient();
 
@@ -64,6 +65,10 @@ const App = () => (
                 <Route path="/filtertube" element={<FilterTube />} />
                 <Route path="/filterphone" element={<FilterPhoneApp />} />
                 <Route path="/install" element={<Install />} />
+                <Route path="/internet-filtering" element={<Landing slug="internet-filtering" />} />
+                <Route path="/samsung-filtering" element={<Landing slug="samsung-filtering" />} />
+                <Route path="/xiaomi-filtering" element={<Landing slug="xiaomi-filtering" />} />
+                <Route path="/kosher-phone" element={<Landing slug="kosher-phone" />} />
               </Route>
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin" element={<Admin />} />

@@ -6,17 +6,54 @@ import Logo from "./Logo";
 import { Button } from "./ui/button";
 import { SITE, WA_DEFAULT } from "@/lib/site";
 
+/** The desktop bar: the things people come for, in the order they come for them. */
 const navLinks = [
   { href: "/install", label: "מדריך התקנה" },
-  { href: "/filterphone", label: "סינון תמונות" },
-  { href: "/services", label: "שירותים" },
+  { href: "/filtertube", label: "FilterTube" },
+  { href: "/services", label: "שירותי מעבדה" },
   { href: "/pricing", label: "מחירון" },
   { href: "/compare", label: "השוואת מערכות" },
-  { href: "/filtertube", label: "FilterTube" },
   // "מאמרים", not "מדריכים": it sits next to the install guide and means something else.
   { href: "/blog", label: "מאמרים" },
-  { href: "/about", label: "אודות" },
   { href: "/contact", label: "צור קשר" },
+];
+
+/** Always one tap away on a phone, without opening the menu. */
+const quickLinks = [
+  { href: "/install", label: "מדריך התקנה" },
+  { href: "/filtertube", label: "FilterTube" },
+  { href: "/services", label: "שירותים" },
+  { href: "/pricing", label: "מחירון" },
+];
+
+/** The phone menu, grouped so each link can be found under what it belongs to. */
+const menuGroups = [
+  {
+    title: "האפליקציות שלנו",
+    links: [
+      { href: "/", label: "FilterPhone — סינון לטלפון" },
+      { href: "/install", label: "מדריך התקנה" },
+      { href: "/filtertube", label: "FilterTube — יוטיוב מסונן" },
+    ],
+  },
+  {
+    title: "סינון במעבדה",
+    links: [
+      { href: "/services", label: "כל השירותים" },
+      { href: "/pricing", label: "מחירון" },
+      { href: "/compare", label: "השוואת מערכות" },
+    ],
+  },
+  {
+    title: "מידע",
+    links: [
+      { href: "/filterphone", label: "סינון תמונות — איך זה עובד" },
+      { href: "/internet-filtering", label: "סינון אינטרנט" },
+      { href: "/blog", label: "מאמרים" },
+      { href: "/about", label: "אודות" },
+      { href: "/contact", label: "צור קשר" },
+    ],
+  },
 ];
 
 const Header = () => {
@@ -36,6 +73,9 @@ const Header = () => {
 
   const isActive = (href: string) =>
     pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
+
+  // The install guide shows one step at a time; nothing should compete with it.
+  const showQuick = pathname !== "/install";
 
   return (
     <>
@@ -121,6 +161,29 @@ const Header = () => {
           </button>
         </nav>
 
+        {showQuick && !mobileOpen && (
+          <ul
+            className="flex gap-2 overflow-x-auto border-t border-border px-5 py-2 [scrollbar-width:none] lg:hidden [&::-webkit-scrollbar]:hidden"
+            aria-label="קיצורי דרך"
+          >
+            {quickLinks.map((link) => (
+              <li key={link.href} className="shrink-0">
+                <Link
+                  to={link.href}
+                  aria-current={isActive(link.href) ? "page" : undefined}
+                  className={`block whitespace-nowrap rounded-full border px-3.5 py-1.5 text-[0.8125rem] font-bold transition-colors ${
+                    isActive(link.href)
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-surface text-ink hover:border-primary/50"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+
         <AnimatePresence initial={false}>
           {mobileOpen && (
             <motion.div
@@ -130,22 +193,28 @@ const Header = () => {
               transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
               className="overflow-hidden border-b border-border bg-surface lg:hidden"
             >
-              <div className="container-custom py-3">
-                <ul className="divide-y divide-border">
-                  {navLinks.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        to={link.href}
-                        className={`flex items-center justify-between py-3.5 text-[0.9375rem] font-medium ${
-                          isActive(link.href) ? "text-primary" : "text-ink"
-                        }`}
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-4 grid grid-cols-2 gap-2.5 pb-2">
+              <div className="container-custom max-h-[calc(100dvh-68px)] overflow-y-auto py-3">
+                {menuGroups.map((group) => (
+                  <div key={group.title} className="border-b border-border py-2 last:border-0">
+                    <p className="pb-1 pt-2 text-[0.75rem] font-bold tracking-wide text-muted-foreground">{group.title}</p>
+                    <ul>
+                      {group.links.map((link) => (
+                        <li key={link.href}>
+                          <Link
+                            to={link.href}
+                            aria-current={pathname === link.href ? "page" : undefined}
+                            className={`flex items-center justify-between py-3 text-[1rem] font-semibold ${
+                              pathname === link.href ? "text-primary" : "text-ink"
+                            }`}
+                          >
+                            {link.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+                <div className="mt-3 grid grid-cols-2 gap-2.5 pb-2">
                   <a href={`tel:${SITE.phoneRaw}`}>
                     <Button variant="outline" className="w-full gap-2">
                       <Phone className="h-4 w-4" />

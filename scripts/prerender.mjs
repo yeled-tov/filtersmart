@@ -5,6 +5,7 @@
 // Output: dist/<route>/index.html (Vercel serves static files before applying SPA rewrites)
 
 import { readFile, writeFile, mkdir, readdir, stat } from "node:fs/promises";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
@@ -19,18 +20,198 @@ const OG_IMAGE = "https://www.filterphone.com/hero.jpg";
 // baked into prerendered HTML and structured data that search engines keep.
 const APK_URL = "https://filter-tube-52d8e.web.app/download/FilterTube.apk";
 
+const readJson = (rel) => JSON.parse(readFileSync(path.resolve(__dirname, "..", rel), "utf8"));
+
+// The install guide's steps live in one JSON file that the page renders from
+// too, so what crawlers read here is, word for word, what the page shows.
+function buildInstallRoute() {
+  const guide = readJson("src/data/installGuide.json");
+  const plain = (t) => t.replace(/\*\*/g, "");
+  const makers = [
+    ["samsung", "סמסונג גלקסי"],
+    ["xiaomi", "שיאומי, רדמי ופוקו"],
+    ["other", "כל טלפון אנדרואיד אחר"],
+  ];
+  const stepsFor = (m) => guide.steps.filter((s) => !s.makers || s.makers.includes(m));
+  const itemsFor = (s, m) => (Array.isArray(s.items) ? s.items : s.items[m]);
+
+  const sections = makers.map(([m, label]) => ({
+    h2: `התקנת FilterPhone ב${label} – צעד אחרי צעד`,
+    items: stepsFor(m).map((s, i) => `שלב ${i + 1} – ${plain(s.title)}: ${itemsFor(s, m).map(plain).join(" ")}`),
+  }));
+  sections.push({ h2: "בעיות נפוצות בהתקנה", items: guide.faqs.map((f) => `${f.q} ${f.a}`) });
+
+  // Hosted by Lovable; the same origin the page plays them from.
+  const asset = (name) => readJson(`src/assets/videos/${name}.mp4.asset.json`);
+  const video = (file, seconds, name, description, thumb) => {
+    const a = asset(file);
+    return {
+      "@type": "VideoObject",
+      name,
+      description,
+      thumbnailUrl: `${SITE_URL}${thumb}`,
+      uploadDate: a.created_at,
+      duration: `PT${Math.floor(seconds / 60)}M${Math.round(seconds % 60)}S`,
+      contentUrl: a.url.startsWith("/") ? `https://filtersmart.lovable.app${a.url}` : a.url,
+      inLanguage: "he",
+    };
+  };
+
+  return {
+    path: "/install",
+    title: "מדריך התקנה – FilterPhone | סמסונג, שיאומי וכל אנדרואיד",
+    image: "/og-install.jpg",
+    imageAlt: "מדריך התקנה – FilterPhone",
+    description:
+      "מתקינים את FilterPhone צעד אחרי צעד, עם סרטונים קצרים: Play Protect, החסימה האוטומטית של סמסונג, התקנה, הרשמה והצריבה בלי מחשב ובלי איפוס.",
+    keywords:
+      "מדריך התקנה FilterPhone, התקנת סינון לטלפון, סינון לסמסונג, סינון לשיאומי, כיבוי Play Protect, חסימה אוטומטית סמסונג, ניפוי באגים אלחוטי, קוד התאמה, סינון בלי איפוס",
+    h1: "מדריך התקנה ל-FilterPhone – צעד אחרי צעד",
+    lead: "מתקינים מהטלפון עצמו, בלי טכנאי: פעולה אחת בכל מסך, עם סרטונים קצרים שמראים איפה ללחוץ. מההורדה, דרך ההרשמה, ועד הצריבה (ניהול המכשיר) שנועלת את הסינון.",
+    sections,
+    jsonLd: [
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        name: "איך מתקינים את FilterPhone – סינון לטלפון אנדרואיד",
+        description:
+          "מדריך התקנה צעד-צעד ל-FilterPhone: כיבוי Play Protect, הורדה והתקנה, הרשמה, והצריבה (ניהול המכשיר) בלי מחשב — כולל הצעדים המיוחדים לסמסונג ולשיאומי.",
+        inLanguage: "he",
+        tool: [
+          { "@type": "HowToTool", name: "טלפון אנדרואיד 8 ומעלה" },
+          { "@type": "HowToTool", name: "דפדפן כרום" },
+          { "@type": "HowToTool", name: "חיבור Wi-Fi" },
+        ],
+        step: stepsFor("other").map((s, i) => ({
+          "@type": "HowToStep",
+          position: i + 1,
+          name: plain(s.title),
+          text: itemsFor(s, "other").map(plain).join(" "),
+          url: `${SITE_URL}/install#other-${s.id}`,
+        })),
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "בית", item: `${SITE_URL}/` },
+          { "@type": "ListItem", position: 2, name: "מדריך התקנה", item: `${SITE_URL}/install` },
+        ],
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: guide.faqs.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
+      },
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          video("install_general", 105.1, "התקנת FilterPhone בטלפון אנדרואיד – סרטון הדרכה", "הורדה והתקנה של FilterPhone בכל טלפון אנדרואיד: האזהרה של כרום, כיבוי זמני של Play Protect, התקנה ממקור לא מוכר והרשמה לשירות.", "/install/poster-all.webp"),
+          video("install_samsung", 108.5, "התקנת FilterPhone בסמסונג גלקסי – סרטון הדרכה", "התקנת FilterPhone בסמסונג גלקסי: כיבוי החסימה האוטומטית (Auto Blocker) ו-Play Protect, הורדה, התקנה והפעלת אפשרויות המפתחים.", "/install/poster-samsung.webp"),
+          video("install_xiaomi", 85.3, "התקנת FilterPhone בשיאומי, רדמי ופוקו – סרטון הדרכה", "התקנת FilterPhone בשיאומי: Play Protect, התקנת אפליקציות לא ידועות, סריקת האבטחה של שיאומי, אפשרויות מפתחים והרשאות ריצה ברקע.", "/install/poster-xiaomi.webp"),
+        ],
+      },
+    ],
+    links: [
+      { href: "/", text: "FilterPhone — סינון לטלפון אנדרואיד" },
+      { href: "/filterphone", text: "סינון תמונות – איך זה עובד" },
+      { href: "/filtertube", text: "FilterTube – יוטיוב מסונן" },
+      { href: "https://api.filterphone.com/download/FilterPhone.apk", text: "הורדת FilterPhone (APK)" },
+    ],
+  };
+}
+
+// The search-topic pages (internet filtering, Samsung, Xiaomi, kosher phone) are
+// written once, in src/data/landings.json, and rendered from it here and in the app.
+function buildLandingRoutes() {
+  const { pages } = readJson("src/data/landings.json");
+  const guide = readJson("src/data/installGuide.json");
+  const web = readJson("src/data/webLevels.json");
+  // `**bold**` → <strong>; `[text](/path)` → a link.
+  const html = (t) =>
+    escapeHtml(t)
+      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+  const plain = (t) => t.replace(/\*\*/g, "").replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
+
+  return pages.map((page) => {
+    const sections = page.sections.map((s) => {
+      const items = [...(s.p || []), ...(s.list || [])].map(html);
+      if (s.block === "webLevels") {
+        items.push(...web.levels.map((l) => `<strong>${escapeHtml(l.name)}</strong> – ${escapeHtml(l.short)}: ${escapeHtml(l.desc)}`));
+        items.push(`תוספות לכל לקוח: ${escapeHtml(web.extras.join(", "))}.`);
+      }
+      if (s.block === "installSteps" && page.maker) {
+        const steps = guide.steps.filter((st) => !st.makers || st.makers.includes(page.maker));
+        items.push(...steps.map((st, i) => `שלב ${i + 1}: ${escapeHtml(plain(st.title))}`));
+      }
+      return { h2: s.h2, items };
+    });
+    sections.push({ h2: "שאלות נפוצות", items: page.faqs.map((f) => `<strong>${escapeHtml(f.q)}</strong> ${escapeHtml(f.a)}`) });
+
+    return {
+      path: `/${page.slug}`,
+      title: page.title,
+      image: "/og-home.jpg",
+      imageAlt: page.h1,
+      description: page.description,
+      keywords: page.keywords,
+      h1: page.h1,
+      lead: page.lead,
+      sections,
+      jsonLd: [
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "בית", item: `${SITE_URL}/` },
+            { "@type": "ListItem", position: 2, name: page.crumb, item: `${SITE_URL}/${page.slug}` },
+          ],
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: page.faqs.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        },
+      ],
+      links: [
+        ...page.related,
+        { href: "/", text: "FilterPhone — סינון לטלפון אנדרואיד" },
+        { href: "/install", text: "מדריך התקנה" },
+        { href: "https://api.filterphone.com/download/FilterPhone.apk", text: "הורדת FilterPhone (APK)" },
+      ],
+    };
+  });
+}
+
+// Shown on /services; the page reads the same questions from the same file.
+const SERVICE_FAQS = readJson("src/data/serviceFaqs.json");
+const LAB_PROCESS = [
+  { title: "מאבחנים את הצורך", body: "בטלפון, בוואטסאפ או דרך יועץ הסינון באתר – מבינים למי המכשיר, מה חייב להישאר פתוח ומה חייב להיחסם." },
+  { title: "בוחרים את המערכת", body: "מסבירים בשקיפות מה כל פתרון עושה, כמה הוא עולה, כמה זמן ההתקנה לוקחת ומה קורה לתוכן שבמכשיר." },
+  { title: "מתקינים ומוסרים", body: "מבצעים את ההתקנה או הצריבה במעבדה שלנו באשדוד, בודקים איתכם שהכול עובד ומסבירים איך להמשיך מכאן." },
+];
+
 // Per-route SEO metadata + fallback body content
 // Every route here will get its own prerendered HTML shell.
 const routes = [
   {
     path: "/",
-    title: "סינון לטלפון אנדרואיד | FilterPhone פילטר פון — סינון חכם",
+    title: "FilterPhone – סינון לטלפון, סינון אינטרנט וסינון תמונות",
     image: "/og-home.jpg",
     imageAlt: "FilterPhone – הטלפון נשאר חכם, התוכן נשאר נקי",
     description:
-      "סינון לטלפון אנדרואיד שלא חונק אותו: סינון תמונות חכם בזמן אמת, 4 רמות גלישה, וואטסאפ מסונן וניהול מלא. התקנה אוטומטית בלי איפוס ברוב הטלפונים.",
+      "סינון לטלפון אנדרואיד שלא חונק אותו: סינון תמונות חכם, 4 רמות סינון אינטרנט, וואטסאפ מסונן וניהול מלא. לסמסונג, לשיאומי ולכל סמארטפון. ברוב הטלפונים בלי איפוס.",
     keywords:
-      "סינון טלפונים, סינון לטלפון, סינון לאנדרואיד, סינון תמונות, סינון אינטרנט כשר, טלפון כשר עם אינטרנט, אפליקציית סינון, סינון וואטסאפ, סינון לשיאומי, סינון לסמסונג, פילטר פון, FilterPhone, סינון טלפון אשדוד, הדרן, עסקן, כושר פליי",
+      "סינון טלפון, סינון לטלפון, סינון טלפונים, סינון אינטרנט, סינון סמארטפון, סינון לאנדרואיד, סינון תמונות, סינון גלקסי, סינון לסמסונג, סינון לשיאומי, סינון אינטרנט כשר, טלפון כשר עם אינטרנט, סמארטפון כשר, אפליקציית סינון, סינון וואטסאפ, פילטר פון, FilterPhone",
     h1: "FilterPhone — סינון לטלפון אנדרואיד: הטלפון נשאר חכם, התוכן נשאר נקי",
     lead: "סינון תמונות חכם בזמן אמת, רמות גלישה לבחירה, וואטסאפ מסונן — ניהול מלא מרחוק, והתקנה אוטומטית ברוב הטלפונים בלי איפוס ובלי מחיקת חשבונות. אנדרואיד 8 ומעלה.",
     sections: [
@@ -214,6 +395,47 @@ const routes = [
           "צריבת גרסה Qin F21 Pro – 70₪",
           "צריבת גרסה Qin F25 – 70₪",
         ],
+      },
+      {
+        h2: "הסינון שלנו – FilterPhone",
+        text: "FilterPhone – סינון לטלפון אנדרואיד, 150₪ לשנה למכשיר: סינון תמונות בשלוש רמות, ארבע רמות גלישה, וואטסאפ מסונן וניהול מכשיר מלא. התקנה מהטלפון עצמו, ברוב הטלפונים בלי איפוס. ההמלצה שלנו כיום.",
+      },
+      {
+        h2: "למה לבחור בנו",
+        items: [
+          "משווק מורשה, לא מתווך: אנחנו מורשים רשמית להתקין הדרן, עסקן וכושר פליי. הצריבה נעשית כאן, במעבדה, ולא נשלחת לאף אחד אחר.",
+          "כל מכשיר, כל פלטפורמה: אייפון, סמסונג גלקסי, שיאומי, וואווי וכל אנדרואיד. גם טאבלטים, מחשבים ומכשירי Qin כשרים.",
+          "התקנה ביום הפנייה: סינון בסיסי מוכן תוך חמש דקות. צריבה מלאה של הדרן או עסקן – בין 45 ל-90 דקות, בתיאום מראש.",
+          "מלווים גם אחרי ההתקנה: רוצים לשנות רמת סינון, לפתוח אפליקציה או להבין איך משהו עובד? מרימים טלפון ופותרים.",
+        ],
+      },
+      {
+        h2: "איך זה עובד – שלושה שלבים",
+        items: LAB_PROCESS.map((s) => `${s.title}: ${s.body}`),
+      },
+      {
+        h2: "שאלות נפוצות על סינון טלפונים",
+        items: SERVICE_FAQS.map((f) => `<strong>${f.q}</strong> ${f.a}`),
+      },
+    ],
+    jsonLd: [
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: SERVICE_FAQS.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        name: "איך מזמינים סינון טלפון ב-FilterPhone אשדוד",
+        description: "שלושה שלבים מפנייה ראשונה ועד מכשיר מסונן ומוכן לשימוש.",
+        totalTime: "PT1H",
+        estimatedCost: { "@type": "MonetaryAmount", currency: "ILS", value: "100" },
+        step: LAB_PROCESS.map((s, i) => ({ "@type": "HowToStep", position: i + 1, name: s.title, text: s.body })),
       },
     ],
   },
@@ -528,220 +750,8 @@ const routes = [
       { href: "https://api.filterphone.com/download/FilterPhone.apk", text: "הורדת FilterPhone (APK)" },
     ],
   },
-  {
-    path: "/install",
-    title: "מדריך התקנה – FilterPhone | סמסונג, שיאומי וכל אנדרואיד",
-    image: "/og-install.jpg",
-    imageAlt: "מדריך התקנה – FilterPhone",
-    description:
-      "איך מתקינים את FilterPhone צעד-צעד: הורדה מכרום, התקנה מחוץ לחנות, Play Protect, החסימה האוטומטית של סמסונג, הגדרות שיאומי והתקנה אוטומטית בלי מחשב ובלי איפוס.",
-    keywords:
-      "מדריך התקנה FilterPhone, התקנת סינון, סינון לסמסונג, סינון לשיאומי, התקנת אפליקציה מחוץ לחנות, Play Protect, חסימה אוטומטית סמסונג, ניפוי באגים אלחוטי, סינון בלי איפוס",
-    h1: "מדריך התקנה – FilterPhone",
-    lead: "מתקינים מהטלפון עצמו, בלי טכנאי. האפליקציה מובילה אתכם ופותחת לבד כל מסך בהגדרות — כאן מוסבר מה תראו בדרך, לפי יצרן, ומה לעשות אם משהו נתקע.",
-    sections: [
-      {
-        h2: "חלק א׳ — לכל הטלפונים: הורדה והתקנה",
-        items: [
-          "פותחים את האתר בכרום ולוחצים ״הורדת האפליקציה״: פותחים את האתר בכרום ולוחצים על הורדת האפליקציה.",
-          "כרום שואל ״להוריד בכל זאת?״: לוחצים הורדה.",
-          "בסוף ההורדה — ״פתיחה״: לוחצים פתיחה, או נכנסים להורדות ובוחרים FilterPhone.",
-          "״הטלפון לא מאפשר להתקין אפליקציות ממקור זה״: לוחצים הגדרות, מדליקים ״אפשר ממקור זה״, חוזרים אחורה ולוחצים התקנה.",
-          "Google Play Protect: לוחצים ״פרטים נוספים״ ואז ״התקנה בכל זאת״. אם אין כפתור כזה: Play Store ← תמונת הפרופיל ← Play Protect ← גלגל השיניים ← מכבים ״סריקת אפליקציות באמצעות Play Protect״, מתקינים, ואחרי ההתקנה אפשר להדליק בחזרה.",
-          "פותחים את FilterPhone ונרשמים: בוחרים דרך התקנה — אוטומטי, Root או ידני — ועוקבים אחרי הצעדים. האפליקציה פותחת לבד כל מסך שצריך.",
-        ],
-      },
-      {
-        h2: "ההתקנה האוטומטית בלי מחשב (אנדרואיד 11 ומעלה)",
-        items: [
-          "הופכים למפתחים: 7 לחיצות על מספר ה-Build (בשיאומי: על גרסת MIUI / OS).",
-          "מדליקים ״ניפוי באגים אלחוטי״: באפשרויות המפתחים.",
-          "מקבלים קוד התאמה: ״התאמת מכשיר באמצעות קוד התאמה״ — מופיע קוד בן 6 ספרות.",
-          "מזינים את הקוד ב-FilterPhone: מכאן הכול נעשה לבד: ניהול המכשיר, ההרשאות, הסוללה והתעודה.",
-        ],
-      },
-      {
-        h2: "חלק ב׳ — סמסונג (גלקסי)",
-        items: [
-          "חסימה אוטומטית (Auto Blocker) — בטלפונים חדשים (One UI 6 ומעלה) חוסמת כל התקנה מחוץ לחנות: הגדרות ← אבטחה ופרטיות ← חסימה אוטומטית ← לכבות. אחרי ההתקנה אפשר להדליק בחזרה",
-          "אחר כך — כמו בחלק א׳",
-          "להתקנה האוטומטית: אפשרויות מפתחים — הגדרות ← אודות הטלפון ← מידע על התוכנה ← 7 לחיצות על מספר Build",
-          "תיקייה מאובטחת או Dual Messenger — צריך להסיר לפני ההתקנה האוטומטית, ולגבות לפני",
-        ],
-      },
-      {
-        h2: "חלק ג׳ — שיאומי / רדמי / פוקו (MIUI / HyperOS)",
-        items: [
-          "״התקנת אפליקציות לא ידועות״ — מאשרים לכרום ״אפשר ממקור זה״",
-          "סריקת אבטחה של שיאומי — מחכים שתסתיים ולוחצים ״התקנה״ (או ״התקן בכל זאת״)",
-          "אפשרויות מפתחים: הגדרות ← אודות הטלפון ← 7 לחיצות על גרסת MIUI / גרסת OS",
-          "״ניפוי באגים ב-USB (הגדרות אבטחה)״: הגדרות ← הגדרות נוספות ← אפשרויות מפתחים. שיאומי מבקשת חשבון Mi פעם אחת; אחרי שההגדרה דלוקה אפשר לצאת ממנו. בטלפון עם Root לא צריך את זה",
-          "אחרי ההתקנה: ״הפעלה אוטומטית״ ו״חיסכון בסוללה ← ללא הגבלות״ — האפליקציה פותחת את המסכים לבד",
-        ],
-      },
-      {
-        h2: "חלק ד׳ — בעיות נפוצות",
-        items: [
-          "״האפליקציה לא הותקנה״ — כמעט תמיד זה Google Play Protect, או בסמסונג החסימה האוטומטית (Auto Blocker).",
-          "״אין לי אפשרויות מפתחים״ — צריך להדליק אותן פעם אחת: 7 לחיצות על מספר ה-Build, או על גרסת MIUI / OS בשיאומי.",
-          "״יש לי אפליקציות כפולות / תיקייה מאובטחת״ — צריך לכבות אותן לפני ההתקנה האוטומטית — וחשוב לגבות לפני.",
-          "״צריך לאפס את הטלפון?״ — ברוב הטלפונים לא. FilterPhone משביתה את החשבונות לכמה שניות בלבד, מפעילה את הניהול ומחזירה אותם.",
-          "״לא מצליח״ — כתבו לנו בוואטסאפ, ואנחנו מתקינים איתכם.",
-        ],
-      },
-    ],
-    jsonLd: [
-      {
-        "@context": "https://schema.org",
-        "@type": "HowTo",
-        "name": "איך מתקינים את FilterPhone – סינון לטלפון אנדרואיד",
-        "description": "מדריך התקנה צעד-צעד ל-FilterPhone: הורדה, התקנה מחוץ לחנות, Play Protect, והתקנה אוטומטית בלי מחשב — כולל צעדים מיוחדים לסמסונג ולשיאומי.",
-        "inLanguage": "he",
-        "totalTime": "PT10M",
-        "tool": [
-          {
-            "@type": "HowToTool",
-            "name": "טלפון אנדרואיד 8 ומעלה"
-          },
-          {
-            "@type": "HowToTool",
-            "name": "דפדפן כרום"
-          }
-        ],
-        "step": [
-          {
-            "@type": "HowToStep",
-            "position": 1,
-            "name": "פותחים את האתר בכרום ולוחצים ״הורדת האפליקציה״",
-            "text": "פותחים את האתר בכרום ולוחצים על הורדת האפליקציה."
-          },
-          {
-            "@type": "HowToStep",
-            "position": 2,
-            "name": "כרום שואל ״להוריד בכל זאת?״",
-            "text": "לוחצים הורדה."
-          },
-          {
-            "@type": "HowToStep",
-            "position": 3,
-            "name": "בסוף ההורדה — ״פתיחה״",
-            "text": "לוחצים פתיחה, או נכנסים להורדות ובוחרים FilterPhone."
-          },
-          {
-            "@type": "HowToStep",
-            "position": 4,
-            "name": "״הטלפון לא מאפשר להתקין אפליקציות ממקור זה״",
-            "text": "לוחצים הגדרות, מדליקים ״אפשר ממקור זה״, חוזרים אחורה ולוחצים התקנה."
-          },
-          {
-            "@type": "HowToStep",
-            "position": 5,
-            "name": "Google Play Protect",
-            "text": "לוחצים ״פרטים נוספים״ ואז ״התקנה בכל זאת״. אם אין כפתור כזה: Play Store ← תמונת הפרופיל ← Play Protect ← גלגל השיניים ← מכבים ״סריקת אפליקציות באמצעות Play Protect״, מתקינים, ואחרי ההתקנה אפשר להדליק בחזרה."
-          },
-          {
-            "@type": "HowToStep",
-            "position": 6,
-            "name": "פותחים את FilterPhone ונרשמים",
-            "text": "בוחרים דרך התקנה — אוטומטי, Root או ידני — ועוקבים אחרי הצעדים. האפליקציה פותחת לבד כל מסך שצריך."
-          },
-          {
-            "@type": "HowToStep",
-            "position": 7,
-            "name": "הופכים למפתחים",
-            "text": "7 לחיצות על מספר ה-Build (בשיאומי: על גרסת MIUI / OS)."
-          },
-          {
-            "@type": "HowToStep",
-            "position": 8,
-            "name": "מדליקים ״ניפוי באגים אלחוטי״",
-            "text": "באפשרויות המפתחים."
-          },
-          {
-            "@type": "HowToStep",
-            "position": 9,
-            "name": "מקבלים קוד התאמה",
-            "text": "״התאמת מכשיר באמצעות קוד התאמה״ — מופיע קוד בן 6 ספרות."
-          },
-          {
-            "@type": "HowToStep",
-            "position": 10,
-            "name": "מזינים את הקוד ב-FilterPhone",
-            "text": "מכאן הכול נעשה לבד: ניהול המכשיר, ההרשאות, הסוללה והתעודה."
-          }
-        ]
-      },
-      {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "בית",
-            "item": "https://www.filterphone.com/"
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "מדריך התקנה",
-            "item": "https://www.filterphone.com/install"
-          }
-        ]
-      },
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "״האפליקציה לא הותקנה״",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "כמעט תמיד זה Google Play Protect, או בסמסונג החסימה האוטומטית (Auto Blocker)."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "״אין לי אפשרויות מפתחים״",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "צריך להדליק אותן פעם אחת: 7 לחיצות על מספר ה-Build, או על גרסת MIUI / OS בשיאומי."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "״יש לי אפליקציות כפולות / תיקייה מאובטחת״",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "צריך לכבות אותן לפני ההתקנה האוטומטית — וחשוב לגבות לפני."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "״צריך לאפס את הטלפון?״",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "ברוב הטלפונים לא. FilterPhone משביתה את החשבונות לכמה שניות בלבד, מפעילה את הניהול ומחזירה אותם."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "״לא מצליח״",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "כתבו לנו בוואטסאפ, ואנחנו מתקינים איתכם."
-            }
-          }
-        ]
-      },
-    ],
-    links: [
-      { href: "/", text: "FilterPhone — סינון לטלפון אנדרואיד" },
-      { href: "/filterphone", text: "סינון תמונות – איך זה עובד" },
-      { href: "https://api.filterphone.com/download/FilterPhone.apk", text: "הורדת FilterPhone (APK)" },
-    ],
-  },
+  buildInstallRoute(),
+  ...buildLandingRoutes(),
   {
     path: "/filtertube",
     title: "FilterTube (פילטר טיוב) – יוטיוב ויוטיוב מיוזיק מסוננים להורדה APK",
@@ -961,6 +971,12 @@ function buildFallback(route) {
     <nav aria-label="ניווט ראשי">
       <ul>
         <li><a href="/">דף הבית</a></li>
+        <li><a href="/install">מדריך התקנה ל-FilterPhone</a></li>
+        <li><a href="/filterphone">סינון תמונות</a></li>
+        <li><a href="/internet-filtering">סינון אינטרנט</a></li>
+        <li><a href="/samsung-filtering">סינון לסמסונג גלקסי</a></li>
+        <li><a href="/xiaomi-filtering">סינון לשיאומי</a></li>
+        <li><a href="/kosher-phone">טלפון כשר עם אינטרנט</a></li>
         <li><a href="/services">שירותים</a></li>
         <li><a href="/pricing">מחירון</a></li>
         <li><a href="/compare">השוואת מערכות סינון</a></li>
@@ -1265,7 +1281,11 @@ const SITEMAP_PRIORITY = {
   "/pricing": "0.9",
   "/filtertube": "0.9",
   "/filterphone": "0.9",
-  "/install": "0.85",
+  "/install": "0.9",
+  "/internet-filtering": "0.9",
+  "/samsung-filtering": "0.9",
+  "/xiaomi-filtering": "0.9",
+  "/kosher-phone": "0.9",
   "/compare": "0.85",
   "/contact": "0.8",
   "/about": "0.7",
